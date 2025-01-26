@@ -3,9 +3,9 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="/Styles/Fluent/Res.axaml" />
-                <ResourceInclude Source="avares://AvaloniaUI.Ribbon/Controls/SplitButtonControl.axaml" />
-                <ResourceInclude Source="avares://AvaloniaUI.Ribbon/Controls/RibbonGallery.axaml" />
-                <ResourceInclude Source="avares://AvaloniaUI.Ribbon/Controls/RibbonButton.axaml" />
+                <ResourceInclude Source="/Styles/Fluent/Controls/SplitButtonControl.axaml" />
+                <ResourceInclude Source="/Styles/Fluent/Controls/RibbonGallery.axaml" />
+                <ResourceInclude Source="/Styles/Fluent/Controls/RibbonButton.axaml" />
                 <ResourceInclude Source="/Styles/Fluent/Controls/RibbonComboBox.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
