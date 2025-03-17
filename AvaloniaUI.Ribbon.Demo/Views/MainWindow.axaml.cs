@@ -1,4 +1,4 @@
-﻿using AvaloniaUI.Ribbon.Windows;
+﻿using AvaloniaUI.Ribbon.Desktop;
 
 namespace AvaloniaUI.Ribbon.Demo.Views;
 

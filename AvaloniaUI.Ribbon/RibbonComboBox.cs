@@ -17,11 +17,11 @@ public class RibbonComboBox : ComboBox, IRibbonInputControl
     public static readonly StyledProperty<object> ContentProperty =
         AvaloniaProperty.Register<RibbonComboBox, object>(nameof(Content));
 
-    public static readonly StyledProperty<IControlTemplate> IconProperty =
-        AvaloniaProperty.Register<RibbonComboBox, IControlTemplate>(nameof(Icon));
+    public static readonly StyledProperty<object> IconProperty =
+        AvaloniaProperty.Register<RibbonComboBox, object>(nameof(Icon));
 
-    public static readonly StyledProperty<IControlTemplate> LargeIconProperty =
-        AvaloniaProperty.Register<RibbonComboBox, IControlTemplate>(nameof(LargeIcon));
+    public static readonly StyledProperty<object> LargeIconProperty =
+        AvaloniaProperty.Register<RibbonComboBox, object>(nameof(LargeIcon));
 
     public object Content
     {
@@ -29,13 +29,13 @@ public class RibbonComboBox : ComboBox, IRibbonInputControl
         set => SetValue(ContentProperty, value);
     }
 
-    public IControlTemplate Icon
+    public object Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
     }
 
-    public IControlTemplate LargeIcon
+    public object LargeIcon
     {
         get => GetValue(LargeIconProperty);
         set => SetValue(LargeIconProperty, value);

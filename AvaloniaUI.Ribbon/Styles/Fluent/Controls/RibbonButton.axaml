@@ -46,7 +46,7 @@
                             Padding="{TemplateBinding Padding}" CornerRadius="{DynamicResource ControlCornerRadius}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                     <DockPanel>
-                        <TemplatedControl Template="{TemplateBinding Icon}" DockPanel.Dock="Left" Width="16"
+                        <ContentPresenter Content="{TemplateBinding Icon}" DockPanel.Dock="Left" Width="16"
                                           Height="16" />
                         <ContentPresenter Classes="MediumContentPresenter" Content="{TemplateBinding Content}"
                                           Margin="3,0,0,0" />
@@ -60,7 +60,7 @@
                 <Button Classes="quickAccessButton" Command="{Binding Command}"
                         CommandParameter="{Binding CommandParameter}" ToolTip.Tip="{Binding ToolTip.Tip}"
                         KeyTip.KeyTipKeys="{Binding KeyTip.Tip}" MinWidth="45" Height="34" Focusable="False">
-                    <TemplatedControl Template="{Binding QuickAccessIcon}" Width="16" Height="16" />
+                    <ContentPresenter Content="{TemplateBinding QuickAccessIcon}" Width="16" Height="16" />
                 </Button>
             </ControlTemplate>
         </Setter>
@@ -86,7 +86,7 @@
                         <Border Classes="RibbonButtonBackgroundBorder" Padding="{TemplateBinding Padding}"
                                 CornerRadius="{DynamicResource ControlCornerRadius}">
                             <DockPanel VerticalAlignment="Stretch">
-                                <TemplatedControl Template="{TemplateBinding LargeIcon}" DockPanel.Dock="Top"
+                                <ContentPresenter Content="{TemplateBinding LargeIcon}" DockPanel.Dock="Top"
                                                   Width="32"
                                                   Height="32" Foreground="{TemplateBinding Foreground}" />
                                 <ContentPresenter Content="{TemplateBinding Content}" Margin="0,3,0,0"
@@ -118,8 +118,8 @@
                     <DataValidationErrors>
                         <Border Classes="RibbonButtonBackgroundBorder" Padding="{TemplateBinding Padding}"
                                 CornerRadius="{DynamicResource ControlCornerRadius}">
-                            <TemplatedControl Foreground="{TemplateBinding Foreground}"
-                                              Template="{TemplateBinding Icon}"
+                            <ContentPresenter Foreground="{TemplateBinding Foreground}"
+                                              Content="{TemplateBinding Icon}"
                                               Width="16" Height="16" />
                         </Border>
                     </DataValidationErrors>

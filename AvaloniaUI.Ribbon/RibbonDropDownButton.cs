@@ -23,19 +23,19 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
     public static readonly StyledProperty<object> ContentProperty =
         ContentControl.ContentProperty.AddOwner<RibbonDropDownButton>();
 
-    public static readonly StyledProperty<IControlTemplate> IconProperty =
+    public static readonly StyledProperty<object> IconProperty =
         RibbonButton.IconProperty.AddOwner<RibbonDropDownButton>();
 
     public static readonly StyledProperty<bool> IsDropDownOpenProperty =
         ComboBox.IsDropDownOpenProperty.AddOwner<RibbonDropDownButton>();
 
-    public static readonly StyledProperty<IControlTemplate> LargeIconProperty =
+    public static readonly StyledProperty<object> LargeIconProperty =
         RibbonButton.LargeIconProperty.AddOwner<RibbonDropDownButton>();
 
     public static readonly AvaloniaProperty<RibbonControlSize> MaxSizeProperty;
     public static readonly AvaloniaProperty<RibbonControlSize> MinSizeProperty;
 
-    public static readonly StyledProperty<IControlTemplate> QuickAccessIconProperty =
+    public static readonly StyledProperty<object> QuickAccessIconProperty =
         RibbonButton.QuickAccessIconProperty.AddOwner<RibbonToggleButton>();
 
     public static readonly StyledProperty<IControlTemplate> QuickAccessTemplateProperty =
@@ -59,7 +59,7 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
         set => SetValue(ContentProperty, value);
     }
 
-    public IControlTemplate Icon
+    public object Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
@@ -71,7 +71,7 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
         set => SetValue(IsDropDownOpenProperty, value);
     }
 
-    public IControlTemplate LargeIcon
+    public object LargeIcon
     {
         get => GetValue(LargeIconProperty);
         set => SetValue(LargeIconProperty, value);
@@ -89,7 +89,7 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
         set => SetValue(MinSizeProperty, value);
     }
 
-    public IControlTemplate QuickAccessIcon
+    public object QuickAccessIcon
     {
         get => GetValue(QuickAccessIconProperty);
         set => SetValue(QuickAccessIconProperty, value);
@@ -108,10 +108,5 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
     }
 
     #endregion Properties
-
-    //TODO:
-    /*protected override IItemContainerGenerator CreateItemContainerGenerator()
-    {
-        return new ItemContainerGenerator<RibbonDropDownItemPresenter>(this, RibbonDropDownItemPresenter.ContentProperty, RibbonDropDownItemPresenter.ContentTemplateProperty);
-    }*/
+    
 }

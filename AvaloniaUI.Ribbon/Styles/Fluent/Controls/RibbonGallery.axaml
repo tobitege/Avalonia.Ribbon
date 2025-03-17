@@ -161,7 +161,7 @@
                         <DockPanel>
                             <!--  /ScrollViewer  -->
                             <UniformGrid
-                                Width="18"
+                                MinWidth="18"
                                 Columns="1"
                                 DockPanel.Dock="Right">
                                 <RepeatButton

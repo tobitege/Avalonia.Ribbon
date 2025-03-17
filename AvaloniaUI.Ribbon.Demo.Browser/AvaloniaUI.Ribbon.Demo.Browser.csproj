@@ -3,13 +3,26 @@
     <TargetFramework>net9.0-browser</TargetFramework>
     <OutputType>Exe</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<DebuggerSupport>true</DebuggerSupport>
+    <UserSecretsId>72830c61-1c61-42bc-8556-ec268f1d7c2f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Browser" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Browser" Version="11.2.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AvaloniaUI.Ribbon.Demo\AvaloniaUI.Ribbon.Demo.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="runtimeconfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="runtimeconfig.template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 </Project>

@@ -20,6 +20,10 @@
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Themes.Fluent/FluentTheme.xaml" />
         <StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/AvaloniaRibbon.axaml" />
-        <StyleInclude Source="avares://AvaloniaUI.Ribbon.Windows/Styles/Fluent/AvaloniaRibbon.axaml" />
+        <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Fluent/AvaloniaRibbon.axaml" />
+        <!--
+        <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Purple" SecondaryColor="Lime" />
+        -->
+
     </Application.Styles>
 </Application>

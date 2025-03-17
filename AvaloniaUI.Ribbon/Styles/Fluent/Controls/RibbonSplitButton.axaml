@@ -46,7 +46,7 @@
                             BorderThickness="0"
                             Command="{TemplateBinding Command}"
                             CommandParameter="{TemplateBinding CommandParameter}">
-                            <TemplatedControl Template="{TemplateBinding LargeIcon}" />
+                            <ContentPresenter Content="{TemplateBinding LargeIcon}" />
                         </Button>
                         <ToggleButton
                             Name="toggle"
@@ -160,7 +160,7 @@
                             Command="{TemplateBinding Command}"
                             CommandParameter="{TemplateBinding CommandParameter}">
                             <StackPanel Orientation="Horizontal">
-                                <TemplatedControl Template="{TemplateBinding Icon}" />
+                                <ContentPresenter Content="{TemplateBinding Icon}" />
                                 <ContentPresenter Margin="3,0,0,0" Content="{TemplateBinding Content}" />
                             </StackPanel>
                         </Button>
@@ -230,7 +230,7 @@
                             BorderThickness="0"
                             Command="{TemplateBinding Command}"
                             CommandParameter="{TemplateBinding CommandParameter}">
-                            <TemplatedControl Template="{TemplateBinding Icon}" />
+                            <ContentPresenter Content="{TemplateBinding Icon}" />
                         </Button>
                     </DockPanel>
                 </Border>

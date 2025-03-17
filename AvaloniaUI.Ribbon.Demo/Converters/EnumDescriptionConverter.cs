@@ -4,44 +4,43 @@ using System.Globalization;
 using System.Reflection;
 using Avalonia.Data.Converters;
 
-namespace AvaloniaUI.Ribbon.Demo.Converters
+namespace AvaloniaUI.Ribbon.Demo.Converters;
+
+public class EnumDescriptionConverter : IValueConverter
 {
-    public class EnumDescriptionConverter : IValueConverter
+    private string GetEnumDescription(Enum enumObj)
     {
-        private string GetEnumDescription(Enum enumObj)
+        var fieldInfo = enumObj.GetType().GetField(enumObj.ToString());
+        object[] attribArray = fieldInfo.GetCustomAttributes(false);
+
+        if (attribArray.Length == 0)
         {
-            FieldInfo fieldInfo = enumObj.GetType().GetField(enumObj.ToString());
-            object[] attribArray = fieldInfo.GetCustomAttributes(false);
-
-            if (attribArray.Length == 0)
-                return enumObj.ToString();
-            else
-            {
-                DescriptionAttribute attrib = null;
-
-                foreach (var att in attribArray)
-                {
-                    if (att is DescriptionAttribute)
-                        attrib = att as DescriptionAttribute;
-                }
-
-                if (attrib != null)
-                    return attrib.Description;
-
-                return enumObj.ToString();
-            }
+            return enumObj.ToString();
         }
-
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        else
         {
-            Enum myEnum = (Enum)value;
-            string description = GetEnumDescription(myEnum);
-            return description;
-        }
+            DescriptionAttribute attrib = null;
 
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return string.Empty;
+            foreach (var att in attribArray)
+                if (att is DescriptionAttribute)
+                    attrib = att as DescriptionAttribute;
+
+            if (attrib != null)
+                return attrib.Description;
+
+            return enumObj.ToString();
         }
+    }
+
+    object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        var myEnum = (Enum)value;
+        var description = GetEnumDescription(myEnum);
+        return description;
+    }
+
+    object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return string.Empty;
     }
 }

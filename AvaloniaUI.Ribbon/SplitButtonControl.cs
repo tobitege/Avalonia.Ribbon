@@ -16,7 +16,7 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
             out MaxSizeProperty);
     }
 
-    public IControlTemplate Icon
+    public object Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
@@ -28,13 +28,13 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
         set => SetValue(IsDropDownOpenProperty, value);
     }
 
-    public IControlTemplate LargeIcon
+    public object LargeIcon
     {
         get => GetValue(LargeIconProperty);
         set => SetValue(LargeIconProperty, value);
     }
 
-    public IControlTemplate QuickAccessIcon
+    public object QuickAccessIcon
     {
         get => GetValue(QuickAccessIconProperty);
         set => SetValue(QuickAccessIconProperty, value);
@@ -96,19 +96,19 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
     public static readonly StyledProperty<bool> CanAddToQuickAccessProperty =
         RibbonButton.CanAddToQuickAccessProperty.AddOwner<SplitButton>();
 
-    public static readonly StyledProperty<IControlTemplate> IconProperty =
+    public static readonly StyledProperty<object> IconProperty =
         RibbonButton.IconProperty.AddOwner<SplitButton>();
 
     public static readonly StyledProperty<bool> IsDropDownOpenProperty =
         ComboBox.IsDropDownOpenProperty.AddOwner<SplitButton>();
 
-    public static readonly StyledProperty<IControlTemplate> LargeIconProperty =
+    public static readonly StyledProperty<object> LargeIconProperty =
         RibbonButton.LargeIconProperty.AddOwner<SplitButton>();
 
     public static readonly AvaloniaProperty<RibbonControlSize> MaxSizeProperty;
     public static readonly AvaloniaProperty<RibbonControlSize> MinSizeProperty;
 
-    public static readonly StyledProperty<IControlTemplate> QuickAccessIconProperty =
+    public static readonly StyledProperty<object> QuickAccessIconProperty =
         RibbonButton.QuickAccessIconProperty.AddOwner<RibbonToggleButton>();
 
     public static readonly StyledProperty<IControlTemplate> QuickAccessTemplateProperty =

@@ -41,7 +41,7 @@
                                 BorderThickness="0.5"
                                 CornerRadius="{TemplateBinding CornerRadius}"
                                 IsVisible="False" />
-                        <TemplatedControl Grid.Column="0" Margin="4,0" Template="{TemplateBinding Icon}"
+                        <ContentPresenter Grid.Column="0" Margin="4,0" Content="{TemplateBinding Icon}"
                                           DockPanel.Dock="Left" Width="16"
                                           Height="16"
                                           IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />

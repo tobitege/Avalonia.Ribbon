@@ -6,7 +6,7 @@ public interface IRibbonInputControl : IRibbonControl
 {
     public object Content { get; set; }
 
-    public IControlTemplate Icon { get; set; }
+    public object Icon { get; set; }
 
-    public IControlTemplate LargeIcon { get; set; }
+    public object LargeIcon { get; set; }
 }

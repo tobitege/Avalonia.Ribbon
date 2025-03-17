@@ -6,19 +6,19 @@ namespace AvaloniaUI.Ribbon;
 
 public class GalleryItem : ListBoxItem
 {
-    public static readonly StyledProperty<IControlTemplate> IconProperty =
+    public static readonly StyledProperty<object> IconProperty =
         RibbonButton.IconProperty.AddOwner<GalleryItem>();
 
-    public static readonly StyledProperty<IControlTemplate> LargeIconProperty =
+    public static readonly StyledProperty<object> LargeIconProperty =
         RibbonButton.LargeIconProperty.AddOwner<GalleryItem>();
 
-    public IControlTemplate Icon
+    public object Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
     }
 
-    public IControlTemplate LargeIcon
+    public object LargeIcon
     {
         get => GetValue(LargeIconProperty);
         set => SetValue(LargeIconProperty, value);

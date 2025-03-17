@@ -51,7 +51,7 @@
                             KeyboardNavigation.IsTabStop="False">
                         <Border Classes="RibbonToggleButtonBackgroundBorder">
                             <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Center">
-                                <TemplatedControl Template="{TemplateBinding LargeIcon}" DockPanel.Dock="Top" />
+                                <ContentPresenter Content="{TemplateBinding LargeIcon}" DockPanel.Dock="Top" />
                                 <ContentPresenter Content="{TemplateBinding Content}" Margin="0,3,0,0"
                                                   VerticalAlignment="Stretch" />
                             </DockPanel>
@@ -153,7 +153,7 @@
                         <Border Classes="RibbonToggleButtonBackgroundBorder">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch"
                                         HorizontalAlignment="Center">
-                                <TemplatedControl Template="{TemplateBinding Icon}" />
+                                <ContentPresenter Content="{TemplateBinding Icon}" />
                                 <ContentPresenter Content="{TemplateBinding Content}" Margin="3,0,0,0" />
                             </StackPanel>
                         </Border>
@@ -254,7 +254,7 @@
                         <Border Classes="RibbonToggleButtonBackgroundBorder">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch"
                                         HorizontalAlignment="Center">
-                                <TemplatedControl Template="{TemplateBinding Icon}" />
+                                <ContentPresenter Content="{TemplateBinding Icon}" />
                             </StackPanel>
                         </Border>
                     </Button>

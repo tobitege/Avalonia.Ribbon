@@ -10,7 +10,7 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty] private string _help = "Help requested!";
 
     [ObservableProperty] private string _lastActionText = "none";
-    
+
     [ObservableProperty] private Orientation _ribbonOrientation = Orientation.Horizontal;
 
     [ObservableProperty] private SystemDecorations _selectedDecoration;
@@ -28,8 +28,8 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-            
     }
+
     public void HelpCommand(object parameter)
     {
         Console.WriteLine(Help);
@@ -77,12 +77,8 @@ public partial class MainViewModel : ViewModelBase
     partial void OnSwitchOrientationChanged(bool value)
     {
         if (value)
-        {
             RibbonOrientation = Orientation.Horizontal;
-        }
         else
-        {
             RibbonOrientation = Orientation.Vertical;
-        }
     }
 }

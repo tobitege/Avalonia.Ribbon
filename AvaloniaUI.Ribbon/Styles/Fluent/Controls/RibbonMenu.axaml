@@ -47,6 +47,7 @@
                                     <DockPanel MinWidth="200">
                                         <ToggleButton
                                             x:Name="BackButton"
+                                            HorizontalAlignment="Left"
                                             Width="{Binding #ContentButton.Bounds.Width}"
                                             Height="{Binding #ContentButton.Bounds.Height}"
                                             Padding="{TemplateBinding Padding}"
@@ -57,17 +58,17 @@
                                             DockPanel.Dock="Top"
                                             IsChecked="{Binding !IsMenuOpen, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                             <Panel Width="24" Height="24">
-                                                <Ellipse Stroke="{Binding $parent[ToggleButton].Foreground}"
+                                                <Ellipse Stroke="{Binding $parent[Ribbon].Foreground}"
                                                          StrokeThickness="1" />
                                                 <Panel Width="14" Height="10">
                                                     <Rectangle
                                                         Height="1"
                                                         VerticalAlignment="Center"
-                                                        Fill="{Binding $parent[ToggleButton].Foreground}" />
+                                                        Fill="{Binding $parent[Ribbon].Foreground}" />
                                                     <Path
                                                         HorizontalAlignment="Left"
                                                         Data="M 5 0 L 0 5 L 5 10"
-                                                        Stroke="{Binding $parent[ToggleButton].Foreground}"
+                                                        Stroke="{Binding $parent[Ribbon].Foreground}"
                                                         StrokeThickness="1" />
                                                 </Panel>
                                             </Panel>

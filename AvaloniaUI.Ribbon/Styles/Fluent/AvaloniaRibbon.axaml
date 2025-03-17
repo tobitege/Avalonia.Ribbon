@@ -7,6 +7,8 @@
                 <ResourceInclude Source="/Styles/Fluent/Controls/RibbonGallery.axaml" />
                 <ResourceInclude Source="/Styles/Fluent/Controls/RibbonButton.axaml" />
                 <ResourceInclude Source="/Styles/Fluent/Controls/RibbonComboBox.axaml" />
+                <ResourceInclude Source="/Styles/Fluent/Controls/RibbonDropDownItem.axaml" />
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
@@ -19,7 +21,6 @@
     -->
     <!--StyleInclude Source="/Styles/Fluent/Controls/RibbonSplitButton.axaml" /-->
     <StyleInclude Source="/Styles/Fluent/Controls/Ribbon.axaml" />
-    <StyleInclude Source="/Styles/Fluent/Controls/RibbonDropDownButton.axaml" />
     <StyleInclude Source="/Styles/Fluent/Controls/RibbonToggleButton.axaml" />
     <StyleInclude Source="/Styles/Fluent/Controls/RibbonGroupBox.axaml" />
     <StyleInclude Source="/Styles/Fluent/Controls/KeyTip.axaml" />

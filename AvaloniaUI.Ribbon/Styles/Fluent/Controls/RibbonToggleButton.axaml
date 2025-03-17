@@ -39,7 +39,7 @@
             <ControlTemplate>
                 <Border Classes="RibbonToggleButtonBackgroundBorder">
                     <DockPanel>
-                        <TemplatedControl Foreground="{TemplateBinding Foreground}" Template="{TemplateBinding Icon}"
+                        <ContentPresenter Foreground="{TemplateBinding Foreground}" Content="{TemplateBinding Icon}"
                                           DockPanel.Dock="Left" />
                         <ContentPresenter Foreground="{TemplateBinding Foreground}" Classes="MediumContentPresenter"
                                           Content="{TemplateBinding Content}"
@@ -54,7 +54,7 @@
                               CommandParameter="{Binding CommandParameter}" ToolTip.Tip="{Binding ToolTip.Tip}"
                               KeyTip.KeyTipKeys="{Binding KeyTip.Tip}" MinWidth="45" Height="34"
                               Focusable="False">
-                    <TemplatedControl Template="{Binding QuickAccessIcon}" Width="16" Height="16" />
+                    <ContentPresenter Content="{TemplateBinding QuickAccessIcon}" Width="16" Height="16" />
                 </ToggleButton>
             </ControlTemplate>
         </Setter>
@@ -72,8 +72,8 @@
             <ControlTemplate>
                 <Border Classes="RibbonToggleButtonBackgroundBorder">
                     <DockPanel VerticalAlignment="Stretch">
-                        <TemplatedControl Foreground="{TemplateBinding Foreground}"
-                                          Template="{TemplateBinding LargeIcon}" DockPanel.Dock="Top" />
+                        <ContentPresenter Foreground="{TemplateBinding Foreground}"
+                                          Content="{TemplateBinding LargeIcon}" DockPanel.Dock="Top" />
                         <ContentPresenter Foreground="{TemplateBinding Foreground}" Content="{TemplateBinding Content}"
                                           Margin="0,3,0,0"
                                           VerticalAlignment="Stretch" />
@@ -98,7 +98,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Border Classes="RibbonToggleButtonBackgroundBorder">
-                    <TemplatedControl Foreground="{TemplateBinding Foreground}" Template="{TemplateBinding Icon}" />
+                    <ContentPresenter Foreground="{TemplateBinding Foreground}" Content="{TemplateBinding Icon}" />
                 </Border>
             </ControlTemplate>
         </Setter>

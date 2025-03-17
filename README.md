@@ -18,10 +18,10 @@ Given that Avalonia is a cross-platform UI framework and to support the availabi
 optimized by [Sachith Liyanagama](https://github.com/SachiHarshitha/Avalonia.Ribbon).
 The overall controls library is refactored as follows.
 
-|        VS Project         | Usecase             |
+|          Project          | Usecase             |
 |:-------------------------:|---------------------|
 |     AvaloniaUI.Ribbon     | Desktop, WASM, etc. |
-| AvaloniaUI.Ribbon.Windows | Desktop Only        |
+| AvaloniaUI.Ribbon.Desktop | Desktop Only        |
 
 ## Available Controls
 
@@ -32,28 +32,29 @@ Based on the platform availability the components are summarized as follows.
 
 ### Cross-Platform
 
-|   Control Type   | Original             | Status                              | New Component (Under 'Controls' Path) |
-|:----------------:|----------------------|-------------------------------------|---------------------------------------|
-|      Ribbon      | Ribbon               | Original State                      |                                       |
-|      Button      | RibbonButton         | :construction: Under Reconstruction |                                       |
-|  Toggle Button   | RibbonToggleButton   | Original State                      |                                       |
-|   Split Button   | RibbonSplitButton    | Recreated                           | SplitButtonControl (Will be renamed)  |
-|     Gallery      | RibbonGallery        | :construction: Under development    | RibbonGallery                         |
-|   GalleryItem    | GalleryItem          | :construction: Under Development    | GalleryItem                           |
-| Drop Down Button | RibbonDropDownButton | Original State                      |                                       |
-|    File Menu     | RibbonMenu           | Modernized to backstage style       |                                       |
-|  File Menu Item  | RibbonMenuItem       | Modernized to backstage style       |                                       |
-|       Tab        | RibbonTab            | Original State                      |                                       |
-| Ribbon Group Box | RibbonGroupBox       | Original State                      |                                       |
+|   Control Type   | Component Type       |
+|:----------------:|----------------------|
+|      Ribbon      | Ribbon               |
+|      Button      | RibbonButton         |
+|  Toggle Button   | RibbonToggleButton   |
+|   Split Button   | RibbonSplitButton    |
+|     Gallery      | RibbonGallery        |
+|   GalleryItem    | GalleryItem          |
+| Drop Down Button | RibbonDropDownButton |
+|    File Menu     | RibbonMenu           |
+|  File Menu Item  | RibbonMenuItem       |
+|       Tab        | RibbonTab            |
+| Ribbon Group Box | RibbonGroupBox       |
+| Ribbon Combo Box | RibbonComboBox       |
 
 ### Desktop Only
 
 Apart from the above-mentioned global components, the desktop-specific controls are presented below.
 
-|   Control Type   | Original           | Status                              | New Component (Under 'Controls' Path) |
-|:----------------:|--------------------|-------------------------------------|---------------------------------------|
-|  Ribbon Window   | RibbonWindow       | :construction: Under Reconstruction |                                       |
-| Quick Access Bar | QuickAccessToolBar | :construction: Under Reconstruction |                                       |
+|   Control Type   | Original           |
+|:----------------:|--------------------|
+|  Ribbon Window   | RibbonWindow       |
+| Quick Access Bar | QuickAccessToolBar |
 
 ## Previews:
 
@@ -69,14 +70,16 @@ Apart from the above-mentioned global components, the desktop-specific controls 
 
 2. Include ribbon styles to App.xaml as shown below.
 
-   Fluent theme:
+   Default theme:
     ```xaml
         <StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/AvaloniaRibbon.xaml" />
     ```
-   "Default" theme:
+   
+   "DESKTOP" theme:
     ```xaml
-        <StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Default/AvaloniaRibbon.xaml" />
+        <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Default/AvaloniaRibbon.xaml" />
     ```
+   
    and localized text (same for both themes):
     ```xaml
         <ResourceInclude Source="avares://AvaloniaUI.Ribbon/Locale/en-ca.xaml" />
@@ -199,6 +202,15 @@ Apart from the above-mentioned global components, the desktop-specific controls 
        ```
 
 ## Change Log
+
+### Update (26/01/2025)
+- Add Ribbon ComboBox.
+- Rename the Windows project to Desktop.
+- Solved the KeyTip visibility issue, due to changes in Avalonia 11.x.
+- Remove Default theme.
+- Relocate Ribbon Expander toggle to end of the control.
+- Solve the GroupBox Separator Visibility.
+- Remove the ribbon mouse wheel based scrolling.
 
 ### Update (21/01/2025)
 
