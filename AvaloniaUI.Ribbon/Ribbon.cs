@@ -89,7 +89,7 @@ public class Ribbon : TabControl, IRibbon
 
     public static readonly StyledProperty<bool> IsCollapsedProperty =
         AvaloniaProperty.Register<Ribbon, bool>(nameof(IsCollapsed));
-    
+
     public static readonly DirectProperty<MenuBase, bool> IsOpenProperty =
         AvaloniaProperty.RegisterDirect<MenuBase, bool>(nameof(IsOpen), (Func<MenuBase, bool>)(o => o.IsOpen));
 
@@ -184,7 +184,7 @@ public class Ribbon : TabControl, IRibbon
         get => GetValue(IsCollapsedPopupOpenProperty);
         set => SetValue(IsCollapsedPopupOpenProperty, value);
     }
-    
+
     public bool IsOpen
     {
         get => _isOpen;
@@ -470,7 +470,7 @@ public class Ribbon : TabControl, IRibbon
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        
+
         if (e.Root is WindowBase wnd)
             wnd.Deactivated += InputRoot_Deactivated;
         if (e.Root is IInputRoot inputRoot)
@@ -510,7 +510,7 @@ public class Ribbon : TabControl, IRibbon
         base.OnLostFocus(e);
         KeyTip.SetShowChildKeyTipKeys(this, false);
     }
-    
+
     private void HandleKeyTipControl(Control item)
     {
         item.RaiseEvent(new RoutedEventArgs(PointerPressedEvent));

@@ -48,7 +48,7 @@ public class KeyTip
         tipContent.Classes.Add("KeyTipContent");
         if (tipContent.Content != null)
             Debug.WriteLine("TEXT: " + tipContent.Content);
-        
+
         var tip = new Popup
         {
             PlacementTarget = element,

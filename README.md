@@ -74,12 +74,12 @@ Apart from the above-mentioned global components, the desktop-specific controls 
     ```xaml
         <StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/AvaloniaRibbon.xaml" />
     ```
-   
+
    "DESKTOP" theme:
     ```xaml
         <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Default/AvaloniaRibbon.xaml" />
     ```
-   
+
    and localized text (same for both themes):
     ```xaml
         <ResourceInclude Source="avares://AvaloniaUI.Ribbon/Locale/en-ca.xaml" />
@@ -204,6 +204,7 @@ Apart from the above-mentioned global components, the desktop-specific controls 
 ## Change Log
 
 ### Update (26/01/2025)
+
 - Add Ribbon ComboBox.
 - Rename the Windows project to Desktop.
 - Solved the KeyTip visibility issue, due to changes in Avalonia 11.x.

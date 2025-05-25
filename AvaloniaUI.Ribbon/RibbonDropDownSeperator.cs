@@ -10,7 +10,7 @@ namespace AvaloniaUI.Ribbon;
 
 public class RibbonDropDownSeperator : NativeMenuItemSeparator
 {
-   public RibbonDropDownSeperator()
-   {
-   }
+    public RibbonDropDownSeperator()
+    {
+    }
 }

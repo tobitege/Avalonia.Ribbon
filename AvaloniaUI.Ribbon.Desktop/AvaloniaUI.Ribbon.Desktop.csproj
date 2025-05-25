@@ -8,8 +8,8 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <PackageId>AvaloniaControls.Ribbon.Desktop</PackageId>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
-		<Version>0.9.9</Version>
-		<LangVersion>latest</LangVersion>
+        <Version>0.9.9</Version>
+        <LangVersion>latest</LangVersion>
         <FileAlignment>512</FileAlignment>
         <Deterministic>true</Deterministic>
         <PackageTags>ribbon;avalonia;avaloniaui;avalonia ui;ribbon;ribbonui;ribbon ui;windows;</PackageTags>
@@ -43,9 +43,9 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.2.5" />
-        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.0.14" />
-        <PackageReference Include="AvaloniaControls.Ribbon" Version="0.9.9" />
+        <PackageReference Include="Avalonia" Version="11.3.0" />
+        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.0.7" />
+        <PackageReference Include="AvaloniaControls.Ribbon" Version="0.9.9"/>
     </ItemGroup>
     <ItemGroup>
         <Compile Update="**\*.axaml.cs">
@@ -56,13 +56,13 @@
         </AvaloniaResource>
     </ItemGroup>
     <ItemGroup>
-      <None Include="..\LICENSE">
-        <Pack>True</Pack>
-        <PackagePath>\</PackagePath>
-      </None>
-      <None Include="..\README.md">
-        <Pack>True</Pack>
-        <PackagePath>\</PackagePath>
-      </None>
+        <None Include="..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
     </ItemGroup>
 </Project>

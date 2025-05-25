@@ -13,11 +13,9 @@ public class RibbonDropDownItem : MenuItem, IRibbonCommand
 {
     #region Fields
 
-
     #endregion Fields
 
     #region Static Property
- 
 
     #endregion Static Property
 

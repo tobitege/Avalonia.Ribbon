@@ -5,7 +5,7 @@
 
     <Style Selector="local|RibbonDropDownButton">
         <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}" />
-        <Setter Property="Foreground" Value="{Binding $parent[Ribbon].Foreground}"/>
+        <Setter Property="Foreground" Value="{Binding $parent[Ribbon].Foreground}" />
         <Setter Property="Padding" Value="3" />
         <Setter Property="QuickAccessTemplate">
             <ControlTemplate>
@@ -46,7 +46,7 @@
                         FontSize="12.5"
                         IsChecked="{TemplateBinding IsDropDownOpen,
                                                     Mode=TwoWay}">
-                        <StackPanel Orientation="Vertical" >
+                        <StackPanel Orientation="Vertical">
                             <ContentPresenter Margin="0,0,0,4" Content="{TemplateBinding LargeIcon}" />
                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                 <ContentPresenter Content="{TemplateBinding Content}" />
@@ -176,7 +176,7 @@
                                     Name="PART_Popup"
                                     MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
                                     IsOpen="{TemplateBinding IsDropDownOpen,
-                                                             Mode=TwoWay}" 
+                                                             Mode=TwoWay}"
                                     PlacementTarget="{TemplateBinding}">
                                     <Border
                                         Padding="{DynamicResource MenuFlyoutPresenterThemePadding}"

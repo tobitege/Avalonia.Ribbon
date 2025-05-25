@@ -45,13 +45,13 @@
                     <Border Classes="RibbonButtonBackgroundBorder" Background="Transparent" BorderBrush="Transparent"
                             Padding="{TemplateBinding Padding}" CornerRadius="{DynamicResource ControlCornerRadius}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                    <DockPanel>
-                        <ContentPresenter Content="{TemplateBinding Icon}" DockPanel.Dock="Left" Width="16"
-                                          Height="16" />
-                        <ContentPresenter Classes="MediumContentPresenter" Content="{TemplateBinding Content}"
-                                          Margin="3,0,0,0" />
-                    </DockPanel>
-                </Border>
+                        <DockPanel>
+                            <ContentPresenter Content="{TemplateBinding Icon}" DockPanel.Dock="Left" Width="16"
+                                              Height="16" />
+                            <ContentPresenter Classes="MediumContentPresenter" Content="{TemplateBinding Content}"
+                                              Margin="3,0,0,0" />
+                        </DockPanel>
+                    </Border>
                 </DataValidationErrors>
             </ControlTemplate>
         </Setter>
@@ -94,7 +94,7 @@
                             </DockPanel>
                         </Border>
                     </DataValidationErrors>
-                    
+
                 </ControlTemplate>
             </Setter>
         </Style>
@@ -123,7 +123,7 @@
                                               Width="16" Height="16" />
                         </Border>
                     </DataValidationErrors>
-                    
+
                 </ControlTemplate>
             </Setter>
         </Style>

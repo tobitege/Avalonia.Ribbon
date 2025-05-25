@@ -108,5 +108,4 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
     }
 
     #endregion Properties
-    
 }
