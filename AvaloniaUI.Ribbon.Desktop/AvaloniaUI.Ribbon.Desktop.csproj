@@ -44,8 +44,8 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.3.0" />
+        <PackageReference Include="System.Text.Json" Version="8.0.5" />
         <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.0.7" />
-        <PackageReference Include="AvaloniaControls.Ribbon" Version="0.9.9"/>
     </ItemGroup>
     <ItemGroup>
         <Compile Update="**\*.axaml.cs">
@@ -64,5 +64,8 @@
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
         </None>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\AvaloniaUI.Ribbon\AvaloniaUI.Ribbon.csproj" />
     </ItemGroup>
 </Project>

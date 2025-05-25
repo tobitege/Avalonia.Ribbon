@@ -28,17 +28,17 @@
         <AvaloniaResource Include="**\*.axaml">
             <SubType>Designer</SubType>
         </AvaloniaResource>
-        <AvaloniaResource Include="Assets\**"/>
+        <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
     <ItemGroup>
-        <AvaloniaResource Remove="Controls\GalleryItem.axaml"/>
-        <AvaloniaResource Remove="Controls\InRibbonGallery.axaml"/>
-        <AvaloniaResource Remove="Controls\RibbonButton.axaml"/>
-        <AvaloniaResource Remove="Controls\RibbonGallery.axaml"/>
-        <AvaloniaResource Remove="Controls\SplitButtonControl.axaml"/>
-        <AvaloniaResource Remove="RibbonControl.axaml"/>
-        <AvaloniaResource Remove="Themes\Accents\Fluent.axaml"/>
-        <AvaloniaResource Remove="Themes\Accents\Simple.axaml"/>
+        <AvaloniaResource Remove="Controls\GalleryItem.axaml" />
+        <AvaloniaResource Remove="Controls\InRibbonGallery.axaml" />
+        <AvaloniaResource Remove="Controls\RibbonButton.axaml" />
+        <AvaloniaResource Remove="Controls\RibbonGallery.axaml" />
+        <AvaloniaResource Remove="Controls\SplitButtonControl.axaml" />
+        <AvaloniaResource Remove="RibbonControl.axaml" />
+        <AvaloniaResource Remove="Themes\Accents\Fluent.axaml" />
+        <AvaloniaResource Remove="Themes\Accents\Simple.axaml" />
     </ItemGroup>
     <ItemGroup>
         <None Include="..\LICENSE">
@@ -53,6 +53,7 @@
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.3.0" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.0" />
+        <PackageReference Include="System.Text.Json" Version="8.0.5" />
         <PackageReference Include="Xaml.Behaviors.Interactions" Version="11.3.0.7" />
     </ItemGroup>
     <ItemGroup>
