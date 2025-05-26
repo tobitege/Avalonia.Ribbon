@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Helpers;
 using AvaloniaUI.Ribbon.Models;
@@ -20,7 +21,7 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
     public static readonly StyledProperty<bool> CanAddToQuickAccessProperty =
         RibbonButton.CanAddToQuickAccessProperty.AddOwner<RibbonDropDownButton>();
 
-    public static readonly StyledProperty<object> ContentProperty =
+    public static readonly StyledProperty<object?> ContentProperty =
         ContentControl.ContentProperty.AddOwner<RibbonDropDownButton>();
 
     public static readonly StyledProperty<object> IconProperty =
@@ -53,7 +54,7 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
         set => SetValue(CanAddToQuickAccessProperty, value);
     }
 
-    public object Content
+    public object? Content
     {
         get => GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
@@ -79,13 +80,13 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
 
     public RibbonControlSize MaxSize
     {
-        get => (RibbonControlSize)GetValue(MaxSizeProperty);
+        get => (RibbonControlSize)(GetValue(MaxSizeProperty) ?? RibbonControlSize.Small);
         set => SetValue(MaxSizeProperty, value);
     }
 
     public RibbonControlSize MinSize
     {
-        get => (RibbonControlSize)GetValue(MinSizeProperty);
+        get => (RibbonControlSize)(GetValue(MinSizeProperty) ?? RibbonControlSize.Small);
         set => SetValue(MinSizeProperty, value);
     }
 
@@ -103,7 +104,7 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
 
     public RibbonControlSize Size
     {
-        get => (RibbonControlSize)GetValue(SizeProperty);
+        get => (RibbonControlSize)(GetValue(SizeProperty) ?? RibbonControlSize.Small);
         set => SetValue(SizeProperty, value);
     }
 
