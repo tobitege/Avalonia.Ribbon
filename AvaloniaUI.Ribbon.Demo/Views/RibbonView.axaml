@@ -10,16 +10,16 @@
     Focusable="True"
     Orientation="{Binding RibbonOrientation}"
     mc:Ignorable="d">
-    <Design.DataContext>
-        <viewModels:MainViewModel />
-    </Design.DataContext>
-    <Ribbon.Resources>
-        <Panel
+	<Design.DataContext>
+		<viewModels:MainViewModel />
+	</Design.DataContext>
+	<Ribbon.Resources>
+		<Panel
             x:Key="Icon1"
             Width="14"
             Height="15"
             x:Shared="True">
-            <Border
+			<Border
                 Width="11"
                 Height="12"
                 Margin="0,2,0,0"
@@ -27,63 +27,63 @@
                 VerticalAlignment="Top"
                 BorderBrush="#FFFB983B"
                 BorderThickness="1">
-                <Border.Clip>
-                    <PathGeometry>
-                        <PathFigure IsClosed="True" StartPoint="0,0">
-                            <LineSegment Point="2,0" />
-                            <LineSegment Point="2,3" />
-                            <LineSegment Point="9,3" />
-                            <LineSegment Point="9,0" />
-                            <LineSegment Point="11,0" />
-                            <LineSegment Point="11,4" />
-                            <LineSegment Point="6,4" />
-                            <LineSegment Point="6,12" />
-                            <LineSegment Point="0,12" />
-                        </PathFigure>
-                    </PathGeometry>
-                </Border.Clip>
-                <Border BorderBrush="#FFF8DB8F" BorderThickness="1" />
-            </Border>
-            <!--  M 2 3 L 2 1 L 3 1 L 4 0 L 6 0 L 7 1 L 8 1 L 8 3 Z  -->
-            <Path
+				<Border.Clip>
+					<PathGeometry>
+						<PathFigure IsClosed="True" StartPoint="0,0">
+							<LineSegment Point="2,0" />
+							<LineSegment Point="2,3" />
+							<LineSegment Point="9,3" />
+							<LineSegment Point="9,0" />
+							<LineSegment Point="11,0" />
+							<LineSegment Point="11,4" />
+							<LineSegment Point="6,4" />
+							<LineSegment Point="6,12" />
+							<LineSegment Point="0,12" />
+						</PathFigure>
+					</PathGeometry>
+				</Border.Clip>
+				<Border BorderBrush="#FFF8DB8F" BorderThickness="1" />
+			</Border>
+			<!--  M 2 3 L 2 1 L 3 1 L 4 0 L 6 0 L 7 1 L 8 1 L 8 3 Z  -->
+			<Path
                 Data="M 2.5 3.5 L 2.5 1.5 L 3.5 1.5 L 4.5 0.5 L 6.5 0.5 L 7.5 1.5 L 8.5 1.5 L 8.5 3.5 Z"
                 Opacity="0.625"
                 Stroke="{Binding $parent[TemplatedControl].Foreground}"
                 StrokeThickness="1" />
-            <Border
+			<Border
                 Width="7"
                 Height="9"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 BorderBrush="{Binding $parent[TemplatedControl].Foreground}"
                 BorderThickness="1">
-                <StackPanel
+				<StackPanel
                     VerticalAlignment="Center"
                     Opacity="0.75"
                     Orientation="Vertical"
                     Spacing="1">
-                    <Rectangle
+					<Rectangle
                         Width="3"
                         Height="1"
                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                    <Rectangle
+					<Rectangle
                         Width="3"
                         Height="1"
                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                    <Rectangle
+					<Rectangle
                         Width="3"
                         Height="1"
                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                </StackPanel>
-            </Border>
-        </Panel>
-        <Panel
+				</StackPanel>
+			</Border>
+		</Panel>
+		<Panel
             x:Key="Icon1Large"
             Width="27"
             Height="30"
             Margin="0,0,1,0"
             x:Shared="True">
-            <Border
+			<Border
                 Width="21"
                 Height="24"
                 Margin="0,4,0,0"
@@ -91,61 +91,61 @@
                 VerticalAlignment="Top"
                 BorderBrush="#FFFB983B"
                 BorderThickness="1">
-                <Border.Clip>
-                    <PathGeometry>
-                        <PathFigure IsClosed="True" StartPoint="0,0">
-                            <LineSegment Point="4,0" />
-                            <LineSegment Point="4,3" />
-                            <LineSegment Point="17,3" />
-                            <LineSegment Point="17,0" />
-                            <LineSegment Point="21,0" />
-                            <LineSegment Point="21,7" />
-                            <LineSegment Point="12,7" />
-                            <LineSegment Point="12,24" />
-                            <LineSegment Point="0,24" />
-                        </PathFigure>
-                    </PathGeometry>
-                </Border.Clip>
-                <Border BorderBrush="#FFF8DB8F" BorderThickness="1" />
-            </Border>
-            <Path
+				<Border.Clip>
+					<PathGeometry>
+						<PathFigure IsClosed="True" StartPoint="0,0">
+							<LineSegment Point="4,0" />
+							<LineSegment Point="4,3" />
+							<LineSegment Point="17,3" />
+							<LineSegment Point="17,0" />
+							<LineSegment Point="21,0" />
+							<LineSegment Point="21,7" />
+							<LineSegment Point="12,7" />
+							<LineSegment Point="12,24" />
+							<LineSegment Point="0,24" />
+						</PathFigure>
+					</PathGeometry>
+				</Border.Clip>
+				<Border BorderBrush="#FFF8DB8F" BorderThickness="1" />
+			</Border>
+			<Path
                 Data="M 4.5 3.5 L 7.5 3.5 L 9.5 0.5 L 11.5 0.5 L 13.5 3.5 L 16.5 3.5 L 16.5 7.5 L 4.5 7.5 Z"
                 Opacity="0.625"
                 Stroke="{Binding $parent[TemplatedControl].Foreground}"
                 StrokeThickness="1" />
-            <Border
+			<Border
                 Width="14"
                 Height="18"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 BorderBrush="{Binding $parent[TemplatedControl].Foreground}"
                 BorderThickness="1">
-                <StackPanel
+				<StackPanel
                     VerticalAlignment="Center"
                     Opacity="0.75"
                     Orientation="Vertical"
                     Spacing="3">
-                    <Rectangle
+					<Rectangle
                         Width="6"
                         Height="1"
                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                    <Rectangle
+					<Rectangle
                         Width="6"
                         Height="1"
                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                    <Rectangle
+					<Rectangle
                         Width="6"
                         Height="1"
                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                </StackPanel>
-            </Border>
-        </Panel>
-        <Panel
+				</StackPanel>
+			</Border>
+		</Panel>
+		<Panel
             x:Key="Icon1QuickAccess"
             Width="14"
             Height="15"
             x:Shared="True">
-            <Border
+			<Border
                 Width="11"
                 Height="12"
                 Margin="0,2,0,0"
@@ -153,63 +153,63 @@
                 VerticalAlignment="Top"
                 BorderBrush="{Binding $parent[TemplatedControl].Foreground}"
                 BorderThickness="1">
-                <Border.Clip>
-                    <PathGeometry>
-                        <PathFigure IsClosed="True" StartPoint="0,0">
-                            <LineSegment Point="2,0" />
-                            <LineSegment Point="2,3" />
-                            <LineSegment Point="9,3" />
-                            <LineSegment Point="9,0" />
-                            <LineSegment Point="11,0" />
-                            <LineSegment Point="11,4" />
-                            <LineSegment Point="6,4" />
-                            <LineSegment Point="6,12" />
-                            <LineSegment Point="0,12" />
-                        </PathFigure>
-                    </PathGeometry>
-                </Border.Clip>
-            </Border>
-            <Path
+				<Border.Clip>
+					<PathGeometry>
+						<PathFigure IsClosed="True" StartPoint="0,0">
+							<LineSegment Point="2,0" />
+							<LineSegment Point="2,3" />
+							<LineSegment Point="9,3" />
+							<LineSegment Point="9,0" />
+							<LineSegment Point="11,0" />
+							<LineSegment Point="11,4" />
+							<LineSegment Point="6,4" />
+							<LineSegment Point="6,12" />
+							<LineSegment Point="0,12" />
+						</PathFigure>
+					</PathGeometry>
+				</Border.Clip>
+			</Border>
+			<Path
                 Data="M 2.5 3.5 L 2.5 1.5 L 3.5 1.5 L 4.5 0.5 L 6.5 0.5 L 7.5 1.5 L 8.5 1.5 L 8.5 3.5 Z"
                 Stroke="{Binding $parent[TemplatedControl].Foreground}"
                 StrokeThickness="1" />
-            <Border
+			<Border
                 Width="7"
                 Height="9"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 BorderBrush="{Binding $parent[TemplatedControl].Foreground}"
                 BorderThickness="1">
-                <StackPanel
+				<StackPanel
                     VerticalAlignment="Center"
                     Orientation="Vertical"
                     Spacing="1">
-                    <Rectangle
+					<Rectangle
                         Width="3"
                         Height="1"
                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                    <Rectangle
+					<Rectangle
                         Width="3"
                         Height="1"
                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                    <Rectangle
+					<Rectangle
                         Width="3"
                         Height="1"
                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                </StackPanel>
-            </Border>
-        </Panel>
-        <Panel
+				</StackPanel>
+			</Border>
+		</Panel>
+		<Panel
             x:Key="Icon2"
             Width="16"
             Height="16"
             x:Shared="True">
-            <Path
+			<Path
                 Data="M 0.5 0.5 L 15.5 0.5 L 15.5 15.5 L 2.5 15.5 L 0.5 13.5 Z"
                 Fill="#FFD998DD"
                 Stroke="#FF563457"
                 StrokeThickness="1" />
-            <Border
+			<Border
                 Width="10"
                 Height="6"
                 Margin="1"
@@ -218,7 +218,7 @@
                 Background="White"
                 BorderBrush="#7F563457"
                 BorderThickness="1,0,1,1" />
-            <Border
+			<Border
                 Width="8"
                 Height="5"
                 Margin="1"
@@ -227,18 +227,18 @@
                 Background="White"
                 BorderBrush="#7F563457"
                 BorderThickness="1,1,1,0" />
-        </Panel>
-        <Panel
+		</Panel>
+		<Panel
             x:Key="Icon2Large"
             Width="27"
             Height="27"
             x:Shared="True">
-            <Path
+			<Path
                 Data="M 0.5 0.5 L 26.5 0.5 L 26.5 26.5 L 3.5 26.5 L 0.5 23.5 Z"
                 Fill="#FFD998DD"
                 Stroke="#FF563457"
                 StrokeThickness="1" />
-            <Border
+			<Border
                 Width="19"
                 Height="12"
                 Margin="1"
@@ -247,7 +247,7 @@
                 Background="White"
                 BorderBrush="#7F563457"
                 BorderThickness="1,0,1,1" />
-            <Border
+			<Border
                 Width="11"
                 Height="7"
                 Margin="1"
@@ -256,17 +256,17 @@
                 Background="White"
                 BorderBrush="#7F563457"
                 BorderThickness="1,1,1,0" />
-        </Panel>
-        <Panel
+		</Panel>
+		<Panel
             x:Key="Icon2QuickAccess"
             Width="16"
             Height="16"
             x:Shared="True">
-            <Path
+			<Path
                 Data="M 0.5 0.5 L 15.5 0.5 L 15.5 15.5 L 2.5 15.5 L 0.5 13.5 Z"
                 Stroke="{Binding $parent[Button ].Foreground}"
                 StrokeThickness="1" />
-            <Border
+			<Border
                 Width="10"
                 Height="6"
                 Margin="1"
@@ -274,7 +274,7 @@
                 VerticalAlignment="Top"
                 BorderBrush="{Binding $parent[TemplatedControl].Foreground}"
                 BorderThickness="1,0,1,1" />
-            <Border
+			<Border
                 Width="8"
                 Height="5"
                 Margin="1"
@@ -282,44 +282,39 @@
                 VerticalAlignment="Bottom"
                 BorderBrush="{Binding $parent[TemplatedControl].Foreground}"
                 BorderThickness="1,1,1,0" />
-        </Panel>
-    </Ribbon.Resources>
-    <Ribbon.Styles>
-        <Style Selector="Ribbon /template/ ContentControl#PART_GroupsPresenterHolder">
-            <Setter Property="Margin" Value="5,0" />
-            <Setter Property="CornerRadius" Value="5" />
-        </Style>
-        <Style Selector="CheckBox TextBlock">
-            <Setter Property="TextWrapping" Value="Wrap" />
-        </Style>
-        <Style Selector="RibbonGroupBox">
-            <Setter Property="Command" Value="{Binding OnClickCommand}" />
-            <Setter Property="CommandParameter"
-                    Value="{Binding Path=Header, RelativeSource={RelativeSource Mode=Self}}" />
-        </Style>
-        <Style Selector="RibbonButton,RibbonToggleButton">
-            <!--  ,ribbon|SplitButtonControl  -->
-            <Setter Property="Command" Value="{Binding OnClickCommand}" />
-            <Setter Property="CommandParameter"
-                    Value="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" />
-        </Style>
-        <Style Selector="RibbonButton[Size=Small],RibbonToggleButton[Size=Small]">
-            <!--  ,ribbon|SplitButtonControl[Size=Small]  -->
-            <Setter Property="CommandParameter"
-                    Value="{Binding Path=(ToolTip.Tip), RelativeSource={RelativeSource Mode=Self}}" />
-        </Style>
-        <Style Selector="SplitButtonControl">
-            <Setter Property="Command" Value="{Binding OnClickCommand}" />
-            <Setter Property="CommandParameter"
-                    Value="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" />
-        </Style>
-        <Style Selector="SplitButtonControl[Size=Small]">
-            <Setter Property="CommandParameter"
-                    Value="{Binding Path=(ToolTip.Tip), RelativeSource={RelativeSource Mode=Self}}" />
-        </Style>
-    </Ribbon.Styles>
-    <Ribbon.HelpPaneContent>
-        <Button
+		</Panel>
+	</Ribbon.Resources>
+	<Ribbon.Styles>
+		<Style Selector="Ribbon /template/ ContentControl#PART_GroupsPresenterHolder">
+			<Setter Property="Margin" Value="5,0" />
+			<Setter Property="CornerRadius" Value="5" />
+		</Style>
+		<Style Selector="CheckBox TextBlock">
+			<Setter Property="TextWrapping" Value="Wrap" />
+		</Style>
+		<Style Selector="RibbonGroupBox">
+			<Setter Property="Command" Value="{Binding OnClickCommand}" />
+			<Setter Property="CommandParameter" Value="{Binding Path=Header, RelativeSource={RelativeSource Mode=Self}}" />
+		</Style>
+		<Style Selector="RibbonButton,RibbonToggleButton">
+			<!--  ,ribbon|SplitButtonControl  -->
+			<Setter Property="Command" Value="{Binding OnClickCommand}" />
+			<Setter Property="CommandParameter" Value="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" />
+		</Style>
+		<Style Selector="RibbonButton[Size=Small],RibbonToggleButton[Size=Small]">
+			<!--  ,ribbon|SplitButtonControl[Size=Small]  -->
+			<Setter Property="CommandParameter" Value="{Binding Path=(ToolTip.Tip), RelativeSource={RelativeSource Mode=Self}}" />
+		</Style>
+		<Style Selector="SplitButtonControl">
+			<Setter Property="Command" Value="{Binding OnClickCommand}" />
+			<Setter Property="CommandParameter" Value="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" />
+		</Style>
+		<Style Selector="SplitButtonControl[Size=Small]">
+			<Setter Property="CommandParameter" Value="{Binding Path=(ToolTip.Tip), RelativeSource={RelativeSource Mode=Self}}" />
+		</Style>
+	</Ribbon.Styles>
+	<Ribbon.HelpPaneContent>
+		<Button
             Name="HelpButton"
             HorizontalAlignment="Stretch"
             Classes="RibbonHelpButton"
@@ -327,7 +322,7 @@
             DockPanel.Dock="Bottom"
             Focusable="False"
             ToolTip.Tip="{DynamicResource AvaloniaRibbon.GetHelp}">
-            <TextBlock
+			<TextBlock
                 Height="10"
                 Margin="0,-1"
                 HorizontalAlignment="Center"
@@ -335,92 +330,93 @@
                 Foreground="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
                 Text="?"
                 TextAlignment="Center" />
-        </Button>
-    </Ribbon.HelpPaneContent>
-    <Ribbon.Menu>
-        <RibbonMenu KeyTip.KeyTipKeys="F">
-            <RibbonMenuItem
+		</Button>
+	</Ribbon.HelpPaneContent>
+	<Ribbon.Menu>
+		<RibbonMenu KeyTip.KeyTipKeys="F">
+			<RibbonMenuItem
                 Group="File"
                 Header="New"
                 IsTopDocked="True">
-                <RibbonMenuItem.Icon>
-                    <Rectangle
+				<RibbonMenuItem.Icon>
+					<Rectangle
                         Width="32"
                         Height="32"
                         Fill="Red" />
-                </RibbonMenuItem.Icon>
-                <RibbonMenuItem.Content />
-            </RibbonMenuItem>
-            <RibbonMenuItem
+				</RibbonMenuItem.Icon>
+				<RibbonMenuItem.Content />
+			</RibbonMenuItem>
+			<RibbonMenuItem
                 Group="File"
                 Header="Open"
                 IsTopDocked="True">
-                <RibbonMenuItem.Icon>
-                    <Rectangle
+				<RibbonMenuItem.Icon>
+					<Rectangle
                         Width="32"
                         Height="32"
                         Fill="Green" />
-                </RibbonMenuItem.Icon>
-                <RibbonMenuItem.Content>
-                    <DockPanel>
-                        <TabControl DockPanel.Dock="Top">
-                            <TabItem Header="TEST" />
-                        </TabControl>
-                    </DockPanel>
-                </RibbonMenuItem.Content>
-            </RibbonMenuItem>
-            <RibbonMenuItem Header="Export">
-                <RibbonMenuItem.Icon>
-                    <Rectangle
+				</RibbonMenuItem.Icon>
+				<RibbonMenuItem.Content>
+					<DockPanel>
+						<TabControl DockPanel.Dock="Top">
+							<TabItem Header="TEST" />
+						</TabControl>
+					</DockPanel>
+				</RibbonMenuItem.Content>
+			</RibbonMenuItem>
+			<RibbonMenuItem Header="Export">
+				<RibbonMenuItem.Icon>
+					<Rectangle
                         Width="32"
                         Height="32"
                         Fill="Purple" />
-                </RibbonMenuItem.Icon>
-            </RibbonMenuItem>
-            <RibbonMenuItem Header="Exit" IsBottomDocked="True">
-                <RibbonMenuItem.Icon>
-                    <Rectangle
+				</RibbonMenuItem.Icon>
+			</RibbonMenuItem>
+			<RibbonMenuItem Header="Exit" IsBottomDocked="True">
+				<RibbonMenuItem.Icon>
+					<Rectangle
                         Width="32"
                         Height="32"
                         Fill="Brown" />
-                </RibbonMenuItem.Icon>
-            </RibbonMenuItem>
-        </RibbonMenu>
-    </Ribbon.Menu>
-    <Ribbon.Tabs>
-        <RibbonTab Header="Home" KeyTip.KeyTipKeys="B">
-            <RibbonTab.Groups>
-                <RibbonGroupBox
+				</RibbonMenuItem.Icon>
+			</RibbonMenuItem>
+		</RibbonMenu>
+	</Ribbon.Menu>
+	<Ribbon.Tabs>
+		<RibbonTab Header="Home" KeyTip.KeyTipKeys="B">
+			<RibbonTab.Groups>
+				<!--  RibbonGroup Split Button Controls  -->
+				<RibbonGroupBox
                     Command="{Binding OnClickCommand}"
                     Header="SplitButtonControls"
                     KeyTip.KeyTipKeys="S">
-                    <SplitButtonControl
+					<SplitButtonControl
                         x:Name="RibbonSplitButton1"
                         Content="Large"
                         Icon="{DynamicResource Icon1}"
                         LargeIcon="{DynamicResource Icon1Large}"
                         QuickAccessIcon="{DynamicResource Icon1QuickAccess}"
                         Size="Large">
-                        <SplitButtonControl.Flyout>
-                            <MenuFlyout Placement="Bottom">
-                                <MenuItem Header="Item 1">
-                                    <MenuItem Header="Subitem 1" />
-                                    <MenuItem Header="Subitem 2" />
-                                    <MenuItem Header="Subitem 3" />
-                                </MenuItem>
-                                <MenuItem Header="Item 2" InputGesture="Ctrl+A" />
-                                <MenuItem Header="Item 3" />
-                            </MenuFlyout>
-                        </SplitButtonControl.Flyout>
-                    </SplitButtonControl>
-                    <SplitButtonControl
+						<SplitButtonControl.Flyout>
+							<MenuFlyout Placement="Bottom">
+								<MenuItem Header="Item 1">
+									<MenuItem Header="Subitem 1" />
+									<MenuItem Header="Subitem 2" />
+									<MenuItem Header="Subitem 3" />
+								</MenuItem>
+								<MenuItem Header="Item 2" InputGesture="Ctrl+A" />
+								<MenuItem Header="Item 3" />
+							</MenuFlyout>
+						</SplitButtonControl.Flyout>
+					</SplitButtonControl>
+					<SplitButtonControl
                         x:Name="RibbonSplitButton2"
                         Content="Medium"
                         Icon="{DynamicResource Icon2}"
                         LargeIcon="{DynamicResource Icon2Large}"
                         QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                         Size="Medium" />
-                    <SplitButtonControl
+					<SplitButtonControl
                         x:Name="RibbonSplitButton3"
                         Icon="{DynamicResource Icon2}"
                         LargeIcon="{DynamicResource Icon2Large}"
@@ -429,64 +425,68 @@
                         QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                         Size="Small"
                         ToolTip.Tip="Small" />
-                </RibbonGroupBox>
-                <RibbonGroupBox
+				</RibbonGroupBox>
+				<!--  RibbonGroup Button Controls  -->
+				<RibbonGroupBox
                     Command="{Binding OnClickCommand}"
                     Header="RibbonButtons"
                     KeyTip.KeyTipKeys="B">
-                    <RibbonButton
+					<RibbonButton
                         Content="Large"
                         Icon="{DynamicResource Icon1}"
                         LargeIcon="{DynamicResource Icon1Large}"
                         MaxSize="Large"
                         MinSize="Large"
                         QuickAccessIcon="{DynamicResource Icon1QuickAccess}" />
-                    <RibbonButton
+					<RibbonButton
                         Content="Medium"
                         Icon="{DynamicResource Icon2}"
                         LargeIcon="{DynamicResource Icon2Large}"
                         MaxSize="Medium"
                         MinSize="Medium"
                         QuickAccessIcon="{DynamicResource Icon2QuickAccess}" />
-                    <RibbonButton
+					<RibbonButton
                         Icon="{DynamicResource Icon2}"
                         LargeIcon="{DynamicResource Icon2Large}"
                         MaxSize="Small"
                         MinSize="Small"
                         QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                         ToolTip.Tip="Small" />
-                </RibbonGroupBox>
-                <RibbonGroupBox
+				</RibbonGroupBox>
+				<!--  RibbonGroup Toggle Button Controls  -->
+				<RibbonGroupBox
                     Command="{Binding OnClickCommand}"
                     Header="RibbonToggleButtons"
                     KeyTip.KeyTipKeys="T">
-                    <RibbonToggleButton
+					<RibbonToggleButton
                         Content="Large"
                         Icon="{DynamicResource Icon1}"
                         LargeIcon="{DynamicResource Icon1Large}"
                         MaxSize="Large"
                         MinSize="Large"
                         QuickAccessIcon="{DynamicResource Icon1QuickAccess}" />
-                    <RibbonToggleButton
+					<RibbonToggleButton
                         Content="Medium"
                         Icon="{DynamicResource Icon2}"
                         LargeIcon="{DynamicResource Icon2Large}"
                         MaxSize="Medium"
                         MinSize="Medium"
                         QuickAccessIcon="{DynamicResource Icon2QuickAccess}" />
-                    <RibbonToggleButton
+					<RibbonToggleButton
                         Icon="{DynamicResource Icon2}"
                         LargeIcon="{DynamicResource Icon2Large}"
                         MaxSize="Small"
                         MinSize="Small"
                         QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                         ToolTip.Tip="Small" />
-                </RibbonGroupBox>
-                <RibbonGroupBox
+				</RibbonGroupBox>
+				<!--  RibbonGroup Drop Down Button Controls  -->
+
+				<RibbonGroupBox
                     Command="{Binding OnClickCommand}"
                     Header="RibbonDropDownButtons"
                     KeyTip.KeyTipKeys="S">
-                    <RibbonDropDownButton
+					<RibbonDropDownButton
                         x:Name="LargeRibbonDropDownButton"
                         Content="Large"
                         Icon="{DynamicResource Icon1}"
@@ -494,32 +494,31 @@
                         MaxSize="Large"
                         MinSize="Large"
                         QuickAccessIcon="{DynamicResource Icon1QuickAccess}">
-                        <RibbonDropDownItem
+						<RibbonDropDownItem
                             Command="{Binding OnClickCommand}"
                             CommandParameter="RibbonDropDownButton Item 1"
                             Header="Item 1">
-                            <RibbonDropDownItem.Icon>
-
-                                <Rectangle
+							<RibbonDropDownItem.Icon>
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Red" />
-                            </RibbonDropDownItem.Icon>
-                        </RibbonDropDownItem>
-                        <RibbonDropDownItem
+							</RibbonDropDownItem.Icon>
+						</RibbonDropDownItem>
+						<RibbonDropDownSeparator />
+						<RibbonDropDownItem
                             Command="{Binding OnClickCommand}"
                             CommandParameter="RibbonDropDownButton Item 2"
                             Header="Item 2">
-                            <RibbonDropDownItem.Icon>
-
-                                <Rectangle
+							<RibbonDropDownItem.Icon>
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Green" />
-                            </RibbonDropDownItem.Icon>
-                        </RibbonDropDownItem>
-                    </RibbonDropDownButton>
-                    <RibbonDropDownButton
+							</RibbonDropDownItem.Icon>
+						</RibbonDropDownItem>
+					</RibbonDropDownButton>
+					<RibbonDropDownButton
                         Content="Medium"
                         Icon="{DynamicResource Icon2}"
                         ItemsSource="{Binding #LargeRibbonDropDownButton.Items}"
@@ -527,7 +526,7 @@
                         MaxSize="Medium"
                         MinSize="Medium"
                         QuickAccessIcon="{DynamicResource Icon2QuickAccess}" />
-                    <RibbonDropDownButton
+					<RibbonDropDownButton
                         Icon="{DynamicResource Icon2}"
                         ItemsSource="{Binding #LargeRibbonDropDownButton.Items}"
                         LargeIcon="{DynamicResource Icon2Large}"
@@ -535,652 +534,648 @@
                         MinSize="Small"
                         QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                         ToolTip.Tip="Small" />
-                </RibbonGroupBox>
-                <RibbonGroupBox Header="ComboBox">
-                    <RibbonGroupWrapPanel Orientation="Vertical">
-                        <RibbonGroupWrapPanel Orientation="Horizontal">
-                            <RibbonComboBox
+				</RibbonGroupBox>
+				<RibbonGroupBox Header="ComboBox">
+					<RibbonGroupWrapPanel Orientation="Vertical">
+						<RibbonGroupWrapPanel Orientation="Horizontal">
+							<RibbonComboBox
                                 Content="With Icon"
                                 Icon="{StaticResource Icon1QuickAccess}"
                                 Size="Large">
-                                <ComboBoxItem>TEST</ComboBoxItem>
-                                <ComboBoxItem>ONE</ComboBoxItem>
-                                <ComboBoxItem>TWO</ComboBoxItem>
-                            </RibbonComboBox>
-                            <RibbonComboBox Content="Without Icon" Size="Large">
-                                <ComboBoxItem>TEST</ComboBoxItem>
-                                <ComboBoxItem>THREE</ComboBoxItem>
-                                <ComboBoxItem>FOUR</ComboBoxItem>
-                            </RibbonComboBox>
-                        </RibbonGroupWrapPanel>
-                        <RibbonComboBox HorizontalAlignment="Center" Size="Large">
-                            <RibbonComboBox.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <ContentPresenter Content="{StaticResource Icon2QuickAccess}" />
-                                    <Label>Custom Content</Label>
-                                </StackPanel>
-                            </RibbonComboBox.Content>
-                            <ComboBoxItem>TEST</ComboBoxItem>
-                            <ComboBoxItem>THREE</ComboBoxItem>
-                            <ComboBoxItem>FOUR</ComboBoxItem>
-                        </RibbonComboBox>
-                    </RibbonGroupWrapPanel>
-                </RibbonGroupBox>
-            </RibbonTab.Groups>
-        </RibbonTab>
-        <RibbonTab Header="Galleries" KeyTip.KeyTipKeys="G">
-            <RibbonTab.Groups>
-                <RibbonGroupBox
+								<ComboBoxItem>TEST</ComboBoxItem>
+								<ComboBoxItem>ONE</ComboBoxItem>
+								<ComboBoxItem>TWO</ComboBoxItem>
+							</RibbonComboBox>
+							<RibbonComboBox Content="Without Icon" Size="Large">
+								<ComboBoxItem>TEST</ComboBoxItem>
+								<ComboBoxItem>THREE</ComboBoxItem>
+								<ComboBoxItem>FOUR</ComboBoxItem>
+							</RibbonComboBox>
+						</RibbonGroupWrapPanel>
+						<RibbonComboBox HorizontalAlignment="Center" Size="Large">
+							<RibbonComboBox.Content>
+								<StackPanel Orientation="Horizontal">
+									<ContentPresenter Content="{StaticResource Icon2QuickAccess}" />
+									<Label>Custom Content</Label>
+								</StackPanel>
+							</RibbonComboBox.Content>
+							<ComboBoxItem>TEST</ComboBoxItem>
+							<ComboBoxItem>THREE</ComboBoxItem>
+							<ComboBoxItem>FOUR</ComboBoxItem>
+						</RibbonComboBox>
+					</RibbonGroupWrapPanel>
+				</RibbonGroupBox>
+			</RibbonTab.Groups>
+		</RibbonTab>
+		<RibbonTab Header="Galleries" KeyTip.KeyTipKeys="G">
+			<RibbonTab.Groups>
+				<RibbonGroupBox
                     Command="{Binding OnClickCommand}"
                     Header="Large gallery"
                     KeyTip.KeyTipKeys="L">
-                    <Gallery Size="Large">
-                        <GalleryItem Content="Item 1">
-                            <GalleryItem.LargeIcon>
+					<Gallery Size="Large">
+						<GalleryItem Content="Item 1">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="Red" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 2">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 2">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="OrangeRed" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 3">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 3">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="Orange" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 4">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 4">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="Yellow" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 5">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 5">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="GreenYellow" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 6">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 6">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="YellowGreen" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 7">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 7">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="Green" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 8">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 8">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="Turquoise" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 9">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 9">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="Cyan" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 10">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 10">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="SkyBlue" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 11">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 11">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="Blue" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 12">
-                            <GalleryItem.LargeIcon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+						<GalleryItem Content="Item 12">
+							<GalleryItem.LargeIcon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="32"
                                     Height="32"
                                     Fill="BlueViolet" />
-                            </GalleryItem.LargeIcon>
-                        </GalleryItem>
-                    </Gallery>
-                </RibbonGroupBox>
-                <RibbonGroupBox Header="Medium gallery" KeyTip.KeyTipKeys="M">
-                    <Gallery Size="Medium">
-                        <GalleryItem Content="Item 1">
-                            <GalleryItem.Icon>
+							</GalleryItem.LargeIcon>
+						</GalleryItem>
+					</Gallery>
+				</RibbonGroupBox>
+				<RibbonGroupBox Header="Medium gallery" KeyTip.KeyTipKeys="M">
+					<Gallery Size="Medium">
+						<GalleryItem Content="Item 1">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Red" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 2">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 2">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="OrangeRed" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 3">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 3">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Orange" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 4">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 4">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Yellow" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 5">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 5">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="GreenYellow" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 6">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 6">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="YellowGreen" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 7">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 7">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Green" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 8">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 8">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Turquoise" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 9">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 9">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Cyan" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 10">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 10">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="SkyBlue" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 11">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 11">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Blue" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 12">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 12">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="BlueViolet" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                    </Gallery>
-                </RibbonGroupBox>
-                <RibbonGroupBox Header="Small gallery" KeyTip.KeyTipKeys="S">
-                    <Gallery Size="Small">
-                        <GalleryItem Content="Item 1">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+					</Gallery>
+				</RibbonGroupBox>
+				<RibbonGroupBox Header="Small gallery" KeyTip.KeyTipKeys="S">
+					<Gallery Size="Small">
+						<GalleryItem Content="Item 1">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Red" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 2">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 2">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="OrangeRed" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 3">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 3">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Orange" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 4">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 4">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Yellow" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 5">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 5">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="GreenYellow" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 6">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 6">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="YellowGreen" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 7">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 7">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Green" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 8">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 8">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Turquoise" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 9">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 9">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Cyan" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 10">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 10">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="SkyBlue" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 11">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 11">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="Blue" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                        <GalleryItem Content="Item 12">
-                            <GalleryItem.Icon>
+							</GalleryItem.Icon>
+						</GalleryItem>
+						<GalleryItem Content="Item 12">
+							<GalleryItem.Icon>
 
-                                <Rectangle
+								<Rectangle
                                     Width="16"
                                     Height="16"
                                     Fill="BlueViolet" />
-                            </GalleryItem.Icon>
-                        </GalleryItem>
-                    </Gallery>
-                </RibbonGroupBox>
-            </RibbonTab.Groups>
-        </RibbonTab>
-        <RibbonTab Header="Invisible tab" IsVisible="False" />
-        <RibbonContextualTabGroup
+							</GalleryItem.Icon>
+						</GalleryItem>
+					</Gallery>
+				</RibbonGroupBox>
+			</RibbonTab.Groups>
+		</RibbonTab>
+		<RibbonTab Header="Invisible tab" IsVisible="False" />
+		<RibbonContextualTabGroup
             Background="Red"
             Header="Contextual Group 1"
             IsVisible="{Binding ShowContextualGroup1, Mode=OneWay}">
-            <RibbonTab Header="Test A" KeyTip.KeyTipKeys="T">
-                <RibbonTab.Groups>
-                    <RibbonGroupBox
+			<RibbonTab Header="Test A" KeyTip.KeyTipKeys="T">
+				<RibbonTab.Groups>
+					<RibbonGroupBox
                         Command="{Binding OnClickCommand}"
                         Header="Test Group"
                         KeyTip.KeyTipKeys="D1">
-                        <RibbonButton
+						<RibbonButton
                             Content="On"
                             KeyTip.KeyTipKeys="A"
                             MinSize="Large"
                             ToolTip.Tip="On">
-                            <RibbonButton.LargeIcon>
+							<RibbonButton.LargeIcon>
 
-                                <Panel Width="32" Height="32">
-                                    <Ellipse
+								<Panel Width="32" Height="32">
+									<Ellipse
                                         Margin="2,4,2,0"
                                         Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                         StrokeThickness="4">
-                                        <Ellipse.Clip>
-                                            <PathGeometry>
-                                                <PathFigure IsClosed="True" StartPoint="0,0">
-                                                    <LineSegment Point="8,0" />
-                                                    <LineSegment Point="8,11" />
-                                                    <LineSegment Point="19,11" />
-                                                    <LineSegment Point="19,0" />
-                                                    <LineSegment Point="28,0" />
-                                                    <LineSegment Point="28,28" />
-                                                    <LineSegment Point="0,28" />
-                                                </PathFigure>
-                                            </PathGeometry>
-                                        </Ellipse.Clip>
-                                    </Ellipse>
-                                    <Rectangle
+										<Ellipse.Clip>
+											<PathGeometry>
+												<PathFigure IsClosed="True" StartPoint="0,0">
+													<LineSegment Point="8,0" />
+													<LineSegment Point="8,11" />
+													<LineSegment Point="19,11" />
+													<LineSegment Point="19,0" />
+													<LineSegment Point="28,0" />
+													<LineSegment Point="28,28" />
+													<LineSegment Point="0,28" />
+												</PathFigure>
+											</PathGeometry>
+										</Ellipse.Clip>
+									</Ellipse>
+									<Rectangle
                                         Width="4"
                                         Margin="0,0,0,9"
                                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                                </Panel>
-                            </RibbonButton.LargeIcon>
-                            <RibbonButton.QuickAccessIcon>
+								</Panel>
+							</RibbonButton.LargeIcon>
+							<RibbonButton.QuickAccessIcon>
 
-                                <Panel Width="16" Height="16">
-                                    <Ellipse
+								<Panel Width="16" Height="16">
+									<Ellipse
                                         Margin="1,2,1,0"
                                         Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                         StrokeThickness="2">
-                                        <Ellipse.Clip>
-                                            <PathGeometry>
-                                                <PathFigure IsClosed="True" StartPoint="0,0">
-                                                    <LineSegment Point="4,0" />
-                                                    <LineSegment Point="4,6" />
-                                                    <LineSegment Point="10,6" />
-                                                    <LineSegment Point="10,0" />
-                                                    <LineSegment Point="14,0" />
-                                                    <LineSegment Point="14,14" />
-                                                    <LineSegment Point="0,14" />
-                                                </PathFigure>
-                                            </PathGeometry>
-                                        </Ellipse.Clip>
-                                    </Ellipse>
-                                    <Rectangle
+										<Ellipse.Clip>
+											<PathGeometry>
+												<PathFigure IsClosed="True" StartPoint="0,0">
+													<LineSegment Point="4,0" />
+													<LineSegment Point="4,6" />
+													<LineSegment Point="10,6" />
+													<LineSegment Point="10,0" />
+													<LineSegment Point="14,0" />
+													<LineSegment Point="14,14" />
+													<LineSegment Point="0,14" />
+												</PathFigure>
+											</PathGeometry>
+										</Ellipse.Clip>
+									</Ellipse>
+									<Rectangle
                                         Width="2"
                                         Margin="0,1,0,5"
                                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                                </Panel>
-                            </RibbonButton.QuickAccessIcon>
-                        </RibbonButton>
-                        <RibbonButton
+								</Panel>
+							</RibbonButton.QuickAccessIcon>
+						</RibbonButton>
+						<RibbonButton
                             Content="Off"
                             KeyTip.KeyTipKeys="B"
                             MinSize="Large"
                             ToolTip.Tip="Off">
-                            <RibbonButton.LargeIcon>
+							<RibbonButton.LargeIcon>
 
-                                <Panel Width="32" Height="32">
-                                    <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}"
-                                             StrokeThickness="4" />
-                                    <Rectangle
+								<Panel Width="32" Height="32">
+									<Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}" StrokeThickness="4" />
+									<Rectangle
                                         Width="4"
                                         Margin="0,9"
                                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                                </Panel>
-                            </RibbonButton.LargeIcon>
-                            <RibbonButton.QuickAccessIcon>
+								</Panel>
+							</RibbonButton.LargeIcon>
+							<RibbonButton.QuickAccessIcon>
 
-                                <Panel Width="16" Height="16">
-                                    <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}"
-                                             StrokeThickness="2" />
-                                    <Rectangle
+								<Panel Width="16" Height="16">
+									<Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}" StrokeThickness="2" />
+									<Rectangle
                                         Width="2"
                                         Margin="0,4"
                                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                                </Panel>
-                            </RibbonButton.QuickAccessIcon>
-                        </RibbonButton>
-                    </RibbonGroupBox>
-                </RibbonTab.Groups>
-            </RibbonTab>
-            <RibbonTab Header="Test B" KeyTip.KeyTipKeys="Q">
-                <RibbonTab.Groups>
-                    <RibbonGroupBox
+								</Panel>
+							</RibbonButton.QuickAccessIcon>
+						</RibbonButton>
+					</RibbonGroupBox>
+				</RibbonTab.Groups>
+			</RibbonTab>
+			<RibbonTab Header="Test B" KeyTip.KeyTipKeys="Q">
+				<RibbonTab.Groups>
+					<RibbonGroupBox
                         Command="{Binding OnClickCommand}"
                         Header="Group"
                         KeyTip.KeyTipKeys="D1">
-                        <RibbonButton
+						<RibbonButton
                             Content="Yes"
                             KeyTip.KeyTipKeys="Y"
                             MinSize="Large"
                             QuickAccessIcon="{Binding Icon, RelativeSource={RelativeSource Mode=Self}}"
                             ToolTip.Tip="Yes">
-                            <RibbonButton.LargeIcon>
+							<RibbonButton.LargeIcon>
 
-                                <Path
+								<Path
                                     Width="32"
                                     Height="32"
                                     Data="M 1 15 L 10 24 L 30 4"
                                     Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                     StrokeThickness="4" />
-                            </RibbonButton.LargeIcon>
-                            <RibbonButton.Icon>
+							</RibbonButton.LargeIcon>
+							<RibbonButton.Icon>
 
-                                <Path
+								<Path
                                     Width="16"
                                     Height="16"
                                     Data="M 0.5 7 L 5 11.5 L 15 1.5"
                                     Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                     StrokeThickness="2" />
-                            </RibbonButton.Icon>
-                        </RibbonButton>
-                        <RibbonButton
+							</RibbonButton.Icon>
+						</RibbonButton>
+						<RibbonButton
                             Content="No"
                             KeyTip.KeyTipKeys="N"
                             MinSize="Large"
                             QuickAccessIcon="{Binding Icon, RelativeSource={RelativeSource Mode=Self}}"
                             ToolTip.Tip="No">
-                            <RibbonButton.LargeIcon>
+							<RibbonButton.LargeIcon>
 
-                                <Path
+								<Path
                                     Width="32"
                                     Height="32"
                                     Data="M 2 2 L 30 30 M 30 2 L 2 30"
                                     Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                     StrokeThickness="4" />
-                            </RibbonButton.LargeIcon>
-                            <RibbonButton.Icon>
+							</RibbonButton.LargeIcon>
+							<RibbonButton.Icon>
 
-                                <Path
+								<Path
                                     Width="16"
                                     Height="16"
                                     Data="M 1 1 L 15 15 M 15 1 L 1 15"
                                     Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                     StrokeThickness="2" />
-                            </RibbonButton.Icon>
-                        </RibbonButton>
-                    </RibbonGroupBox>
-                </RibbonTab.Groups>
-            </RibbonTab>
-            <RibbonTab Header="Test C" KeyTip.KeyTipKeys="N">
-                <RibbonTab.Groups>
-                    <RibbonGroupBox
+							</RibbonButton.Icon>
+						</RibbonButton>
+					</RibbonGroupBox>
+				</RibbonTab.Groups>
+			</RibbonTab>
+			<RibbonTab Header="Test C" KeyTip.KeyTipKeys="N">
+				<RibbonTab.Groups>
+					<RibbonGroupBox
                         Command="{Binding OnClickCommand}"
                         Header="Test Group lel"
                         KeyTip.KeyTipKeys="D1">
-                        <RibbonButton
+						<RibbonButton
                             Content="Non't"
                             KeyTip.KeyTipKeys="A"
                             MinSize="Large"
                             ToolTip.Tip="Non't">
-                            <RibbonButton.LargeIcon>
+							<RibbonButton.LargeIcon>
 
-                                <Panel Width="32" Height="32">
-                                    <Ellipse
+								<Panel Width="32" Height="32">
+									<Ellipse
                                         Margin="2,4,2,0"
                                         Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                         StrokeThickness="4">
-                                        <Ellipse.Clip>
-                                            <PathGeometry>
-                                                <PathFigure IsClosed="True" StartPoint="0,0">
-                                                    <LineSegment Point="8,0" />
-                                                    <LineSegment Point="8,11" />
-                                                    <LineSegment Point="19,11" />
-                                                    <LineSegment Point="19,0" />
-                                                    <LineSegment Point="28,0" />
-                                                    <LineSegment Point="28,28" />
-                                                    <LineSegment Point="0,28" />
-                                                </PathFigure>
-                                            </PathGeometry>
-                                        </Ellipse.Clip>
-                                    </Ellipse>
-                                    <Rectangle
+										<Ellipse.Clip>
+											<PathGeometry>
+												<PathFigure IsClosed="True" StartPoint="0,0">
+													<LineSegment Point="8,0" />
+													<LineSegment Point="8,11" />
+													<LineSegment Point="19,11" />
+													<LineSegment Point="19,0" />
+													<LineSegment Point="28,0" />
+													<LineSegment Point="28,28" />
+													<LineSegment Point="0,28" />
+												</PathFigure>
+											</PathGeometry>
+										</Ellipse.Clip>
+									</Ellipse>
+									<Rectangle
                                         Width="4"
                                         Margin="0,0,0,9"
                                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                                </Panel>
-                            </RibbonButton.LargeIcon>
-                            <RibbonButton.QuickAccessIcon>
+								</Panel>
+							</RibbonButton.LargeIcon>
+							<RibbonButton.QuickAccessIcon>
 
-                                <Panel Width="16" Height="16">
-                                    <Ellipse
+								<Panel Width="16" Height="16">
+									<Ellipse
                                         Margin="1,2,1,0"
                                         Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                         StrokeThickness="2">
-                                        <Ellipse.Clip>
-                                            <PathGeometry>
-                                                <PathFigure IsClosed="True" StartPoint="0,0">
-                                                    <LineSegment Point="4,0" />
-                                                    <LineSegment Point="4,6" />
-                                                    <LineSegment Point="10,6" />
-                                                    <LineSegment Point="10,0" />
-                                                    <LineSegment Point="14,0" />
-                                                    <LineSegment Point="14,14" />
-                                                    <LineSegment Point="0,14" />
-                                                </PathFigure>
-                                            </PathGeometry>
-                                        </Ellipse.Clip>
-                                    </Ellipse>
-                                    <Rectangle
+										<Ellipse.Clip>
+											<PathGeometry>
+												<PathFigure IsClosed="True" StartPoint="0,0">
+													<LineSegment Point="4,0" />
+													<LineSegment Point="4,6" />
+													<LineSegment Point="10,6" />
+													<LineSegment Point="10,0" />
+													<LineSegment Point="14,0" />
+													<LineSegment Point="14,14" />
+													<LineSegment Point="0,14" />
+												</PathFigure>
+											</PathGeometry>
+										</Ellipse.Clip>
+									</Ellipse>
+									<Rectangle
                                         Width="2"
                                         Margin="0,1,0,5"
                                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                                </Panel>
-                            </RibbonButton.QuickAccessIcon>
-                        </RibbonButton>
-                        <RibbonButton
+								</Panel>
+							</RibbonButton.QuickAccessIcon>
+						</RibbonButton>
+						<RibbonButton
                             Content="Yesn't"
                             KeyTip.KeyTipKeys="B"
                             MinSize="Large"
                             ToolTip.Tip="Yesn't">
-                            <RibbonButton.LargeIcon>
+							<RibbonButton.LargeIcon>
 
-                                <Panel Width="32" Height="32">
-                                    <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}"
-                                             StrokeThickness="4" />
-                                    <Rectangle
+								<Panel Width="32" Height="32">
+									<Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}" StrokeThickness="4" />
+									<Rectangle
                                         Width="4"
                                         Margin="0,9"
                                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                                </Panel>
-                            </RibbonButton.LargeIcon>
-                            <RibbonButton.QuickAccessIcon>
+								</Panel>
+							</RibbonButton.LargeIcon>
+							<RibbonButton.QuickAccessIcon>
 
-                                <Panel Width="16" Height="16">
-                                    <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}"
-                                             StrokeThickness="2" />
-                                    <Rectangle
+								<Panel Width="16" Height="16">
+									<Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}" StrokeThickness="2" />
+									<Rectangle
                                         Width="2"
                                         Margin="0,4"
                                         Fill="{Binding $parent[TemplatedControl].Foreground}" />
-                                </Panel>
-                            </RibbonButton.QuickAccessIcon>
-                        </RibbonButton>
-                    </RibbonGroupBox>
-                </RibbonTab.Groups>
-            </RibbonTab>
-        </RibbonContextualTabGroup>
-        <RibbonContextualTabGroup
+								</Panel>
+							</RibbonButton.QuickAccessIcon>
+						</RibbonButton>
+					</RibbonGroupBox>
+				</RibbonTab.Groups>
+			</RibbonTab>
+		</RibbonContextualTabGroup>
+		<RibbonContextualTabGroup
             Background="Green"
             Header="Contextual Group 2"
             IsVisible="{Binding ShowContextualGroup2}">
-            <RibbonTab Header="This tab's name is really long" KeyTip.KeyTipKeys="T">
-                <RibbonTab.Groups>
-                    <RibbonGroupBox
+			<RibbonTab Header="This tab's name is really long" KeyTip.KeyTipKeys="T">
+				<RibbonTab.Groups>
+					<RibbonGroupBox
                         Command="{Binding OnClickCommand}"
                         Header="Another bloody group"
                         KeyTip.KeyTipKeys="D1">
-                        <RibbonButton
+						<RibbonButton
                             Content="Button 1"
                             Icon="{DynamicResource Icon1}"
                             KeyTip.KeyTipKeys="A"
@@ -1188,7 +1183,7 @@
                             MinSize="Medium"
                             QuickAccessIcon="{DynamicResource Icon1QuickAccess}"
                             ToolTip.Tip="Button 1" />
-                        <RibbonButton
+						<RibbonButton
                             Content="Button 2"
                             Icon="{DynamicResource Icon2}"
                             KeyTip.KeyTipKeys="B"
@@ -1196,7 +1191,7 @@
                             MinSize="Medium"
                             QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                             ToolTip.Tip="Button 2" />
-                        <RibbonButton
+						<RibbonButton
                             Content="Button 3"
                             Icon="{DynamicResource Icon2}"
                             KeyTip.KeyTipKeys="C"
@@ -1204,21 +1199,21 @@
                             MinSize="Medium"
                             QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                             ToolTip.Tip="Button 3" />
-                    </RibbonGroupBox>
-                </RibbonTab.Groups>
-            </RibbonTab>
-        </RibbonContextualTabGroup>
-        <RibbonContextualTabGroup
+					</RibbonGroupBox>
+				</RibbonTab.Groups>
+			</RibbonTab>
+		</RibbonContextualTabGroup>
+		<RibbonContextualTabGroup
             Background="Yellow"
             Header="Contextual Group 3 with a very long name"
             IsVisible="{Binding ShowContextualGroup3}">
-            <RibbonTab Header="lol" KeyTip.KeyTipKeys="T">
-                <RibbonTab.Groups>
-                    <RibbonGroupBox
+			<RibbonTab Header="lol" KeyTip.KeyTipKeys="T">
+				<RibbonTab.Groups>
+					<RibbonGroupBox
                         Command="{Binding OnClickCommand}"
                         Header="lmao"
                         KeyTip.KeyTipKeys="D1">
-                        <RibbonButton
+						<RibbonButton
                             Content="no u"
                             Icon="{DynamicResource Icon1}"
                             KeyTip.KeyTipKeys="N"
@@ -1226,9 +1221,9 @@
                             MinSize="Small"
                             QuickAccessIcon="{DynamicResource Icon1QuickAccess}"
                             ToolTip.Tip="no u" />
-                    </RibbonGroupBox>
-                </RibbonTab.Groups>
-            </RibbonTab>
-        </RibbonContextualTabGroup>
-    </Ribbon.Tabs>
+					</RibbonGroupBox>
+				</RibbonTab.Groups>
+			</RibbonTab>
+		</RibbonContextualTabGroup>
+	</Ribbon.Tabs>
 </Ribbon>

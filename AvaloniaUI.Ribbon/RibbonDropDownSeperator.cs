@@ -1,16 +1,14 @@
-using System.Windows.Input;
-using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Templates;
-using Avalonia.Metadata;
-using AvaloniaUI.Ribbon.Contracts;
+
+using System;
 
 namespace AvaloniaUI.Ribbon;
 
-public class RibbonDropDownSeperator : NativeMenuItemSeparator
+public class RibbonDropDownSeparator : TemplatedControl
 {
-    public RibbonDropDownSeperator()
+    public RibbonDropDownSeparator()
     {
     }
+
+    protected override Type StyleKeyOverride => typeof(RibbonDropDownSeparator);
 }

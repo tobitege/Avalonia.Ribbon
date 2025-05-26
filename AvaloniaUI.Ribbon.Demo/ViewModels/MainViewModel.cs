@@ -1,7 +1,10 @@
 ﻿using System;
+
 using Avalonia.Controls;
 using Avalonia.Layout;
+
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace AvaloniaUI.Ribbon.Demo.ViewModels;
 
@@ -36,6 +39,7 @@ public partial class MainViewModel : ViewModelBase
         LastActionText = Help;
     }
 
+    [RelayCommand]
     public void OnClickCommand(object parameter)
     {
         var paramString = "[NO CONTENT]";

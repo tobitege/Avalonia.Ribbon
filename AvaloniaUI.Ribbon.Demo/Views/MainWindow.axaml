@@ -1,15 +1,22 @@
-<RibbonWindow xmlns="https://github.com/avaloniaui"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-              xmlns:views="clr-namespace:AvaloniaUI.Ribbon.Demo.Views"
-              xmlns:viewModels="clr-namespace:AvaloniaUI.Ribbon.Demo.ViewModels"
-              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-              x:Class="AvaloniaUI.Ribbon.Demo.Views.MainWindow"
-              Icon="/Assets/avalonia-logo.ico"
-              Title="AvaloniaUI.Ribbon.Demo">
+<RibbonWindow
+    x:Class="AvaloniaUI.Ribbon.Demo.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:AvaloniaUI.Ribbon.Demo.ViewModels"
+    xmlns:views="clr-namespace:AvaloniaUI.Ribbon.Demo.Views"
+    Title="AvaloniaUI.Ribbon.Demo"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Icon="/Assets/avalonia-logo.ico"
+    mc:Ignorable="d">
     <RibbonWindow.Resources>
-        <Panel x:Key="Icon1" x:Shared="True" Width="14" Height="15">
+        <Panel
+            x:Key="Icon1"
+            Width="14"
+            Height="15"
+            x:Shared="True">
             <Border
                 Width="11"
                 Height="12"
@@ -68,10 +75,12 @@
                 </StackPanel>
             </Border>
         </Panel>
-        <Panel x:Key="Icon1Large" x:Shared="True"
-               Width="27"
-               Height="30"
-               Margin="0,0,1,0">
+        <Panel
+            x:Key="Icon1Large"
+            Width="27"
+            Height="30"
+            Margin="0,0,1,0"
+            x:Shared="True">
             <Border
                 Width="21"
                 Height="24"
@@ -129,7 +138,11 @@
                 </StackPanel>
             </Border>
         </Panel>
-        <Panel x:Shared="True" Width="14" Height="15" x:Key="Icon1QuickAccess">
+        <Panel
+            x:Key="Icon1QuickAccess"
+            Width="14"
+            Height="15"
+            x:Shared="True">
             <Border
                 Width="11"
                 Height="12"
@@ -184,7 +197,11 @@
                 </StackPanel>
             </Border>
         </Panel>
-        <Panel x:Shared="True" Width="16" Height="16" x:Key="Icon2">
+        <Panel
+            x:Key="Icon2"
+            Width="16"
+            Height="16"
+            x:Shared="True">
             <Path
                 Data="M 0.5 0.5 L 15.5 0.5 L 15.5 15.5 L 2.5 15.5 L 0.5 13.5 Z"
                 Fill="#FFD998DD"
@@ -209,7 +226,11 @@
                 BorderBrush="#7F563457"
                 BorderThickness="1,1,1,0" />
         </Panel>
-        <Panel x:Shared="True" Width="27" Height="27" x:Key="Icon2Large">
+        <Panel
+            x:Key="Icon2Large"
+            Width="27"
+            Height="27"
+            x:Shared="True">
             <Path
                 Data="M 0.5 0.5 L 26.5 0.5 L 26.5 26.5 L 3.5 26.5 L 0.5 23.5 Z"
                 Fill="#FFD998DD"
@@ -234,7 +255,11 @@
                 BorderBrush="#7F563457"
                 BorderThickness="1,1,1,0" />
         </Panel>
-        <Panel x:Shared="True" Width="16" Height="16" x:Key="Icon2QuickAccess">
+        <Panel
+            x:Key="Icon2QuickAccess"
+            Width="16"
+            Height="16"
+            x:Shared="True">
             <Path
                 Data="M 0.5 0.5 L 15.5 0.5 L 15.5 15.5 L 2.5 15.5 L 0.5 13.5 Z"
                 Stroke="{Binding $parent[Button ].Foreground}"
@@ -351,12 +376,14 @@
         </QuickAccessToolbar>
     </RibbonWindow.QuickAccessToolbar>
     <RibbonWindow.Ribbon>
-        <DesktopRibbon VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent"
-                       Focusable="True" Orientation="{Binding RibbonOrientation}"
-                       DataContext="{Binding}">
-            <DesktopRibbon.Resources>
-
-            </DesktopRibbon.Resources>
+        <DesktopRibbon
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="Transparent"
+            DataContext="{Binding}"
+            Focusable="True"
+            Orientation="{Binding RibbonOrientation}">
+            <DesktopRibbon.Resources />
             <DesktopRibbon.Styles>
                 <Style Selector="DesktopRibbon /template/ ContentControl#PART_GroupsPresenterHolder">
                     <Setter Property="Margin" Value="5,0" />
@@ -367,35 +394,31 @@
                 </Style>
                 <Style Selector="RibbonGroupBox">
                     <Setter Property="Command" Value="{Binding OnClickCommand}" />
-                    <Setter Property="CommandParameter"
-                            Value="{Binding Path=Header, RelativeSource={RelativeSource Mode=Self}}" />
+                    <Setter Property="CommandParameter" Value="{Binding Path=Header, RelativeSource={RelativeSource Mode=Self}}" />
                 </Style>
                 <Style Selector="RibbonButton,RibbonToggleButton">
                     <!--  ,ribbon|SplitButtonControl  -->
                     <Setter Property="Command" Value="{Binding OnClickCommand}" />
-                    <Setter Property="CommandParameter"
-                            Value="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" />
+                    <Setter Property="CommandParameter" Value="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" />
                 </Style>
                 <Style Selector="RibbonButton[Size=Small],RibbonToggleButton[Size=Small]">
                     <!--  ,ribbon|SplitButtonControl[Size=Small]  -->
-                    <Setter Property="CommandParameter"
-                            Value="{Binding Path=(ToolTip.Tip), RelativeSource={RelativeSource Mode=Self}}" />
+                    <Setter Property="CommandParameter" Value="{Binding Path=(ToolTip.Tip), RelativeSource={RelativeSource Mode=Self}}" />
                 </Style>
                 <Style Selector="SplitButtonControl">
                     <Setter Property="Command" Value="{Binding OnClickCommand}" />
-                    <Setter Property="CommandParameter"
-                            Value="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" />
+                    <Setter Property="CommandParameter" Value="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}" />
                 </Style>
                 <Style Selector="SplitButtonControl[Size=Small]">
-                    <Setter Property="CommandParameter"
-                            Value="{Binding Path=(ToolTip.Tip), RelativeSource={RelativeSource Mode=Self}}" />
+                    <Setter Property="CommandParameter" Value="{Binding Path=(ToolTip.Tip), RelativeSource={RelativeSource Mode=Self}}" />
                 </Style>
             </DesktopRibbon.Styles>
             <DesktopRibbon.HelpPaneContent>
-                <StackPanel Orientation="{Binding RibbonOrientation}" VerticalAlignment="Center">
-                    <RibbonComboBox Content="ComboBox" Height="24" />
+                <StackPanel VerticalAlignment="Center" Orientation="{Binding RibbonOrientation}">
+                    <RibbonComboBox Height="24" Content="ComboBox" />
                     <Button
-                        Name="HelpButton" Height="24"
+                        Name="HelpButton"
+                        Height="24"
                         HorizontalAlignment="Stretch"
                         Classes="RibbonHelpButton"
                         Command="{Binding HelpCommand}"
@@ -411,22 +434,25 @@
                             TextAlignment="Center" />
                     </Button>
                 </StackPanel>
-
             </DesktopRibbon.HelpPaneContent>
             <DesktopRibbon.Menu>
-                <RibbonMenu
-                    Width="50"
-                    KeyTip.KeyTipKeys="F">
-                    <RibbonMenuItem Header="New" Group="File" IsTopDocked="True">
+                <RibbonMenu Width="50" KeyTip.KeyTipKeys="F">
+                    <RibbonMenuItem
+                        Group="File"
+                        Header="New"
+                        IsTopDocked="True">
                         <RibbonMenuItem.Icon>
                             <Rectangle
                                 Width="32"
                                 Height="32"
                                 Fill="Red" />
                         </RibbonMenuItem.Icon>
-                        <RibbonMenuItem.Content></RibbonMenuItem.Content>
+                        <RibbonMenuItem.Content />
                     </RibbonMenuItem>
-                    <RibbonMenuItem Header="Open" Group="File" IsTopDocked="True">
+                    <RibbonMenuItem
+                        Group="File"
+                        Header="Open"
+                        IsTopDocked="True">
                         <RibbonMenuItem.Icon>
                             <Rectangle
                                 Width="32"
@@ -460,12 +486,13 @@
                 </RibbonMenu>
             </DesktopRibbon.Menu>
             <DesktopRibbon.Tabs>
-                <RibbonTab KeyTip.KeyTipKeys="B" Header="Home">
+                <RibbonTab Header="Home" KeyTip.KeyTipKeys="B">
                     <RibbonTab.Groups>
+                        <!--  Split Button Controls  -->
                         <RibbonGroupBox
-                            KeyTip.KeyTipKeys="S"
                             Command="{Binding OnClickCommand}"
-                            Header="SplitButtonControls">
+                            Header="SplitButtonControls"
+                            KeyTip.KeyTipKeys="S">
                             <SplitButtonControl
                                 x:Name="RibbonSplitButton1"
                                 Content="Large"
@@ -502,68 +529,74 @@
                                 Size="Small"
                                 ToolTip.Tip="Small" />
                         </RibbonGroupBox>
+                        <!--  Normal Button Controls  -->
+
                         <RibbonGroupBox
-                            KeyTip.KeyTipKeys="B"
                             Command="{Binding OnClickCommand}"
-                            Header="RibbonButtons">
+                            Header="RibbonButtons"
+                            KeyTip.KeyTipKeys="B">
                             <RibbonButton
                                 Content="Large"
+                                Icon="{DynamicResource Icon1}"
                                 KeyTip.KeyTipKeys="U"
-                                Icon="{DynamicResource Icon1}"
                                 LargeIcon="{DynamicResource Icon1Large}"
                                 MaxSize="Large"
                                 MinSize="Large"
                                 QuickAccessIcon="{DynamicResource Icon1QuickAccess}" />
                             <RibbonButton
-                                KeyTip.KeyTipKeys="V"
                                 Content="Medium"
                                 Icon="{DynamicResource Icon2}"
+                                KeyTip.KeyTipKeys="V"
                                 LargeIcon="{DynamicResource Icon2Large}"
                                 MaxSize="Medium"
                                 MinSize="Medium"
                                 QuickAccessIcon="{DynamicResource Icon2QuickAccess}" />
                             <RibbonButton
-                                KeyTip.KeyTipKeys="W"
                                 Icon="{DynamicResource Icon2}"
+                                KeyTip.KeyTipKeys="W"
                                 LargeIcon="{DynamicResource Icon2Large}"
                                 MaxSize="Small"
                                 MinSize="Small"
                                 QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                                 ToolTip.Tip="Small" />
                         </RibbonGroupBox>
+                        <!--  Toggle Button Controls  -->
+
                         <RibbonGroupBox
-                            KeyTip.KeyTipKeys="T"
                             Command="{Binding OnClickCommand}"
-                            Header="RibbonToggleButtons">
+                            Header="RibbonToggleButtons"
+                            KeyTip.KeyTipKeys="T">
                             <RibbonToggleButton
                                 Content="Large"
-                                KeyTip.KeyTipKeys="X"
                                 Icon="{DynamicResource Icon1}"
+                                KeyTip.KeyTipKeys="X"
                                 LargeIcon="{DynamicResource Icon1Large}"
                                 MaxSize="Large"
                                 MinSize="Large"
                                 QuickAccessIcon="{DynamicResource Icon1QuickAccess}" />
                             <RibbonToggleButton
                                 Content="Medium"
-                                KeyTip.KeyTipKeys="Y"
                                 Icon="{DynamicResource Icon2}"
+                                KeyTip.KeyTipKeys="Y"
                                 LargeIcon="{DynamicResource Icon2Large}"
                                 MaxSize="Medium"
                                 MinSize="Medium"
                                 QuickAccessIcon="{DynamicResource Icon2QuickAccess}" />
                             <RibbonToggleButton
-                                KeyTip.KeyTipKeys="Z"
                                 Icon="{DynamicResource Icon2}"
+                                KeyTip.KeyTipKeys="Z"
                                 LargeIcon="{DynamicResource Icon2Large}"
                                 MaxSize="Small"
                                 MinSize="Small"
                                 QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                                 ToolTip.Tip="Small" />
                         </RibbonGroupBox>
+                        <!--  DropDown Button Controls  -->
+
                         <RibbonGroupBox
-                            KeyTip.KeyTipKeys="S"
                             Command="{Binding OnClickCommand}"
-                            Header="RibbonDropDownButtons">
+                            Header="RibbonDropDownButtons"
+                            KeyTip.KeyTipKeys="S">
                             <RibbonDropDownButton
                                 x:Name="LargeRibbonDropDownButton"
                                 Content="Large"
@@ -583,6 +616,7 @@
                                             Fill="Red" />
                                     </RibbonDropDownItem.Icon>
                                 </RibbonDropDownItem>
+                                <RibbonDropDownSeparator />
                                 <RibbonDropDownItem
                                     Command="{Binding OnClickCommand}"
                                     CommandParameter="RibbonDropDownButton Item 2"
@@ -594,6 +628,32 @@
                                             Fill="Green" />
                                     </RibbonDropDownItem.Icon>
                                 </RibbonDropDownItem>
+                                <RibbonDropDownItemsPresenter Header="Test">
+                                    <RibbonButton Size="Small">
+                                        <RibbonButton.Icon>
+                                            <Rectangle
+                                                Width="16"
+                                                Height="16"
+                                                Fill="Green" />
+                                        </RibbonButton.Icon>
+                                    </RibbonButton>
+                                    <RibbonButton Content="Medium" Size="Medium">
+                                        <RibbonButton.Icon>
+                                            <Rectangle
+                                                Width="16"
+                                                Height="16"
+                                                Fill="Red" />
+                                        </RibbonButton.Icon>
+                                    </RibbonButton>
+                                    <RibbonButton Content="Large" Size="Large">
+                                        <RibbonButton.LargeIcon>
+                                            <Rectangle
+                                                Width="16"
+                                                Height="16"
+                                                Fill="Purple" />
+                                        </RibbonButton.LargeIcon>
+                                    </RibbonButton>
+                                </RibbonDropDownItemsPresenter>
                             </RibbonDropDownButton>
                             <RibbonDropDownButton
                                 Content="Medium"
@@ -623,7 +683,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Green" />
-
                                     </RibbonDropDownItem.Icon>
                                 </RibbonDropDownItem>
                             </RibbonDropDownButton>
@@ -644,7 +703,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Red" />
-
                                     </RibbonDropDownItem.Icon>
                                 </RibbonDropDownItem>
                                 <RibbonDropDownItem
@@ -657,7 +715,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Green" />
-
                                     </RibbonDropDownItem.Icon>
                                 </RibbonDropDownItem>
                             </RibbonDropDownButton>
@@ -665,8 +722,10 @@
                         <RibbonGroupBox Header="ComboBox">
                             <RibbonGroupWrapPanel Orientation="Vertical">
                                 <RibbonGroupWrapPanel Orientation="Horizontal">
-                                    <RibbonComboBox Icon="{StaticResource Icon1QuickAccess}" Content="With Icon"
-                                                    Size="Large">
+                                    <RibbonComboBox
+                                        Content="With Icon"
+                                        Icon="{StaticResource Icon1QuickAccess}"
+                                        Size="Large">
                                         <ComboBoxItem>TEST</ComboBoxItem>
                                         <ComboBoxItem>ONE</ComboBoxItem>
                                         <ComboBoxItem>TWO</ComboBoxItem>
@@ -676,9 +735,8 @@
                                         <ComboBoxItem>THREE</ComboBoxItem>
                                         <ComboBoxItem>FOUR</ComboBoxItem>
                                     </RibbonComboBox>
-
                                 </RibbonGroupWrapPanel>
-                                <RibbonComboBox Size="Large" HorizontalAlignment="Center">
+                                <RibbonComboBox HorizontalAlignment="Center" Size="Large">
                                     <RibbonComboBox.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <ContentPresenter Content="{DynamicResource Icon2QuickAccess}" />
@@ -694,12 +752,12 @@
                     </RibbonTab.Groups>
                 </RibbonTab>
 
-                <RibbonTab KeyTip.KeyTipKeys="G" Header="Galleries">
+                <RibbonTab Header="Galleries" KeyTip.KeyTipKeys="G">
                     <RibbonTab.Groups>
                         <RibbonGroupBox
-                            KeyTip.KeyTipKeys="L"
                             Command="{Binding OnClickCommand}"
-                            Header="Large gallery">
+                            Header="Large gallery"
+                            KeyTip.KeyTipKeys="L">
                             <Gallery Size="Large">
                                 <GalleryItem Content="Item 1">
                                     <GalleryItem.LargeIcon>
@@ -708,7 +766,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="Red" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 2">
@@ -718,7 +775,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="OrangeRed" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 3">
@@ -728,7 +784,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="Orange" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 4">
@@ -738,7 +793,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="Yellow" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 5">
@@ -748,7 +802,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="GreenYellow" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 6">
@@ -758,7 +811,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="YellowGreen" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 7">
@@ -768,7 +820,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="Green" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 8">
@@ -778,7 +829,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="Turquoise" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 9">
@@ -788,7 +838,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="Cyan" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 10">
@@ -798,7 +847,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="SkyBlue" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 11">
@@ -808,7 +856,6 @@
                                             Width="32"
                                             Height="32"
                                             Fill="Blue" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 12">
@@ -818,12 +865,11 @@
                                             Width="32"
                                             Height="32"
                                             Fill="BlueViolet" />
-
                                     </GalleryItem.LargeIcon>
                                 </GalleryItem>
                             </Gallery>
                         </RibbonGroupBox>
-                        <RibbonGroupBox KeyTip.KeyTipKeys="M" Header="Medium gallery">
+                        <RibbonGroupBox Header="Medium gallery" KeyTip.KeyTipKeys="M">
                             <Gallery Size="Medium">
                                 <GalleryItem Content="Item 1">
                                     <GalleryItem.Icon>
@@ -832,7 +878,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Red" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 2">
@@ -842,7 +887,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="OrangeRed" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 3">
@@ -852,7 +896,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Orange" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 4">
@@ -862,7 +905,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Yellow" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 5">
@@ -872,7 +914,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="GreenYellow" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 6">
@@ -882,7 +923,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="YellowGreen" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 7">
@@ -892,7 +932,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Green" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 8">
@@ -902,7 +941,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Turquoise" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 9">
@@ -912,7 +950,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Cyan" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 10">
@@ -922,7 +959,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="SkyBlue" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 11">
@@ -932,7 +968,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Blue" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 12">
@@ -942,12 +977,11 @@
                                             Width="16"
                                             Height="16"
                                             Fill="BlueViolet" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                             </Gallery>
                         </RibbonGroupBox>
-                        <RibbonGroupBox KeyTip.KeyTipKeys="S" Header="Small gallery">
+                        <RibbonGroupBox Header="Small gallery" KeyTip.KeyTipKeys="S">
                             <Gallery Size="Small">
                                 <GalleryItem Content="Item 1">
                                     <GalleryItem.Icon>
@@ -956,7 +990,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Red" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 2">
@@ -966,7 +999,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="OrangeRed" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 3">
@@ -976,7 +1008,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Orange" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 4">
@@ -986,7 +1017,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Yellow" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 5">
@@ -996,7 +1026,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="GreenYellow" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 6">
@@ -1006,7 +1035,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="YellowGreen" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 7">
@@ -1016,7 +1044,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Green" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 8">
@@ -1026,7 +1053,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Turquoise" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 9">
@@ -1036,7 +1062,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Cyan" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 10">
@@ -1046,7 +1071,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="SkyBlue" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 11">
@@ -1056,7 +1080,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="Blue" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                                 <GalleryItem Content="Item 12">
@@ -1066,7 +1089,6 @@
                                             Width="16"
                                             Height="16"
                                             Fill="BlueViolet" />
-
                                     </GalleryItem.Icon>
                                 </GalleryItem>
                             </Gallery>
@@ -1078,15 +1100,15 @@
                     Background="Red"
                     Header="Contextual Group 1"
                     IsVisible="True">
-                    <RibbonTab KeyTip.KeyTipKeys="T" Header="Test A">
+                    <RibbonTab Header="Test A" KeyTip.KeyTipKeys="T">
                         <RibbonTab.Groups>
                             <RibbonGroupBox
-                                KeyTip.KeyTipKeys="D1"
                                 Command="{Binding OnClickCommand}"
-                                Header="Test Group">
+                                Header="Test Group"
+                                KeyTip.KeyTipKeys="D1">
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="A"
                                     Content="On"
+                                    KeyTip.KeyTipKeys="A"
                                     MinSize="Large"
                                     ToolTip.Tip="On">
                                     <RibbonButton.LargeIcon>
@@ -1115,7 +1137,6 @@
                                                 Margin="0,0,0,9"
                                                 Fill="{Binding $parent[TemplatedControl].Foreground}" />
                                         </Panel>
-
                                     </RibbonButton.LargeIcon>
                                     <RibbonButton.QuickAccessIcon>
 
@@ -1143,51 +1164,46 @@
                                                 Margin="0,1,0,5"
                                                 Fill="{Binding $parent[TemplatedControl].Foreground}" />
                                         </Panel>
-
                                     </RibbonButton.QuickAccessIcon>
                                 </RibbonButton>
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="B"
                                     Content="Off"
+                                    KeyTip.KeyTipKeys="B"
                                     MinSize="Large"
                                     ToolTip.Tip="Off">
                                     <RibbonButton.LargeIcon>
 
                                         <Panel Width="32" Height="32">
-                                            <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}"
-                                                     StrokeThickness="4" />
+                                            <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}" StrokeThickness="4" />
                                             <Rectangle
                                                 Width="4"
                                                 Margin="0,9"
                                                 Fill="{Binding $parent[TemplatedControl].Foreground}" />
                                         </Panel>
-
                                     </RibbonButton.LargeIcon>
                                     <RibbonButton.QuickAccessIcon>
 
                                         <Panel Width="16" Height="16">
-                                            <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}"
-                                                     StrokeThickness="2" />
+                                            <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}" StrokeThickness="2" />
                                             <Rectangle
                                                 Width="2"
                                                 Margin="0,4"
                                                 Fill="{Binding $parent[TemplatedControl].Foreground}" />
                                         </Panel>
-
                                     </RibbonButton.QuickAccessIcon>
                                 </RibbonButton>
                             </RibbonGroupBox>
                         </RibbonTab.Groups>
                     </RibbonTab>
-                    <RibbonTab KeyTip.KeyTipKeys="Q" Header="Test B">
+                    <RibbonTab Header="Test B" KeyTip.KeyTipKeys="Q">
                         <RibbonTab.Groups>
                             <RibbonGroupBox
-                                KeyTip.KeyTipKeys="D1"
                                 Command="{Binding OnClickCommand}"
-                                Header="Group">
+                                Header="Group"
+                                KeyTip.KeyTipKeys="D1">
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="Y"
                                     Content="Yes"
+                                    KeyTip.KeyTipKeys="Y"
                                     MinSize="Large"
                                     QuickAccessIcon="{Binding Icon, RelativeSource={RelativeSource Mode=Self}}"
                                     ToolTip.Tip="Yes">
@@ -1199,7 +1215,6 @@
                                             Data="M 1 15 L 10 24 L 30 4"
                                             Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                             StrokeThickness="4" />
-
                                     </RibbonButton.LargeIcon>
                                     <RibbonButton.Icon>
 
@@ -1209,12 +1224,11 @@
                                             Data="M 0.5 7 L 5 11.5 L 15 1.5"
                                             Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                             StrokeThickness="2" />
-
                                     </RibbonButton.Icon>
                                 </RibbonButton>
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="N"
                                     Content="No"
+                                    KeyTip.KeyTipKeys="N"
                                     MinSize="Large"
                                     QuickAccessIcon="{Binding Icon, RelativeSource={RelativeSource Mode=Self}}"
                                     ToolTip.Tip="No">
@@ -1226,7 +1240,6 @@
                                             Data="M 2 2 L 30 30 M 30 2 L 2 30"
                                             Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                             StrokeThickness="4" />
-
                                     </RibbonButton.LargeIcon>
                                     <RibbonButton.Icon>
 
@@ -1236,21 +1249,20 @@
                                             Data="M 1 1 L 15 15 M 15 1 L 1 15"
                                             Stroke="{Binding $parent[TemplatedControl].Foreground}"
                                             StrokeThickness="2" />
-
                                     </RibbonButton.Icon>
                                 </RibbonButton>
                             </RibbonGroupBox>
                         </RibbonTab.Groups>
                     </RibbonTab>
-                    <RibbonTab KeyTip.KeyTipKeys="N" Header="Test C">
+                    <RibbonTab Header="Test C" KeyTip.KeyTipKeys="N">
                         <RibbonTab.Groups>
                             <RibbonGroupBox
-                                KeyTip.KeyTipKeys="D1"
                                 Command="{Binding OnClickCommand}"
-                                Header="Test Group lel">
+                                Header="Test Group lel"
+                                KeyTip.KeyTipKeys="D1">
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="A"
                                     Content="Non't"
+                                    KeyTip.KeyTipKeys="A"
                                     MinSize="Large"
                                     ToolTip.Tip="Non't">
                                     <RibbonButton.LargeIcon>
@@ -1279,7 +1291,6 @@
                                                 Margin="0,0,0,9"
                                                 Fill="{Binding $parent[TemplatedControl].Foreground}" />
                                         </Panel>
-
                                     </RibbonButton.LargeIcon>
                                     <RibbonButton.QuickAccessIcon>
 
@@ -1307,37 +1318,32 @@
                                                 Margin="0,1,0,5"
                                                 Fill="{Binding $parent[TemplatedControl].Foreground}" />
                                         </Panel>
-
                                     </RibbonButton.QuickAccessIcon>
                                 </RibbonButton>
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="B"
                                     Content="Yesn't"
+                                    KeyTip.KeyTipKeys="B"
                                     MinSize="Large"
                                     ToolTip.Tip="Yesn't">
                                     <RibbonButton.LargeIcon>
 
                                         <Panel Width="32" Height="32">
-                                            <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}"
-                                                     StrokeThickness="4" />
+                                            <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}" StrokeThickness="4" />
                                             <Rectangle
                                                 Width="4"
                                                 Margin="0,9"
                                                 Fill="{Binding $parent[TemplatedControl].Foreground}" />
                                         </Panel>
-
                                     </RibbonButton.LargeIcon>
                                     <RibbonButton.QuickAccessIcon>
 
                                         <Panel Width="16" Height="16">
-                                            <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}"
-                                                     StrokeThickness="2" />
+                                            <Ellipse Stroke="{Binding $parent[TemplatedControl].Foreground}" StrokeThickness="2" />
                                             <Rectangle
                                                 Width="2"
                                                 Margin="0,4"
                                                 Fill="{Binding $parent[TemplatedControl].Foreground}" />
                                         </Panel>
-
                                     </RibbonButton.QuickAccessIcon>
                                 </RibbonButton>
                             </RibbonGroupBox>
@@ -1348,32 +1354,32 @@
                     Background="Green"
                     Header="Contextual Group 2"
                     IsVisible="{Binding ShowContextualGroup2}">
-                    <RibbonTab KeyTip.KeyTipKeys="T" Header="This tab's name is really long">
+                    <RibbonTab Header="This tab's name is really long" KeyTip.KeyTipKeys="T">
                         <RibbonTab.Groups>
                             <RibbonGroupBox
-                                KeyTip.KeyTipKeys="D1"
                                 Command="{Binding OnClickCommand}"
-                                Header="Another bloody group">
+                                Header="Another bloody group"
+                                KeyTip.KeyTipKeys="D1">
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="A"
                                     Content="Button 1"
                                     Icon="{DynamicResource Icon1}"
+                                    KeyTip.KeyTipKeys="A"
                                     LargeIcon="{DynamicResource Icon1Large}"
                                     MinSize="Medium"
                                     QuickAccessIcon="{DynamicResource Icon1QuickAccess}"
                                     ToolTip.Tip="Button 1" />
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="B"
                                     Content="Button 2"
                                     Icon="{DynamicResource Icon2}"
+                                    KeyTip.KeyTipKeys="B"
                                     LargeIcon="{DynamicResource Icon2Large}"
                                     MinSize="Medium"
                                     QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
                                     ToolTip.Tip="Button 2" />
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="C"
                                     Content="Button 3"
                                     Icon="{DynamicResource Icon2}"
+                                    KeyTip.KeyTipKeys="C"
                                     LargeIcon="{DynamicResource Icon2Large}"
                                     MinSize="Medium"
                                     QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
@@ -1386,16 +1392,16 @@
                     Background="Yellow"
                     Header="Contextual Group 3 with a very long name"
                     IsVisible="{Binding ShowContextualGroup3}">
-                    <RibbonTab KeyTip.KeyTipKeys="T" Header="lol">
+                    <RibbonTab Header="lol" KeyTip.KeyTipKeys="T">
                         <RibbonTab.Groups>
                             <RibbonGroupBox
-                                KeyTip.KeyTipKeys="D1"
                                 Command="{Binding OnClickCommand}"
-                                Header="lmao">
+                                Header="lmao"
+                                KeyTip.KeyTipKeys="D1">
                                 <RibbonButton
-                                    KeyTip.KeyTipKeys="N"
                                     Content="no u"
                                     Icon="{DynamicResource Icon1}"
+                                    KeyTip.KeyTipKeys="N"
                                     LargeIcon="{DynamicResource Icon1Large}"
                                     MinSize="Small"
                                     QuickAccessIcon="{DynamicResource Icon1QuickAccess}"
