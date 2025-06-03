@@ -1,17 +1,17 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!--  Add Resources Here  -->
-    <ControlTheme x:Key="{x:Type RibbonDropDownItemsPresenter}" TargetType="RibbonDropDownItemsPresenter">
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Panel>
-                    <Border
+	<!--  Add Resources Here  -->
+	<ControlTheme x:Key="{x:Type RibbonDropDownItemsPresenter}" TargetType="RibbonDropDownItemsPresenter">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel>
+					<Border
                         x:Name="BodyBorder"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{DynamicResource ControlCornerRadius}">
-                        <StackPanel Orientation="Vertical">
-                            <Label
+						<StackPanel Orientation="Vertical">
+							<Label
                                 x:Name="PART_HeaderLabel"
                                 Margin="{TemplateBinding Padding}"
                                 HorizontalAlignment="Stretch"
@@ -19,23 +19,22 @@
                                 HorizontalContentAlignment="Stretch"
                                 Background="{DynamicResource SystemControlDisabledChromeDisabledHighBrush}"
                                 Content="{TemplateBinding Header}" />
-                            <DockPanel>
-
-                                <ItemsPresenter
+							<DockPanel>
+								<ItemsPresenter
                                     x:Name="PART_ItemsPresenter"
                                     HorizontalAlignment="Stretch"
                                     DockPanel.Dock="Left"
                                     ItemsPanel="{TemplateBinding ItemsPanel}" />
-                            </DockPanel>
-                        </StackPanel>
-                    </Border>
-                </Panel>
-            </ControlTemplate>
-        </Setter>
-        <Setter Property="ItemsPanel">
-            <ItemsPanelTemplate>
-                <UniformGrid x:Name="GalleryItemsUniformGrid" Columns="3" />
-            </ItemsPanelTemplate>
-        </Setter>
-    </ControlTheme>
+							</DockPanel>
+						</StackPanel>
+					</Border>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+		<Setter Property="ItemsPanel">
+			<ItemsPanelTemplate>
+				<UniformGrid x:Name="GalleryItemsUniformGrid" Columns="3" />
+			</ItemsPanelTemplate>
+		</Setter>
+	</ControlTheme>
 </ResourceDictionary>

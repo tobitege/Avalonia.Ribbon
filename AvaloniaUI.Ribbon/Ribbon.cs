@@ -235,7 +235,7 @@ public class Ribbon : TabControl, IRibbon
 
         KeyTip.SetShowChildKeyTipKeys(this, false);
         IsOpen = false;
-        _prevFocusedElement.Focus();
+        _prevFocusedElement?.Focus();
 
         RaiseEvent(new RoutedEventArgs
         {
