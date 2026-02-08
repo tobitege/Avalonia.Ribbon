@@ -166,10 +166,17 @@ jobs:
 
       - name: Publish to NuGet
         if: ${{ inputs.skip_nuget != true }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
+          if [ -z "$NUGET_API_KEY" ]; then
+            echo "::error::Missing secret NUGET_API_KEY. Set it in repository settings before publishing."
+            exit 1
+          fi
+
           dotnet nuget push ./final/*.nupkg \
-            -k ${{ secrets.NUGET_API_KEY }} \
-            -s https://api.nuget.org/v3/index.json \
+            --api-key "$NUGET_API_KEY" \
+            --source "https://api.nuget.org/v3/index.json" \
             --skip-duplicate
 
       - name: Create and push tag
