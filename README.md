@@ -252,7 +252,45 @@ For a complete working reference, see:
                </Ribbon>
        ```
 
+### Ribbon Group Overflow Behavior
+
+By default, ribbon groups keep the existing behavior: a single row that shrinks groups from `Large` to `Small` when width is limited.
+
+For narrow layouts, you can opt in to wrapping groups across rows before shrinking:
+
+```xaml
+<Ribbon
+    Orientation="Horizontal"
+    GroupOverflowBehavior="WrapThenShrink"
+    MaxGroupRows="2">
+    <!-- Tabs and groups -->
+</Ribbon>
+```
+
+- `GroupOverflowBehavior="ShrinkOnly"` (default): single-row, shrink-first behavior.
+- `GroupOverflowBehavior="WrapThenShrink"`: use up to `MaxGroupRows` rows, then shrink if still overflowing.
+- `MaxGroupRows`: minimum value is `1`.
+- `MaxGroupRows` has no built-in upper limit in the control; demos can clamp the value for UX (for example `1..10`).
+
 ## Change Log
+
+### Update (2026-02-09)
+
+- Add ribbon group overflow API with `GroupOverflowBehavior` (`ShrinkOnly`, `WrapThenShrink`) and configurable `MaxGroupRows`.
+- Implement wrap-then-shrink behavior in `RibbonGroupsStackPanel`, including expansion back to `Large` when space increases.
+- Update core and desktop ribbon templates to bind overflow settings and support multi-row group layout.
+- Add layout tests in `AvaloniaUI.Ribbon.Tests` for default behavior, wrap-before-shrink behavior, shrink fallback, re-expansion, and `MaxGroupRows > 2`.
+- Improve both demo apps (default and Flowery) with:
+  - a wrap toggle,
+  - configurable max wrap rows (`1..10` in demo UX),
+  - responsive options panel wrapping,
+  - and a dedicated `Wrap Lab` tab to demonstrate behavior under constrained width.
+- Remove deprecated top-right help-pane `ComboBox` from the default desktop demo.
+- Fix `RibbonDropDownButton` flyout behavior so it no longer auto-closes shortly after opening and opens reliably again.
+- Add script split for launching demos:
+  - `scripts/run-desktop.ps1` now runs the regular desktop demo,
+  - `scripts/run-flowery.ps` runs the Flowery demo.
+- Document ribbon overflow behavior and usage in README.
 
 ### Update (08/02/2026)
 

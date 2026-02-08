@@ -120,7 +120,6 @@
                             <Popup
                                 x:Name="PART_CollapsedContentPopup"
                                 Width="{Binding Path=Bounds.Width, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                Height="96"
                                 IsOpen="{Binding IsCollapsedPopupOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
                                 Placement="LeftEdgeAlignedBottom"
                                 PlacementTarget="{Binding ElementName=SeparatorRectangle}"
@@ -146,7 +145,7 @@
                                             Background="{DynamicResource SystemControlForegroundChromeMediumBrush}">
                                 <ItemsControl
                                     Name="PART_SelectedGroupsHost"
-                                    Height="96"
+                                    MinHeight="96"
                                     MinWidth="100"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -177,6 +176,8 @@
                                                 Background="{TemplateBinding Background}"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Stretch"
+                                                GroupOverflowBehavior="{Binding $parent[windows:DesktopRibbon].GroupOverflowBehavior}"
+                                                MaxGroupRows="{Binding $parent[windows:DesktopRibbon].MaxGroupRows}"
                                                 Orientation="Horizontal" />
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>

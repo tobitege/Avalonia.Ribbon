@@ -1,7 +1,10 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Avalonia.Controls;
 using Avalonia.Layout;
+using AvaloniaUI.Ribbon.Models;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,6 +13,9 @@ namespace AvaloniaUI.Ribbon.Demo.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private const int MinRibbonGroupRows = 1;
+    private const int MaxRibbonGroupRows = 10;
+
     [ObservableProperty] private string _help = "Help requested!";
 
     [ObservableProperty] private string _lastActionText = "none";
@@ -26,8 +32,18 @@ public partial class MainViewModel : ViewModelBase
 
     [ObservableProperty] private bool _switchOrientation = true;
 
+    [ObservableProperty] private bool _enableRibbonGroupWrap = true;
+
+    [ObservableProperty] private RibbonGroupOverflowBehavior _ribbonGroupOverflowBehavior =
+        RibbonGroupOverflowBehavior.WrapThenShrink;
+
+    [ObservableProperty] private int _ribbonMaxGroupRows = 2;
+
     [ObservableProperty] private bool _switchTheme = true;
     public string Greeting => "Welcome to Avalonia!";
+
+    public IReadOnlyList<int> RibbonMaxGroupRowOptions { get; } =
+        Enumerable.Range(MinRibbonGroupRows, MaxRibbonGroupRows).ToArray();
 
     public MainViewModel()
     {
@@ -84,5 +100,26 @@ public partial class MainViewModel : ViewModelBase
             RibbonOrientation = Orientation.Horizontal;
         else
             RibbonOrientation = Orientation.Vertical;
+    }
+
+    partial void OnEnableRibbonGroupWrapChanged(bool value)
+    {
+        if (value)
+        {
+            RibbonGroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink;
+            if (RibbonMaxGroupRows < 2)
+                RibbonMaxGroupRows = 2;
+        }
+        else
+        {
+            RibbonGroupOverflowBehavior = RibbonGroupOverflowBehavior.ShrinkOnly;
+        }
+    }
+
+    partial void OnRibbonMaxGroupRowsChanged(int value)
+    {
+        var clamped = Math.Clamp(value, MinRibbonGroupRows, MaxRibbonGroupRows);
+        if (clamped != value)
+            RibbonMaxGroupRows = clamped;
     }
 }

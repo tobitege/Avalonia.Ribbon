@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Builds and starts the AvaloniaUI.Ribbon.Demo.Desktop application.
+    Builds and starts the AvaloniaUI.Ribbon.Demo.Flowery desktop application.
 
 .DESCRIPTION
     Builds the Desktop project and, if the resulting .exe exists, starts it in the background.
@@ -9,8 +9,8 @@
     Build configuration to use (default: Debug).
 
 .EXAMPLE
-    pwsh ./scripts/run-desktop.ps1
-    pwsh ./scripts/run-desktop.ps1 -Configuration Release
+    pwsh ./scripts/run-flowery.ps
+    pwsh ./scripts/run-flowery.ps -Configuration Release
 #>
 param(
     [string]$Configuration = "Debug"
@@ -19,7 +19,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$desktopProject = Join-Path $repoRoot "AvaloniaUI.Ribbon.Demo.Desktop/AvaloniaUI.Ribbon.Demo.Desktop.csproj"
+$desktopProject = Join-Path $repoRoot "AvaloniaUI.Ribbon.Demo.Flowery/AvaloniaUI.Ribbon.Demo.Flowery.csproj"
 
 if (-not (Test-Path $desktopProject)) {
     Write-Host "ERROR: Desktop project not found at $desktopProject" -ForegroundColor Red
@@ -44,7 +44,7 @@ if ([string]::IsNullOrWhiteSpace($tfm)) {
     exit 1
 }
 
-Write-Host "Building: AvaloniaUI.Ribbon.Demo.Desktop" -ForegroundColor Cyan
+Write-Host "Building: AvaloniaUI.Ribbon.Demo.Flowery" -ForegroundColor Cyan
 Write-Host "  Configuration: $Configuration" -ForegroundColor Gray
 Write-Host "  TargetFramework: $tfm" -ForegroundColor Gray
 

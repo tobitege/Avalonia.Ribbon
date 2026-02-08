@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -6,11 +8,15 @@ using Flowery.Controls;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using AvaloniaUI.Ribbon.Models;
 
 namespace AvaloniaUI.Ribbon.Demo.Flowery.ViewModels;
 
 public partial class MainViewModel : ViewModelBase, IDisposable
 {
+    private const int MinRibbonGroupRows = 1;
+    private const int MaxRibbonGroupRows = 10;
+
     [ObservableProperty] private string _help = "Help requested!";
 
     [ObservableProperty] private string _lastActionText = "none";
@@ -27,11 +33,20 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     [ObservableProperty] private bool _switchOrientation = true;
 
+    [ObservableProperty] private bool _enableRibbonGroupWrap = true;
+
+    [ObservableProperty] private RibbonGroupOverflowBehavior _ribbonGroupOverflowBehavior =
+        RibbonGroupOverflowBehavior.WrapThenShrink;
+
+    [ObservableProperty] private int _ribbonMaxGroupRows = 2;
+
     [ObservableProperty] private string _darkRadioThemeName = "Dark";
 
     [ObservableProperty] private string _lightRadioThemeName = "Light";
 
     public string Greeting => "Welcome to Avalonia!";
+
+    public IReadOnlyList<int> RibbonMaxGroupRowOptions { get; } = Enumerable.Range(MinRibbonGroupRows, MaxRibbonGroupRows).ToArray();
 
     public MainViewModel()
     {
@@ -72,6 +87,30 @@ public partial class MainViewModel : ViewModelBase, IDisposable
             RibbonOrientation = Orientation.Horizontal;
         else
             RibbonOrientation = Orientation.Vertical;
+    }
+
+    partial void OnEnableRibbonGroupWrapChanged(bool value)
+    {
+        if (value)
+        {
+            RibbonGroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink;
+            if (RibbonMaxGroupRows < 2)
+                RibbonMaxGroupRows = 2;
+        }
+        else
+        {
+            RibbonGroupOverflowBehavior = RibbonGroupOverflowBehavior.ShrinkOnly;
+        }
+    }
+
+    partial void OnRibbonMaxGroupRowsChanged(int value)
+    {
+        var clamped = Math.Clamp(value, MinRibbonGroupRows, MaxRibbonGroupRows);
+        if (clamped != value)
+        {
+            RibbonMaxGroupRows = clamped;
+            return;
+        }
     }
 
     private void OnThemeChanged(object sender, string themeName)

@@ -14,6 +14,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaUI.Ribbon.Contracts;
+using AvaloniaUI.Ribbon.Models;
 
 namespace AvaloniaUI.Ribbon;
 
@@ -104,6 +105,14 @@ public class Ribbon : TabControl, IRibbon
 
     public static readonly StyledProperty<Orientation> OrientationProperty =
         StackPanel.OrientationProperty.AddOwner<Ribbon>();
+
+    public static readonly StyledProperty<RibbonGroupOverflowBehavior> GroupOverflowBehaviorProperty =
+        AvaloniaProperty.Register<Ribbon, RibbonGroupOverflowBehavior>(nameof(GroupOverflowBehavior),
+            RibbonGroupOverflowBehavior.ShrinkOnly);
+
+    public static readonly StyledProperty<int> MaxGroupRowsProperty =
+        AvaloniaProperty.Register<Ribbon, int>(nameof(MaxGroupRows), 1,
+            coerce: (_, value) => Math.Max(1, value));
 
     public static readonly RoutedEvent<RoutedEventArgs> RibbonKeyTipsOpenedEvent =
         RoutedEvent.Register<MenuBase, RoutedEventArgs>("RibbonKeyTipsOpened", RoutingStrategies.Bubble);
@@ -200,6 +209,18 @@ public class Ribbon : TabControl, IRibbon
     {
         get => GetValue(OrientationProperty);
         set => SetValue(OrientationProperty, value);
+    }
+
+    public RibbonGroupOverflowBehavior GroupOverflowBehavior
+    {
+        get => GetValue(GroupOverflowBehaviorProperty);
+        set => SetValue(GroupOverflowBehaviorProperty, value);
+    }
+
+    public int MaxGroupRows
+    {
+        get => GetValue(MaxGroupRowsProperty);
+        set => SetValue(MaxGroupRowsProperty, value);
     }
 
     public ObservableCollection<RibbonGroupBox> SelectedGroups

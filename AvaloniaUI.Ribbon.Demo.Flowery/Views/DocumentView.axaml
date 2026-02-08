@@ -31,8 +31,8 @@
                     MinWidth="140"
                     VerticalAlignment="Center" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Orientation="Vertical">
+            <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel Margin="0,0,20,8" Orientation="Vertical">
                     <Label FontWeight="Bold">Theme</Label>
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <controls:DaisyThemeRadio
@@ -45,8 +45,7 @@
                             ThemeName="{Binding DarkRadioThemeName}" />
                     </StackPanel>
                 </StackPanel>
-                <Line IsVisible="True" Width="5" Margin="20, 0" Height="40" Fill="Gray" />
-                <StackPanel Orientation="Vertical">
+                <StackPanel Margin="0,0,20,8" Orientation="Vertical">
                     <Label FontWeight="Bold">Ribbon Orientation</Label>
                     <ToggleSwitch
                         x:Name="OrientationToggleSwitch"
@@ -54,7 +53,26 @@
                         OffContent="Vertical"
                         OnContent="Horizontal" />
                 </StackPanel>
-            </StackPanel>
+                <StackPanel Margin="0,0,20,8" Orientation="Vertical">
+                    <Label FontWeight="Bold">Ribbon Group Wrap</Label>
+                    <controls:DaisyToggle
+                        x:Name="WrapToggleSwitch"
+                        IsChecked="{Binding EnableRibbonGroupWrap}" />
+                </StackPanel>
+                <StackPanel Margin="0,0,20,8" Orientation="Vertical">
+                    <Label FontWeight="Bold">Max Wrap Rows</Label>
+                    <ComboBox
+                        Width="110"
+                        IsEnabled="{Binding EnableRibbonGroupWrap}"
+                        ItemsSource="{Binding RibbonMaxGroupRowOptions}"
+                        SelectedItem="{Binding RibbonMaxGroupRows}" />
+                </StackPanel>
+            </WrapPanel>
+            <TextBlock
+                MaxWidth="640"
+                Opacity="0.8"
+                Text="Tip: open the 'Wrap Lab' tab and reduce window width. With wrap OFF, groups stay on one clipped row; with wrap ON, they can use up to the selected row count before shrinking."
+                TextWrapping="Wrap" />
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="LAST ACTION: " />
                 <TextBlock Text="{Binding LastActionText}" />

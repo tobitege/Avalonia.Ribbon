@@ -382,6 +382,8 @@
             Background="Transparent"
             DataContext="{Binding}"
             Focusable="True"
+            GroupOverflowBehavior="{Binding RibbonGroupOverflowBehavior}"
+            MaxGroupRows="{Binding RibbonMaxGroupRows}"
             Orientation="{Binding RibbonOrientation}">
 			<DesktopRibbon.Resources />
 			<DesktopRibbon.Styles>
@@ -1139,6 +1141,64 @@
 									</GalleryItem.Icon>
 								</GalleryItem>
 							</Gallery>
+						</RibbonGroupBox>
+					</RibbonTab.Groups>
+				</RibbonTab>
+				<RibbonTab Header="Wrap Lab" KeyTip.KeyTipKeys="W">
+					<RibbonTab.Groups>
+						<RibbonGroupBox Header="Wrap Group 1" Width="180">
+							<RibbonButton
+                                Content="Alpha"
+                                Icon="{DynamicResource Icon1}"
+                                LargeIcon="{DynamicResource Icon1Large}"
+                                MinSize="Large"
+                                MaxSize="Large"
+                                QuickAccessIcon="{DynamicResource Icon1QuickAccess}" />
+						</RibbonGroupBox>
+						<RibbonGroupBox Header="Wrap Group 2" Width="180">
+							<RibbonButton
+                                Content="Beta"
+                                Icon="{DynamicResource Icon2}"
+                                LargeIcon="{DynamicResource Icon2Large}"
+                                MinSize="Large"
+                                MaxSize="Large"
+                                QuickAccessIcon="{DynamicResource Icon2QuickAccess}" />
+						</RibbonGroupBox>
+						<RibbonGroupBox Header="Wrap Group 3" Width="180">
+							<RibbonButton
+                                Content="Gamma"
+                                Icon="{DynamicResource Icon1}"
+                                LargeIcon="{DynamicResource Icon1Large}"
+                                MinSize="Large"
+                                MaxSize="Large"
+                                QuickAccessIcon="{DynamicResource Icon1QuickAccess}" />
+						</RibbonGroupBox>
+						<RibbonGroupBox Header="Wrap Group 4" Width="180">
+							<RibbonButton
+                                Content="Delta"
+                                Icon="{DynamicResource Icon2}"
+                                LargeIcon="{DynamicResource Icon2Large}"
+                                MinSize="Large"
+                                MaxSize="Large"
+                                QuickAccessIcon="{DynamicResource Icon2QuickAccess}" />
+						</RibbonGroupBox>
+						<RibbonGroupBox Header="Wrap Group 5" Width="180">
+							<RibbonButton
+                                Content="Epsilon"
+                                Icon="{DynamicResource Icon1}"
+                                LargeIcon="{DynamicResource Icon1Large}"
+                                MinSize="Large"
+                                MaxSize="Large"
+                                QuickAccessIcon="{DynamicResource Icon1QuickAccess}" />
+						</RibbonGroupBox>
+						<RibbonGroupBox Header="Wrap Group 6" Width="180">
+							<RibbonButton
+                                Content="Zeta"
+                                Icon="{DynamicResource Icon2}"
+                                LargeIcon="{DynamicResource Icon2Large}"
+                                MinSize="Large"
+                                MaxSize="Large"
+                                QuickAccessIcon="{DynamicResource Icon2QuickAccess}" />
 						</RibbonGroupBox>
 					</RibbonTab.Groups>
 				</RibbonTab>

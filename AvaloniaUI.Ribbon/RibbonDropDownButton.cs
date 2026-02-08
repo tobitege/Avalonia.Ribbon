@@ -3,9 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Threading;
 
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Helpers;
@@ -20,11 +17,9 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
 {
     #region Fields
 
-    private DispatcherTimer? _flyoutMonitorTimer;
-
     private Flyout? _flyout;
     private Button? _primaryButton = null;
-    private bool _isFlyoutOpen = false;
+    private bool _suppressDropDownSync;
 
     #endregion Fields
 
@@ -32,6 +27,13 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
     {
         RibbonControlHelper<RibbonDropDownButton>.SetProperties(out SizeProperty, out MinSizeProperty,
             out MaxSizeProperty);
+        IsDropDownOpenProperty.Changed.AddClassHandler<RibbonDropDownButton, bool>((sender, args) =>
+        {
+            if (sender._suppressDropDownSync)
+                return;
+
+            sender.SyncFlyoutWithDropDownState(args.NewValue.Value);
+        });
     }
 
     #region Static Properties
@@ -136,7 +138,6 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
     {
         base.OnApplyTemplate(e);
 
-        UnregisterEvents();
         UnregisterFlyoutEvents(_flyout);
 
         _primaryButton = e.NameScope.Find<Button>("PART_PrimaryButton");
@@ -144,105 +145,54 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
         if (_primaryButton != null)
         {
             _flyout = _primaryButton.Flyout as Flyout;
-            if (_flyout != null)
-            {
-                if (_flyout.Content is Control contentControl)
-                {
-                    contentControl.PointerExited += (_, __) =>
-                    {
-                        CloseFlyout();
-                    };
-                }
-            }
-        }
-
-        _primaryButton.Click += PrimaryButton_Click;
-        _primaryButton.AddHandler(PointerPressedEvent, PrimaryButton_PreviewPointerPressed, RoutingStrategies.Tunnel);
-    }
-
-    /// <summary>
-    /// Handle PreviewPointerPressed event for the primary button.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void PrimaryButton_PreviewPointerPressed(object sender, PointerPressedEventArgs e)
-    {
-    }
-
-    /// <summary>
-    /// Handle Click event for the primary button.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void PrimaryButton_Click(object sender, RoutedEventArgs e)
-    {
-        // Handle internal button click, so it won't bubble outside.
-        e.Handled = true;
-        OnClickPrimary(e);
-    }
-
-    /// <summary>
-    /// onClickPrimary is called when the primary button is clicked.
-    /// </summary>
-    /// <param name="e"></param>
-    private void OnClickPrimary(RoutedEventArgs e)
-    {
-        // Note: It is not currently required to check enabled status; however, this is a failsafe
-        if (IsEffectivelyEnabled)
-        {
-            if (_isFlyoutOpen)
-            {
-                CloseFlyout();
-            }
-            else
-            {
-                OpenFlyout();
-            }
+            RegisterFlyoutEvents(_flyout);
+            SyncFlyoutWithDropDownState(IsDropDownOpen);
         }
     }
 
-    /// <summary>
-    /// Opens the secondary button's flyout.
-    /// </summary>
-    protected void OpenFlyout()
+    private void Flyout_Opened(object? sender, EventArgs e)
     {
-        if (_flyout != null && _primaryButton != null)
-        {
-            _isFlyoutOpen = true;
-            _flyout.Placement = PlacementMode.Bottom;
-
-            _flyout.ShowAt(_primaryButton);
-
-            // Start monitoring pointer position
-            _flyoutMonitorTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1000) };
-            _flyoutMonitorTimer.Tick += (_, __) => MonitorPointerExit();
-            _flyoutMonitorTimer.Start();
-        }
+        SyncDropDownStateFromFlyout(true);
     }
 
-    /// <summary>
-    /// Monitors the pointer exit from the primary button and flyout content.
-    /// </summary>
-    private void MonitorPointerExit()
+    private void Flyout_Closed(object? sender, EventArgs e)
     {
-        if (_primaryButton == null || _flyout?.Content is not Control popupContent)
+        SyncDropDownStateFromFlyout(false);
+    }
+
+    private void SyncFlyoutWithDropDownState(bool isDropDownOpen)
+    {
+        if (_flyout is null || _primaryButton is null)
             return;
 
-        if (!_primaryButton.IsPointerOver && !popupContent.IsPointerOver)
+        if (isDropDownOpen)
         {
-            CloseFlyout();
+            if (!_flyout.IsOpen)
+            {
+                _flyout.Placement = PlacementMode.Bottom;
+                _flyout.ShowAt(_primaryButton);
+            }
+        }
+        else if (_flyout.IsOpen)
+        {
+            _flyout.Hide();
         }
     }
 
-    /// <summary>
-    /// Closes the secondary button's flyout.
-    /// </summary>
-    protected void CloseFlyout()
+    private void SyncDropDownStateFromFlyout(bool isOpen)
     {
-        _flyout?.Hide();
-        _isFlyoutOpen = false;
-        _flyoutMonitorTimer?.Stop();
-        _flyoutMonitorTimer = null;
+        if (IsDropDownOpen == isOpen)
+            return;
+
+        _suppressDropDownSync = true;
+        try
+        {
+            IsDropDownOpen = isOpen;
+        }
+        finally
+        {
+            _suppressDropDownSync = false;
+        }
     }
 
     /// <summary>
@@ -251,17 +201,20 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
     /// <param name="flyout">The flyout to disconnect events from.</param>
     private void UnregisterFlyoutEvents(FlyoutBase? flyout)
     {
+        if (flyout is null)
+            return;
+
+        flyout.Opened -= Flyout_Opened;
+        flyout.Closed -= Flyout_Closed;
     }
 
-    /// <summary>
-    /// Explicitly unregisters all events related to the two buttons in OnApplyTemplate().
-    /// </summary>
-    private void UnregisterEvents()
+    private void RegisterFlyoutEvents(FlyoutBase? flyout)
     {
-        if (_primaryButton != null)
-        {
-            _primaryButton.Click -= PrimaryButton_Click;
-            _primaryButton.RemoveHandler(PointerPressedEvent, PrimaryButton_PreviewPointerPressed);
-        }
+        if (flyout is null)
+            return;
+
+        flyout.Opened += Flyout_Opened;
+        flyout.Closed += Flyout_Closed;
     }
+
 }
