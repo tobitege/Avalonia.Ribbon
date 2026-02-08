@@ -4,9 +4,9 @@
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
         <ProjectGuid>{F2F7E655-E83D-4024-B155-CA5FCE3A827B}</ProjectGuid>
         <OutputType>Library</OutputType>
-        <Authors>Splitwirez, Alban Mazerolles, Rubal Walia, Sachith Liyanagama</Authors>
+        <Authors>Splitwirez, Alban Mazerolles, Rubal Walia, Sachith Liyanagama, tobitege</Authors>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <PackageId>AvaloniaControls.Ribbon.Desktop</PackageId>
+        <PackageId>AvaloniaControls.Ribbon.Desktop.Flowery</PackageId>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <Version>0.9.9</Version>
         <LangVersion>latest</LangVersion>
@@ -16,10 +16,10 @@
         <NuGetPackageImportStamp>
         </NuGetPackageImportStamp>
         <Title>Avalonia Ribbon Control for Windowed application.</Title>
-        <Description>Desktop-Specific version of AvaloniaUI Ribbon controls. Incase you would like to develop a single Cross-Platform app, use the AvaloniaControls.Ribbon package instead.</Description>
-        <Copyright>Partial Copyright (c) 2023 Sachith Liyanagama</Copyright>
-        <PackageProjectUrl>https://github.com/SachiHarshitha/Avalonia.Ribbon</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/SachiHarshitha/Avalonia.Ribbon.git</RepositoryUrl>
+        <Description>Desktop-Specific version of AvaloniaUI Ribbon controls. In case you would like to develop a single Cross-Platform app, use the AvaloniaControls.Ribbon.Flowery package instead.</Description>
+        <Copyright>Partial Copyright (c) 2023 Sachith Liyanagama; Partial Copyright (c) 2026 tobitege</Copyright>
+        <PackageProjectUrl>https://github.com/tobitege/Avalonia.Ribbon</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/tobitege/Avalonia.Ribbon.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>

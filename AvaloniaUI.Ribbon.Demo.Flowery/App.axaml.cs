@@ -1,25 +1,18 @@
-#nullable enable
-
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using Avalonia.ThemeManager;
+using Flowery.Controls;
 
-using AvaloniaUI.Ribbon.Demo.ViewModels;
-using AvaloniaUI.Ribbon.Demo.Views;
+using AvaloniaUI.Ribbon.Demo.Flowery.ViewModels;
+using AvaloniaUI.Ribbon.Demo.Flowery.Views;
 
-namespace AvaloniaUI.Ribbon.Demo;
+namespace AvaloniaUI.Ribbon.Demo.Flowery;
 
 public class App : Application
 {
-    public static IThemeManager? ThemeManager;
-
     public override void Initialize()
     {
-        ThemeManager = new FluentThemeManager();
-        ThemeManager.Initialize(this);
-        ThemeManager.Switch(0);
         AvaloniaXamlLoader.Load(this);
     }
 
@@ -28,6 +21,9 @@ public class App : Application
         // Line below is needed to remove Avalonia data validation.
         // Without this line you will get duplicate validations from both Avalonia and CT
         BindingPlugins.DataValidators.RemoveAt(0);
+
+        DaisyThemeManager.ApplyTheme("Dark");
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             desktop.MainWindow = new MainWindow
             {

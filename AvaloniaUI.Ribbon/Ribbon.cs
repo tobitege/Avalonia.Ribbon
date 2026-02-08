@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
-using Avalonia.Controls.Platform;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
@@ -45,7 +43,12 @@ public class Ribbon : TabControl, IRibbon
         SelectedIndexProperty.Changed.AddClassHandler<Ribbon>((x, e) => x.RefreshSelectedGroups());
 
         IsCollapsedProperty.Changed.AddClassHandler<Ribbon, bool>((sender, args) =>
-            sender.UpdatePresenterLocation(args.NewValue.Value));
+        {
+            if (sender.IsCollapsedPopupOpen)
+                sender.IsCollapsedPopupOpen = false;
+
+            sender.UpdatePresenterLocation(args.NewValue.Value);
+        });
 
         KeyTip.ShowChildKeyTipKeysProperty.Changed.AddClassHandler<Ribbon>((sender, args) =>
         {
@@ -139,11 +142,7 @@ public class Ribbon : TabControl, IRibbon
 
     private ObservableCollection<RibbonGroupBox> _selectedGroups = new();
 
-    private CompositeDisposable _selectedItemSubscriptions;
-
     private ObservableCollection<Control> _tabs = new();
-    private InputPaneState _state;
-    private Rect _occludedRect;
 
     #endregion Fields
 

@@ -1,0 +1,66 @@
+name: CI Build
+
+# Builds on every commit to verify everything compiles.
+# Does NOT publish anything to NuGet.
+
+on:
+  push:
+    branches:
+      - main
+      - alpha
+  pull_request:
+    branches:
+      - main
+      - alpha
+
+jobs:
+  build-libraries:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Build AvaloniaUI.Ribbon
+        run: dotnet build AvaloniaUI.Ribbon/AvaloniaUI.Ribbon.csproj -c Release
+
+      - name: Build AvaloniaUI.Ribbon.Desktop
+        run: dotnet build AvaloniaUI.Ribbon.Desktop/AvaloniaUI.Ribbon.Desktop.csproj -c Release
+
+  build-demos:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - rid: win-x64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Build shared demo project (Windows target only)
+        run: dotnet build AvaloniaUI.Ribbon.Demo/AvaloniaUI.Ribbon.Demo.csproj -f net9.0-windows -c Release
+
+      - name: Build desktop demo host
+        run: dotnet build AvaloniaUI.Ribbon.Demo.Desktop/AvaloniaUI.Ribbon.Demo.Desktop.csproj -c Release
+
+      - name: Build Flowery demo project (Windows target only)
+        run: dotnet build AvaloniaUI.Ribbon.Demo.Flowery/AvaloniaUI.Ribbon.Demo.Flowery.csproj -f net9.0-windows -c Release
+
+      - name: Publish Flowery desktop demo
+        shell: bash
+        run: |
+          dotnet publish AvaloniaUI.Ribbon.Demo.Flowery/AvaloniaUI.Ribbon.Demo.Flowery.csproj \
+            -f net9.0-windows \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:EnableCompressionInSingleFile=true \
+            -o ./publish/flowery

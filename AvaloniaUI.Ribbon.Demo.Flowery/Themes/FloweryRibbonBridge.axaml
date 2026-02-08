@@ -1,0 +1,71 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=netstandard">
+
+    <!-- Ribbon legacy aliases mapped to Flowery Daisy palette -->
+    <sys:Double x:Key="FontSizeNormal">12</sys:Double>
+    <sys:Double x:Key="ThemeDisabledOpacity">0.45</sys:Double>
+    <Thickness x:Key="ThemeBorderThickness">1</Thickness>
+
+    <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource DaisyBase100Color}" />
+    <SolidColorBrush x:Key="ThemeForegroundBrush" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="ThemeControlMidBrush" Color="{DynamicResource DaisyBase200Color}" />
+    <SolidColorBrush x:Key="ThemeControlMidHighBrush" Color="{DynamicResource DaisyBase200Color}" />
+    <SolidColorBrush x:Key="ThemeControlHighBrush" Color="{DynamicResource DaisyBase300Color}" />
+    <SolidColorBrush x:Key="ThemeControlHighlightMidBrush" Color="{DynamicResource DaisyBase300Color}" />
+    <SolidColorBrush x:Key="ThemeBorderLowBrush" Color="{DynamicResource DaisyNeutralColor}" />
+    <SolidColorBrush x:Key="ThemeBorderMidBrush" Color="{DynamicResource DaisyNeutralColor}" />
+    <SolidColorBrush x:Key="SystemControlHighlightAltBaseLowBrush" Color="{DynamicResource DaisyNeutralColor}" />
+
+    <SolidColorBrush x:Key="ThemeAccentBrush2" Color="{DynamicResource DaisyAccentColor}" />
+    <SolidColorBrush x:Key="ThemeAccentBrush3" Color="{DynamicResource DaisyPrimaryColor}" />
+    <SolidColorBrush x:Key="ThemeAccentBrush4" Color="{DynamicResource DaisyPrimaryFocusColor}" />
+
+    <SolidColorBrush x:Key="HoveredBackgroundColorBrush" Color="{DynamicResource DaisyBase300Color}" />
+    <SolidColorBrush x:Key="HoveredBorderBackgroundColorBrush" Color="{DynamicResource DaisyNeutralColor}" />
+    <SolidColorBrush x:Key="ClickedBackgroundColorBrush" Color="{DynamicResource DaisyPrimaryFocusColor}" />
+    <SolidColorBrush x:Key="ClickedBorderBackgroundColorBrush" Color="{DynamicResource DaisyPrimaryColor}" />
+
+    <SolidColorBrush x:Key="ButtonForeground" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource DaisyBase300Color}" />
+    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource DaisyBase200Color}" />
+    <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource DaisyNeutralColor}" />
+    <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="{DynamicResource DaisyBase300Color}" />
+
+    <SolidColorBrush x:Key="ToggleButtonForeground" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="ToggleButtonForegroundPressed" Color="{DynamicResource DaisyBase100Color}" />
+    <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource DaisyBase300Color}" />
+    <SolidColorBrush x:Key="ToggleButtonBackgroundPressed" Color="{DynamicResource DaisyPrimaryColor}" />
+    <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource DaisyPrimaryColor}" />
+    <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource DaisyNeutralColor}" />
+    <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource DaisyPrimaryFocusColor}" />
+
+    <SolidColorBrush x:Key="SystemControlBackgroundChromeMediumLowBrush" Color="{DynamicResource DaisyBase200Color}" />
+    <SolidColorBrush x:Key="SystemControlBackgroundChromeMediumBrush" Color="{DynamicResource DaisyBase300Color}" />
+    <SolidColorBrush x:Key="SystemControlForegroundChromeMediumBrush" Color="{DynamicResource DaisyBase100Color}" />
+    <SolidColorBrush x:Key="SystemControlBackgroundAltHighBrush" Color="{DynamicResource DaisyBase100Color}" />
+
+    <SolidColorBrush x:Key="ComboBoxBackground" Color="{DynamicResource DaisyBase100Color}" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundUnfocused" Color="{DynamicResource DaisyBase100Color}" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{DynamicResource DaisyBase200Color}" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="{DynamicResource DaisyBase300Color}" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundDisabled" Color="{DynamicResource DaisyBase200Color}" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="{DynamicResource DaisyNeutralColor}" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundBorderBrushUnfocused" Color="{DynamicResource DaisyNeutralColor}" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundBorderBrushFocused" Color="{DynamicResource DaisyPrimaryColor}" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{DynamicResource DaisyPrimaryColor}" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="{DynamicResource DaisyPrimaryFocusColor}" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrushDisabled" Color="{DynamicResource DaisyBase300Color}" />
+    <SolidColorBrush x:Key="ComboBoxForeground" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="ComboBoxForegroundFocused" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="ComboBoxForegroundFocusedPressed" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="ComboBoxForegroundDisabled" Color="{DynamicResource DaisyBase300Color}" />
+    <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{DynamicResource DaisyBase100Color}" />
+    <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{DynamicResource DaisyNeutralColor}" />
+    <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundFocused" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundFocusedPressed" Color="{DynamicResource DaisyBase100Color}" />
+    <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundDisabled" Color="{DynamicResource DaisyBase300Color}" />
+</ResourceDictionary>

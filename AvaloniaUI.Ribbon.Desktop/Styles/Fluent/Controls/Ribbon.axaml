@@ -405,9 +405,9 @@
         Selector="windows|DesktopRibbon[Orientation=Vertical][IsCollapsed=True] /template/ ToggleButton.RibbonToggleButton Path.RibbonExpandCollapsePath">
         <Setter Property="Data" Value="M 0 0 L 5 5 L 0 10" />
     </Style>
-    <!--Style Selector="windows|DesktopRibbon[IsCollapsed=True] /template/ ItemsControl#PART_SelectedGroupsHost">
-    <Setter Property="IsVisible" Value="false" />
-  </Style-->
+    <Style Selector="windows|DesktopRibbon[IsCollapsed=True] /template/ ContentControl#PART_GroupsPresenterHolder">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
 
     <Style Selector="windows|DesktopRibbon /template/ Popup Menu.RibbonMenuMenu">
         <Setter Property="Background" Value="Transparent" />

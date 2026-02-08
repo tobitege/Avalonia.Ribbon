@@ -1,0 +1,236 @@
+name: Release
+
+# MANUAL TRIGGER ONLY
+# Creates a release with NuGet packages and demo binaries.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 2026.2.8) - without "v" prefix'
+        required: true
+        type: string
+      skip_nuget:
+        description: 'Skip NuGet publish (useful when re-running failed releases)'
+        required: false
+        type: boolean
+        default: false
+      skip_tag:
+        description: 'Skip tag creation (assumes tag already exists remotely)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.validate.outputs.version }}
+      tag: ${{ steps.validate.outputs.tag }}
+    steps:
+      - name: Ensure branch is main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Releases can only be created from the main branch."
+          exit 1
+
+      - name: Validate version format
+        id: validate
+        run: |
+          VERSION="${{ inputs.version }}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid version format. Use semantic versioning like 2026.2.8"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Validated version: $VERSION, tag: v$VERSION"
+
+  build-packages:
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Verify version in Directory.Build.targets
+        run: |
+          TARGETS_VERSION=$(grep -oPm1 '(?<=<Version>)[^<]+' Directory.Build.targets || true)
+          if [ -z "$TARGETS_VERSION" ]; then
+            echo "::error::Could not find <Version> in Directory.Build.targets"
+            exit 1
+          fi
+          if [ "$TARGETS_VERSION" != "${{ needs.validate.outputs.version }}" ]; then
+            echo "::error::Version mismatch. Directory.Build.targets has $TARGETS_VERSION but input is ${{ needs.validate.outputs.version }}"
+            exit 1
+          fi
+          echo "Version matches Directory.Build.targets: $TARGETS_VERSION"
+
+      - name: Pack AvaloniaUI.Ribbon
+        run: dotnet pack AvaloniaUI.Ribbon/AvaloniaUI.Ribbon.csproj -c Release -o ./artifacts
+
+      - name: Pack AvaloniaUI.Ribbon.Desktop
+        run: dotnet pack AvaloniaUI.Ribbon.Desktop/AvaloniaUI.Ribbon.Desktop.csproj -c Release -o ./artifacts
+
+      - name: Upload package artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-artifacts
+          path: ./artifacts/*.nupkg
+
+  build-demos:
+    needs: validate
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        include:
+          - rid: win-x64
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Publish classic desktop demo
+        shell: bash
+        run: |
+          dotnet publish AvaloniaUI.Ribbon.Demo.Desktop/AvaloniaUI.Ribbon.Demo.Desktop.csproj \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:EnableCompressionInSingleFile=true \
+            -o ./publish/desktop
+
+      - name: Publish Flowery desktop demo
+        shell: bash
+        run: |
+          dotnet publish AvaloniaUI.Ribbon.Demo.Flowery/AvaloniaUI.Ribbon.Demo.Flowery.csproj \
+            -f net9.0-windows \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:EnableCompressionInSingleFile=true \
+            -o ./publish/flowery
+
+      - name: Archive demo outputs
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path ./artifacts -Force | Out-Null
+          Compress-Archive -Path ./publish/desktop/* -DestinationPath "./artifacts/AvaloniaRibbon-Demo-Desktop-${{ needs.validate.outputs.version }}-${{ matrix.rid }}.zip" -Force
+          Compress-Archive -Path ./publish/flowery/* -DestinationPath "./artifacts/AvaloniaRibbon-Demo-Flowery-${{ needs.validate.outputs.version }}-${{ matrix.rid }}.zip" -Force
+
+      - name: Upload demo artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-artifacts-${{ matrix.rid }}
+          path: ./artifacts/*.zip
+
+  publish:
+    needs: [validate, build-packages, build-demos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./release-artifacts
+
+      - name: Collect release artifacts
+        run: |
+          mkdir -p ./final
+          find ./release-artifacts -name "*.nupkg" -exec cp {} ./final/ \;
+          find ./release-artifacts -name "*.zip" -exec cp {} ./final/ \;
+          echo "Collected release artifacts:"
+          ls -la ./final/
+
+      - name: Publish to NuGet
+        if: ${{ inputs.skip_nuget != true }}
+        run: |
+          dotnet nuget push ./final/*.nupkg \
+            -k ${{ secrets.NUGET_API_KEY }} \
+            -s https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+      - name: Create and push tag
+        if: ${{ inputs.skip_tag != true }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ needs.validate.outputs.tag }}
+          git push origin ${{ needs.validate.outputs.tag }}
+
+      - name: Skip tag creation
+        if: ${{ inputs.skip_tag == true }}
+        run: echo "Skipping tag creation."
+
+      - name: Build release notes
+        run: |
+          VERSION="${{ needs.validate.outputs.version }}"
+          cat > release_notes.md <<EOF
+          ## What's Changed
+
+          Release version: \`$VERSION\`
+
+          ## NuGet Packages
+
+          - \`AvaloniaControls.Ribbon.Flowery.$VERSION.nupkg\`
+          - \`AvaloniaControls.Ribbon.Desktop.Flowery.$VERSION.nupkg\`
+
+          ## Demo Apps
+
+          - \`AvaloniaRibbon-Demo-Desktop-$VERSION-win-x64.zip\`
+          - \`AvaloniaRibbon-Demo-Flowery-$VERSION-win-x64.zip\`
+          EOF
+          cat release_notes.md
+
+      - name: Load custom release notes
+        id: release_body
+        run: |
+          {
+            echo 'body<<EOF'
+            cat release_notes.md
+            echo ''
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.validate.outputs.tag }}
+          name: "v${{ needs.validate.outputs.version }}"
+          files: ./final/*
+          generate_release_notes: true
+          body: ${{ steps.release_body.outputs.body }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "## Release Complete" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Version: ${{ needs.validate.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Tag: ${{ needs.validate.outputs.tag }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- NuGet: https://www.nuget.org/packages/AvaloniaControls.Ribbon.Flowery/${{ needs.validate.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- NuGet (Desktop): https://www.nuget.org/packages/AvaloniaControls.Ribbon.Desktop.Flowery/${{ needs.validate.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Release: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.validate.outputs.tag }}" >> "$GITHUB_STEP_SUMMARY"

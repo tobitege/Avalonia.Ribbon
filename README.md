@@ -12,6 +12,9 @@ by [Splitwirez](https://github.com/Splitwirez/AvaloniaRibbon). Once the Avalonia
 The original version of the component is used in **[Jaya File Manager](https://github.com/JayaFM/Jaya)**, but other
 projects are welcome to use it as well.
 
+> Note
+> This fork by tobitege focuses on providing a current, compilable NuGet version of Avalonia.Ribbon, including fixes, and a Flowery.NET demo to show how to theme the control. To avoid collisions with upstream packages, this fork publishes under its own package IDs: `AvaloniaControls.Ribbon.Flowery` and `AvaloniaControls.Ribbon.Desktop.Flowery`.
+
 ## Cross-Platform Support
 
 Given that Avalonia is a cross-platform UI framework and to support the availability, currently, this project is being
@@ -56,7 +59,7 @@ Apart from the above-mentioned global components, the desktop-specific controls 
 |  Ribbon Window   | RibbonWindow       |
 | Quick Access Bar | QuickAccessToolBar |
 
-## Previews:
+## Previews
 
 | Desktop                                                                                                                                          | WASM                                                                                                                                               |
 |--------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -71,22 +74,70 @@ Apart from the above-mentioned global components, the desktop-specific controls 
 2. Include ribbon styles to App.xaml as shown below.
 
    Default theme:
+
     ```xaml
         <StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/AvaloniaRibbon.xaml" />
     ```
 
    "DESKTOP" theme:
+
     ```xaml
         <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Default/AvaloniaRibbon.xaml" />
     ```
 
    and localized text (same for both themes):
+
     ```xaml
         <ResourceInclude Source="avares://AvaloniaUI.Ribbon/Locale/en-ca.xaml" />
     ```
 
-    3. Use the below mentioned sample as an example to use the ribbon control.
+### Use with Flowery.NET (Bridge)
+
+Use this when you want Ribbon visuals to follow Flowery Daisy theme tokens.
+
+1. Add NuGet packages:
+
+   ```xml
+   <ItemGroup>
+     <PackageReference Include="AvaloniaControls.Ribbon.Flowery" Version="*" />
+     <PackageReference Include="Flowery.NET" Version="*" />
+     <!-- Optional for desktop-specific controls -->
+     <PackageReference Include="AvaloniaControls.Ribbon.Desktop.Flowery" Version="*" />
+   </ItemGroup>
+   ```
+
+2. Add Flowery theme and Ribbon styles in `App.axaml`:
+
+   ```xaml
+   <Application
+       xmlns="https://github.com/avaloniaui"
+       xmlns:daisy="clr-namespace:Flowery;assembly=Flowery.NET">
+     <Application.Resources>
+       <ResourceDictionary>
+         <ResourceDictionary.MergedDictionaries>
+           <ResourceInclude Source="avares://AvaloniaUI.Ribbon/Locale/en-ca.axaml" />
+           <ResourceInclude Source="/Themes/FloweryRibbonBridge.axaml" />
+         </ResourceDictionary.MergedDictionaries>
+       </ResourceDictionary>
+     </Application.Resources>
+     <Application.Styles>
+       <FluentTheme />
+       <daisy:DaisyUITheme />
+       <StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/AvaloniaRibbon.axaml" />
+     </Application.Styles>
+   </Application>
+   ```
+
+3. Add a bridge resource dictionary (for example `Themes/FloweryRibbonBridge.axaml`) that maps Ribbon legacy brush keys (such as `ThemeBackgroundBrush`, `ThemeAccentBrush*`, `ButtonForeground`, `ToggleButton*`, `ComboBox*`) to Flowery Daisy colors (`DaisyBase*`, `DaisyPrimary*`, `DaisyAccent*`, `DaisyNeutral*`).
+
+For a complete working reference, see:
+
+- `AvaloniaUI.Ribbon.Demo.Flowery/App.axaml`
+- `AvaloniaUI.Ribbon.Demo.Flowery/Themes/FloweryRibbonBridge.axaml`
+
+    1. Use the below mentioned sample as an example to use the ribbon control.
        The sample is available in the [AvaloniaUI.Ribbon.Demo]() project.
+
        ```xaml
                <Ribbon Name="RibbonControl" DockPanel.Dock="Top" Orientation="Horizontal" HelpButtonCommand="{Binding HelpCommand}">
                    <RibbonMenu
@@ -203,6 +254,13 @@ Apart from the above-mentioned global components, the desktop-specific controls 
 
 ## Change Log
 
+### Update (08/02/2026)
+
+- Fix visibility/layout issue where `Large` buttons were not correctly hidden when the ribbon bar was collapsed/minimized.
+- Add `AvaloniaUI.Ribbon.Demo.Flowery` as a Flowery.NET-based demo project.
+- Centralize package version numbering via `Directory.Build.targets`.
+- Added Github workflows for CI build and NuGet package release for `AvaloniaControls.Ribbon.Flowery` and `AvaloniaControls.Ribbon.Desktop.Flowery`.
+
 ### Update (26/01/2025)
 
 - Add Ribbon ComboBox.
@@ -302,10 +360,9 @@ The remaining things which have be done are as follows.
 - Take care of the disapearance of icons in case of window resizing.
 - Handle click actions easily.
 
-# Avalonia Ribbon
+## Original acknowledgements
 
 Please acknowledge Splitwirez for all the last new features added to the ribbon. As far as I'm concerned, I'm just
 centralizing code and updating the nuget.
 
 You can also acknowledge Rubal Walia as well for cleaning up all my messy code.
-
