@@ -30,10 +30,10 @@ jobs:
       version: ${{ steps.validate.outputs.version }}
       tag: ${{ steps.validate.outputs.tag }}
     steps:
-      - name: Ensure branch is main
-        if: github.ref != 'refs/heads/main'
+      - name: Ensure branch is flowery
+        if: github.ref != 'refs/heads/flowery'
         run: |
-          echo "::error::Releases can only be created from the main branch."
+          echo "::error::Releases can only be created from the flowery branch."
           exit 1
 
       - name: Validate version format

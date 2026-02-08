@@ -6,11 +6,11 @@ name: CI Build
 on:
   push:
     branches:
-      - main
+      - flowery
       - alpha
   pull_request:
     branches:
-      - main
+      - flowery
       - alpha
 
 jobs:
