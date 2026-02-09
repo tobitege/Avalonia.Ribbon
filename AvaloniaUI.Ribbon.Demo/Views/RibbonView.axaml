@@ -996,6 +996,69 @@
 				</RibbonGroupBox>
 			</RibbonTab.Groups>
 		</RibbonTab>
+		<RibbonTab Header="Group Containers" KeyTip.KeyTipKeys="C">
+			<RibbonTab.Groups>
+				<RibbonGroupBox Header="Triple" KeyTip.KeyTipKeys="T">
+					<RibbonGroupTriple ItemSpacing="2">
+						<RibbonButton Content="Paste" Icon="{DynamicResource Icon1}" LargeIcon="{DynamicResource Icon1Large}" MinSize="Medium" MaxSize="Large" QuickAccessIcon="{DynamicResource Icon1QuickAccess}" ToolTip.Tip="Triple item 1" />
+						<RibbonButton Content="Paste As" Icon="{DynamicResource Icon2}" LargeIcon="{DynamicResource Icon2Large}" MinSize="Small" MaxSize="Medium" QuickAccessIcon="{DynamicResource Icon2QuickAccess}" ToolTip.Tip="Triple item 2" />
+						<RibbonButton Content="Format" Icon="{DynamicResource Icon1}" LargeIcon="{DynamicResource Icon1Large}" MinSize="Small" MaxSize="Medium" QuickAccessIcon="{DynamicResource Icon1QuickAccess}" ToolTip.Tip="Triple item 3" />
+					</RibbonGroupTriple>
+				</RibbonGroupBox>
+				<RibbonGroupBox Header="Lines Only" KeyTip.KeyTipKeys="L">
+					<RibbonGroupLines LargeLineCount="2" SmallLineCount="3" ItemSpacing="2">
+						<RibbonButton Content="Cut" Icon="{DynamicResource Icon2}" LargeIcon="{DynamicResource Icon2Large}" MinSize="Small" MaxSize="Medium" QuickAccessIcon="{DynamicResource Icon2QuickAccess}" ToolTip.Tip="Lines item 1" />
+						<RibbonButton Content="Copy" Icon="{DynamicResource Icon1}" LargeIcon="{DynamicResource Icon1Large}" MinSize="Small" MaxSize="Medium" QuickAccessIcon="{DynamicResource Icon1QuickAccess}" ToolTip.Tip="Lines item 2" />
+						<RibbonButton Content="Rename" Icon="{DynamicResource Icon2}" LargeIcon="{DynamicResource Icon2Large}" MinSize="Small" MaxSize="Medium" QuickAccessIcon="{DynamicResource Icon2QuickAccess}" ToolTip.Tip="Lines item 3" />
+						<RibbonButton Content="Move" Icon="{DynamicResource Icon1}" LargeIcon="{DynamicResource Icon1Large}" MinSize="Small" MaxSize="Medium" QuickAccessIcon="{DynamicResource Icon1QuickAccess}" ToolTip.Tip="Lines item 4" />
+						<RibbonButton Content="Duplicate" Icon="{DynamicResource Icon2}" LargeIcon="{DynamicResource Icon2Large}" MinSize="Small" MaxSize="Medium" QuickAccessIcon="{DynamicResource Icon2QuickAccess}" ToolTip.Tip="Lines item 5" />
+						<RibbonButton Content="Delete" Icon="{DynamicResource Icon1}" LargeIcon="{DynamicResource Icon1Large}" MinSize="Small" MaxSize="Medium" QuickAccessIcon="{DynamicResource Icon1QuickAccess}" ToolTip.Tip="Lines item 6" />
+					</RibbonGroupLines>
+				</RibbonGroupBox>
+		<RibbonGroupBox Header="Lines with Clusters" KeyTip.KeyTipKeys="Z">
+			<RibbonGroupLines LargeLineCount="{Binding ClusterBankLineCount}" SmallLineCount="{Binding ClusterBankLineCount}" ItemSpacing="2">
+				<RibbonGroupCluster>
+					<RibbonButton Content="A" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="A" />
+					<RibbonButton Content="B" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="B" />
+					<RibbonButton Content="C" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="C" />
+					<RibbonButton Content="D" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="D" />
+					<RibbonButton Content="E" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="E" />
+				</RibbonGroupCluster>
+				<RibbonGroupCluster>
+					<RibbonButton Content="K" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="K" />
+					<RibbonButton Content="L" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="L" />
+					<RibbonButton Content="M" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="M" />
+					<RibbonButton Content="N" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="N" />
+					<RibbonButton Content="O" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="O" />
+				</RibbonGroupCluster>
+				<RibbonGroupCluster>
+					<RibbonButton Content="U" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="U" />
+					<RibbonButton Content="V" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="V" />
+					<RibbonButton Content="W" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="W" />
+					<RibbonButton Content="X" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="X" />
+					<RibbonButton Content="Y" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="Y" />
+				</RibbonGroupCluster>
+				<RibbonGroupCluster>
+					<RibbonButton Content="F" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="F" />
+					<RibbonButton Content="G" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="G" />
+					<RibbonButton Content="H" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="H" />
+					<RibbonButton Content="I" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="I" />
+					<RibbonButton Content="J" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="J" />
+				</RibbonGroupCluster>
+				<RibbonGroupCluster>
+					<RibbonButton Content="P" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="P" />
+					<RibbonButton Content="Q" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="Q" />
+					<RibbonButton Content="R" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="R" />
+					<RibbonButton Content="S" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="S" />
+					<RibbonButton Content="T" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="T" />
+				</RibbonGroupCluster>
+				<RibbonGroupCluster>
+					<RibbonButton Content="Z" Icon="{Binding Content, RelativeSource={RelativeSource Self}}" MinSize="Small" MaxSize="Small" ToolTip.Tip="Z" />
+				</RibbonGroupCluster>
+			</RibbonGroupLines>
+		</RibbonGroupBox>
+			</RibbonTab.Groups>
+		</RibbonTab>
 		<RibbonTab Header="Invisible tab" IsVisible="False" />
 		<RibbonContextualTabGroup
             Background="Red"
@@ -1313,3 +1376,8 @@
 		</RibbonContextualTabGroup>
 	</Ribbon.Tabs>
 </Ribbon>
+
+
+
+
+

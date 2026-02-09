@@ -16,6 +16,9 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 {
     private const int MinRibbonGroupRows = 1;
     private const int MaxRibbonGroupRows = 10;
+    private const int TotalClusterBanks = 6;
+    private const int MinClusterBanksPerRow = 1;
+    private const int MaxClusterBanksPerRow = TotalClusterBanks;
 
     [ObservableProperty] private string _help = "Help requested!";
 
@@ -40,6 +43,10 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     [ObservableProperty] private int _ribbonMaxGroupRows = 2;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ClusterBankLineCount))]
+    private int _clusterBanksPerRow = 2;
+
     [ObservableProperty] private string _darkRadioThemeName = "Dark";
 
     [ObservableProperty] private string _lightRadioThemeName = "Light";
@@ -47,6 +54,10 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     public string Greeting => "Welcome to Avalonia!";
 
     public IReadOnlyList<int> RibbonMaxGroupRowOptions { get; } = Enumerable.Range(MinRibbonGroupRows, MaxRibbonGroupRows).ToArray();
+
+    public IReadOnlyList<int> ClusterBanksPerRowOptions { get; } = Enumerable.Range(MinClusterBanksPerRow, MaxClusterBanksPerRow).ToArray();
+
+    public int ClusterBankLineCount => (int)Math.Ceiling((double)TotalClusterBanks / ClusterBanksPerRow);
 
     public MainViewModel()
     {
@@ -111,6 +122,13 @@ public partial class MainViewModel : ViewModelBase, IDisposable
             RibbonMaxGroupRows = clamped;
             return;
         }
+    }
+
+    partial void OnClusterBanksPerRowChanged(int value)
+    {
+        var clamped = Math.Clamp(value, MinClusterBanksPerRow, MaxClusterBanksPerRow);
+        if (clamped != value)
+            ClusterBanksPerRow = clamped;
     }
 
     private void OnThemeChanged(object sender, string themeName)

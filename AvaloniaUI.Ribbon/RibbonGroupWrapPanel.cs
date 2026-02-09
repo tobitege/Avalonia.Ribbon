@@ -1,4 +1,3 @@
-﻿using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -20,26 +19,16 @@ public class RibbonGroupWrapPanel : WrapPanel
         AffectsMeasure<RibbonGroupWrapPanel>(DisplayModeProperty);
         AffectsRender<RibbonGroupWrapPanel>(DisplayModeProperty);
 
-        DisplayModeProperty.Changed.AddClassHandler<RibbonGroupWrapPanel>((sneder, args) =>
+        DisplayModeProperty.Changed.AddClassHandler<RibbonGroupWrapPanel>((sender, args) =>
         {
-            var children2 = sneder.Children.Where(x => x is IRibbonControl);
-            if ((GroupDisplayMode)args.NewValue == GroupDisplayMode.Large)
-            {
-                sneder.Orientation = Orientation.Horizontal;
-                foreach (IRibbonControl ctrl in children2)
-                    ctrl.Size = ctrl.MaxSize;
-            }
-            else if ((GroupDisplayMode)args.NewValue == GroupDisplayMode.Small)
-            {
-                sneder.Orientation = Orientation.Vertical;
-                foreach (IRibbonControl ctrl in children2)
-                    ctrl.Size = ctrl.MinSize;
-            }
+            sender.ApplyDisplayMode((GroupDisplayMode)args.NewValue);
         });
     }
 
     public RibbonGroupWrapPanel()
     {
+        Children.CollectionChanged += (_, _) => ApplyDisplayMode(DisplayMode);
+
         if (TemplatedParent is RibbonGroupBox parentBox)
         {
             parentBox.Rearranged += (_, _) => ArrangeOverride(Bounds.Size);
@@ -51,5 +40,19 @@ public class RibbonGroupWrapPanel : WrapPanel
     {
         get => GetValue(DisplayModeProperty);
         set => SetValue(DisplayModeProperty, value);
+    }
+
+    private void ApplyDisplayMode(GroupDisplayMode displayMode)
+    {
+        Orientation = displayMode == GroupDisplayMode.Small ? Orientation.Vertical : Orientation.Horizontal;
+
+        for (var i = 0; i < Children.Count; i++)
+        {
+            if (Children[i] is IRibbonGroupContainer groupContainer)
+                groupContainer.ApplyDisplayMode(displayMode);
+
+            if (Children[i] is IRibbonControl control)
+                control.Size = displayMode == GroupDisplayMode.Small ? control.MinSize : control.MaxSize;
+        }
     }
 }

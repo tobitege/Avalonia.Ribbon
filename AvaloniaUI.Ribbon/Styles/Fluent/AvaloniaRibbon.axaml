@@ -20,6 +20,7 @@
 	<StyleInclude Source="/Styles/Fluent/Controls/RibbonDropDownButton.axaml" />
 	<StyleInclude Source="/Styles/Fluent/Controls/RibbonToggleButton.axaml" />
 	<StyleInclude Source="/Styles/Fluent/Controls/RibbonGroupBox.axaml" />
+	<StyleInclude Source="/Styles/Fluent/Controls/RibbonGroupContainers.axaml" />
 	<StyleInclude Source="/Styles/Fluent/Controls/KeyTip.axaml" />
 	<StyleInclude Source="/Styles/Fluent/Controls/RibbonContextualTabGroup.axaml" />
 

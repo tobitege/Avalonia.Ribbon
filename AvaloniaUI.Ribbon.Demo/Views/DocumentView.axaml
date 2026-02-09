@@ -50,12 +50,50 @@
                         ItemsSource="{Binding RibbonMaxGroupRowOptions}"
                         SelectedItem="{Binding RibbonMaxGroupRows}" />
                 </StackPanel>
+                <StackPanel Margin="0,0,20,8" Orientation="Vertical">
+                    <Label FontWeight="Bold">Cluster Banks / Row</Label>
+                    <ComboBox
+                        Width="140"
+                        ItemsSource="{Binding ClusterBanksPerRowOptions}"
+                        SelectedItem="{Binding ClusterBanksPerRow}" />
+                </StackPanel>
             </WrapPanel>
             <TextBlock
                 MaxWidth="640"
                 Opacity="0.8"
                 Text="Tip: open the 'Wrap Lab' tab and reduce window width. With wrap OFF, groups stay on one row; with wrap ON, they use up to the selected row count before shrinking."
                 TextWrapping="Wrap" />
+            <Border
+                MaxWidth="760"
+                Padding="12"
+                BorderBrush="{DynamicResource ThemeBorderLowBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                    <StackPanel Grid.Column="0" Spacing="6">
+                        <TextBlock FontWeight="SemiBold" Text="RibbonGroupLines" />
+                        <TextBlock
+                            Opacity="0.9"
+                            Text="Best for independent actions. Items are arranged into line slots and can have mixed widths."
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            Opacity="0.75"
+                            Text="See 'Group Containers' tab: Lines Only group."
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="6">
+                        <TextBlock FontWeight="SemiBold" Text="RibbonGroupCluster" />
+                        <TextBlock
+                            Opacity="0.9"
+                            Text="Best for dense, compact related actions. Buttons form a tight strip with shared edges."
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            Opacity="0.75"
+                            Text="See 'Group Containers' tab: Lines with Clusters group."
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
+            </Border>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="LAST ACTION: " />
                 <TextBlock Text="{Binding LastActionText}" />
@@ -82,3 +120,4 @@
         </StackPanel>
     </DockPanel>
 </UserControl>
+

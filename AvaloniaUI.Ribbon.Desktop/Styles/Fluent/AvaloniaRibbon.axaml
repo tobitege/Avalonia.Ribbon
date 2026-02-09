@@ -24,6 +24,7 @@
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonDropDownButton.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonToggleButton.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonGroupBox.axaml" />
+	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonGroupContainers.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/KeyTip.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonContextualTabGroup.axaml" />
 

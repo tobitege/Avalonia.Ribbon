@@ -1,0 +1,48 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
+	<Style Selector="local|RibbonGroupTriple, local|RibbonGroupLines, local|RibbonGroupCluster">
+		<Setter Property="VerticalAlignment" Value="Top" />
+	</Style>
+
+	<Style Selector="local|RibbonGroupCluster local|RibbonButton, local|RibbonGroupCluster local|RibbonToggleButton, local|RibbonGroupCluster local|RibbonDropDownButton, local|RibbonGroupCluster local|RibbonSplitButton, local|RibbonGroupCluster local|SplitButtonControl">
+		<Setter Property="Margin" Value="-1,0,0,0" />
+	</Style>
+
+	<Style Selector="local|RibbonGroupCluster local|RibbonButton.cluster-first, local|RibbonGroupCluster local|RibbonToggleButton.cluster-first, local|RibbonGroupCluster local|RibbonDropDownButton.cluster-first, local|RibbonGroupCluster local|RibbonSplitButton.cluster-first, local|RibbonGroupCluster local|SplitButtonControl.cluster-first">
+		<Setter Property="Margin" Value="0,0,0,0" />
+	</Style>
+
+	<Style Selector="local|RibbonGroupCluster local|RibbonButton.cluster-single, local|RibbonGroupCluster local|RibbonToggleButton.cluster-single, local|RibbonGroupCluster local|RibbonDropDownButton.cluster-single, local|RibbonGroupCluster local|RibbonSplitButton.cluster-single, local|RibbonGroupCluster local|SplitButtonControl.cluster-single">
+		<Setter Property="Margin" Value="0,0,0,0" />
+	</Style>
+
+	<Style Selector="local|RibbonGroupCluster local|RibbonButton /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonDropDownButton /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonSplitButton /template/ Border.RibbonButtonBackgroundBorder">
+		<Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="CornerRadius" Value="0" />
+	</Style>
+
+	<Style Selector="local|RibbonGroupCluster local|RibbonToggleButton /template/ Border.RibbonToggleButtonBackgroundBorder, local|RibbonGroupCluster local|SplitButtonControl /template/ Border.RibbonToggleButtonBackgroundBorder">
+		<Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="CornerRadius" Value="0" />
+	</Style>
+
+	<Style Selector="local|RibbonGroupCluster local|RibbonButton.cluster-first /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonDropDownButton.cluster-first /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonSplitButton.cluster-first /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonToggleButton.cluster-first /template/ Border.RibbonToggleButtonBackgroundBorder, local|RibbonGroupCluster local|SplitButtonControl.cluster-first /template/ Border.RibbonToggleButtonBackgroundBorder">
+		<Setter Property="BorderThickness" Value="1,1,0,1" />
+	</Style>
+
+	<Style Selector="local|RibbonGroupCluster local|RibbonButton.cluster-middle /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonDropDownButton.cluster-middle /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonSplitButton.cluster-middle /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonToggleButton.cluster-middle /template/ Border.RibbonToggleButtonBackgroundBorder, local|RibbonGroupCluster local|SplitButtonControl.cluster-middle /template/ Border.RibbonToggleButtonBackgroundBorder">
+		<Setter Property="BorderThickness" Value="0,1,0,1" />
+	</Style>
+
+	<Style Selector="local|RibbonGroupCluster local|RibbonButton.cluster-last /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonDropDownButton.cluster-last /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonSplitButton.cluster-last /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonToggleButton.cluster-last /template/ Border.RibbonToggleButtonBackgroundBorder, local|RibbonGroupCluster local|SplitButtonControl.cluster-last /template/ Border.RibbonToggleButtonBackgroundBorder">
+		<Setter Property="BorderThickness" Value="0,1,1,1" />
+	</Style>
+
+	<Style Selector="local|RibbonGroupCluster local|RibbonButton.cluster-single /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonDropDownButton.cluster-single /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonSplitButton.cluster-single /template/ Border.RibbonButtonBackgroundBorder, local|RibbonGroupCluster local|RibbonToggleButton.cluster-single /template/ Border.RibbonToggleButtonBackgroundBorder, local|RibbonGroupCluster local|SplitButtonControl.cluster-single /template/ Border.RibbonToggleButtonBackgroundBorder">
+		<Setter Property="BorderThickness" Value="1" />
+	</Style>
+</Styles>

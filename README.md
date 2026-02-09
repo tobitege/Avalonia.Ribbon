@@ -49,6 +49,14 @@ Based on the platform availability the components are summarized as follows.
 |       Tab        | RibbonTab            |
 | Ribbon Group Box | RibbonGroupBox       |
 | Ribbon Combo Box | RibbonComboBox       |
+| Group Triple     | RibbonGroupTriple    |
+| Group Lines      | RibbonGroupLines     |
+| Group Cluster    | RibbonGroupCluster   |
+
+## Developer Documentation
+
+- Main controls reference: `docs/main-library-controls.md`
+- Group container deep dive: `docs/group-containers.md`
 
 ### Desktop Only
 
@@ -136,7 +144,7 @@ For a complete working reference, see:
 - `AvaloniaUI.Ribbon.Demo.Flowery/Themes/FloweryRibbonBridge.axaml`
 
     1. Use the below mentioned sample as an example to use the ribbon control.
-       The sample is available in the [AvaloniaUI.Ribbon.Demo]() project.
+       The sample is available in the `AvaloniaUI.Ribbon.Demo` project.
 
        ```xaml
                <Ribbon Name="RibbonControl" DockPanel.Dock="Top" Orientation="Horizontal" HelpButtonCommand="{Binding HelpCommand}">
@@ -271,6 +279,90 @@ For narrow layouts, you can opt in to wrapping groups across rows before shrinki
 - `GroupOverflowBehavior="WrapThenShrink"`: use up to `MaxGroupRows` rows, then shrink if still overflowing.
 - `MaxGroupRows`: minimum value is `1`.
 - `MaxGroupRows` has no built-in upper limit in the control; demos can clamp the value for UX (for example `1..10`).
+
+### Group Containers (Triple / Lines / Cluster)
+
+Use group containers inside `RibbonGroupBox` to create canonical Ribbon layouts:
+
+Developer details (API defaults, layout behavior, styling hooks):
+
+- `docs/group-containers.md`
+
+```xaml
+<RibbonGroupBox Header="Clipboard">
+    <RibbonGroupTriple>
+        <RibbonButton Content="Paste" MinSize="Medium" MaxSize="Large" />
+        <RibbonButton Content="Paste Special" MinSize="Small" MaxSize="Medium" />
+        <RibbonButton Content="Format" MinSize="Small" MaxSize="Medium" />
+    </RibbonGroupTriple>
+
+    <RibbonGroupLines>
+        <RibbonButton Content="Cut" MinSize="Small" MaxSize="Medium" />
+        <RibbonButton Content="Copy" MinSize="Small" MaxSize="Medium" />
+        <RibbonButton Content="Copy Path" MinSize="Small" MaxSize="Medium" />
+        <RibbonGroupCluster>
+            <RibbonToggleButton Content="Bold" MinSize="Small" MaxSize="Medium" />
+            <RibbonToggleButton Content="Italic" MinSize="Small" MaxSize="Medium" />
+            <RibbonToggleButton Content="Underline" MinSize="Small" MaxSize="Medium" />
+        </RibbonGroupCluster>
+    </RibbonGroupLines>
+</RibbonGroupBox>
+```
+
+All group containers share these base properties:
+
+- `DisplayMode`: inherited from the parent `RibbonGroupBox` (`Large`/`Small` group mode).
+- `MinimumSize` / `MaximumSize`: `RibbonControlSize` values (`Small`, `Medium`, `Large`) used to clamp the computed child size range.
+- `ItemSpacing`: spacing between arranged child items.
+
+Quick reference:
+
+| Container | `MinimumSize` default | `MaximumSize` default | Large-mode target size |
+| --- | --- | --- | --- |
+| Base `RibbonGroupContainer` | `Small` | `Large` | `Large` (then clamped by min/max) |
+| `RibbonGroupTriple` | `Small` | `Large` | `Large` (then clamped by min/max) |
+| `RibbonGroupLines` | `Small` | `Large` | `Medium` (then clamped by min/max) |
+| `RibbonGroupCluster` | `Small` | `Medium` | `Medium` (then clamped by min/max) |
+
+`RibbonGroupTriple`:
+
+- Purpose: classic Office-style "three stacked actions" layout.
+- Layout model: column-major; fills up to `MaxItemsPerColumn` slots before starting the next column.
+- Key properties: `MaxItemsPerColumn` (default `3`) controls vertical stack height, and `ItemAlignment` (`Near`, `Center`, `Far`) controls horizontal alignment inside each slot.
+- Sizing: supports `Large`, `Medium`, and `Small` item states via inherited min/max size clamping.
+
+`RibbonGroupLines`:
+
+- Purpose: line-based command lanes (for example 2-line or 3-line command bands).
+- Layout model: column-major with configurable line count by display mode.
+- Key properties: `LargeLineCount` (default `2`) for large group mode and `SmallLineCount` (default `3`) for small group mode.
+- Sizing: coerces child `Large` requests to `Medium`, which matches canonical ribbon line groups.
+
+`RibbonGroupCluster`:
+
+- Purpose: compact "bank" of adjacent small/medium commands that should read as a single unit.
+- Layout model: one horizontal row, no internal wrapping.
+- Sizing: coerces `Large` to `Medium`; defaults to `ItemSpacing=0` for contiguous buttons.
+- Styling: cluster children receive positional classes (`cluster-first`, `cluster-middle`, `cluster-last`, `cluster-single`) and Fluent theme styles apply faint borders globally so banks remain visually distinct in dark and light themes.
+
+Composing banks in rows:
+
+```xaml
+<RibbonGroupLines LargeLineCount="2" SmallLineCount="3">
+    <RibbonGroupCluster>
+        <RibbonButton Content="A" MinSize="Small" MaxSize="Medium" />
+        <RibbonButton Content="B" MinSize="Small" MaxSize="Medium" />
+        <RibbonButton Content="C" MinSize="Small" MaxSize="Medium" />
+    </RibbonGroupCluster>
+    <RibbonGroupCluster>
+        <RibbonButton Content="D" MinSize="Small" MaxSize="Medium" />
+        <RibbonButton Content="E" MinSize="Small" MaxSize="Medium" />
+        <RibbonButton Content="F" MinSize="Small" MaxSize="Medium" />
+    </RibbonGroupCluster>
+</RibbonGroupLines>
+```
+
+Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many banks appear per row via its line-count properties.
 
 ## Change Log
 
