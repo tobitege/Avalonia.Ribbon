@@ -366,6 +366,14 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-02-10)
+
+- Add ribbon group container controls (`RibbonGroupContainer`, `RibbonGroupLines`, `RibbonGroupCluster`, `RibbonGroupTriple`) with alignment/contracts and Fluent style integration.
+- Update the default and Flowery demos to showcase the new group container layouts.
+- Add a new Windows 11 demo project (`AvaloniaUI.Ribbon.W11`) and centralize Windows 11 ribbon icon resources.
+- Add `RibbonGroupContainerTests` to tests project
+- Add new documentation pages for group containers and main library controls (docs).
+
 ### Update (2026-02-09)
 
 - Add ribbon group overflow API with `GroupOverflowBehavior` (`ShrinkOnly`, `WrapThenShrink`) and configurable `MaxGroupRows`.
