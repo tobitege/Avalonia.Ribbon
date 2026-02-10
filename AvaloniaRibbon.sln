@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaUI.Ribbon.Demo.Flow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaUI.Ribbon.Tests", "AvaloniaUI.Ribbon.Tests\AvaloniaUI.Ribbon.Tests.csproj", "{87C83CE2-E011-49C7-A304-8CB94627412C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.Ribbon.w11", "Avalonia.Ribbon.w11\Avalonia.Ribbon.w11.csproj", "{05655C84-9C97-42F8-8180-A17BC4E18948}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaUI.Ribbon.W11", "AvaloniaUI.Ribbon.W11\AvaloniaUI.Ribbon.W11.csproj", "{05655C84-9C97-42F8-8180-A17BC4E18948}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

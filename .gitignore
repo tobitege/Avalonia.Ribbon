@@ -455,4 +455,5 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 *tkribbon/*
+.history/*
 dev-only/*

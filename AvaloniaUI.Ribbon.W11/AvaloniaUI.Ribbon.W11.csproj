@@ -3,8 +3,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <AssemblyName>Avalonia.Ribbon.w11</AssemblyName>
-    <RootNamespace>Avalonia.Ribbon.W11</RootNamespace>
+    <AssemblyName>AvaloniaUI.Ribbon.W11</AssemblyName>
+    <RootNamespace>AvaloniaUI.Ribbon.W11</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 

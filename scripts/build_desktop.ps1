@@ -43,7 +43,7 @@ $desktopLibraryProject = Join-Path $repoRoot "AvaloniaUI.Ribbon.Desktop/Avalonia
 $demoProject = Join-Path $repoRoot "AvaloniaUI.Ribbon.Demo/AvaloniaUI.Ribbon.Demo.csproj"
 $demoDesktopProject = Join-Path $repoRoot "AvaloniaUI.Ribbon.Demo.Desktop/AvaloniaUI.Ribbon.Demo.Desktop.csproj"
 $floweryDemoProject = Join-Path $repoRoot "AvaloniaUI.Ribbon.Demo.Flowery/AvaloniaUI.Ribbon.Demo.Flowery.csproj"
-$w11DemoProject = Join-Path $repoRoot "Avalonia.Ribbon.w11/Avalonia.Ribbon.w11.csproj"
+$w11DemoProject = Join-Path $repoRoot "AvaloniaUI.Ribbon.W11/AvaloniaUI.Ribbon.W11.csproj"
 
 $requiredProjects = @(
     $ribbonProject,
@@ -68,7 +68,7 @@ Invoke-Step "Build: AvaloniaUI.Ribbon.Desktop" "dotnet build `"$desktopLibraryPr
 Invoke-Step "Build: AvaloniaUI.Ribbon.Demo (net9.0-windows)" "dotnet build `"$demoProject`" -f net9.0-windows -c $Configuration$noRestoreArg"
 Invoke-Step "Build: AvaloniaUI.Ribbon.Demo.Desktop" "dotnet build `"$demoDesktopProject`" -c $Configuration$noRestoreArg"
 Invoke-Step "Build: AvaloniaUI.Ribbon.Demo.Flowery (net9.0-windows)" "dotnet build `"$floweryDemoProject`" -f net9.0-windows -c $Configuration$noRestoreArg"
-Invoke-Step "Build: Avalonia.Ribbon.w11" "dotnet build `"$w11DemoProject`" -c $Configuration$noRestoreArg"
+Invoke-Step "Build: AvaloniaUI.Ribbon.W11" "dotnet build `"$w11DemoProject`" -c $Configuration$noRestoreArg"
 
 $totalDuration = (Get-Date) - $script:startTime
 

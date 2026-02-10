@@ -1,7 +1,7 @@
 using System;
 using Avalonia;
 
-namespace Avalonia.Ribbon.W11;
+namespace AvaloniaUI.Ribbon.W11;
 
 internal static class Program
 {

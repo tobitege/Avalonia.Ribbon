@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Builds and starts the Avalonia.Ribbon.w11 desktop application.
+    Builds and starts the AvaloniaUI.Ribbon.W11 desktop application.
 
 .DESCRIPTION
     Builds the w11 Desktop project and, if the resulting .exe exists, starts it in the background.
@@ -19,7 +19,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
-$desktopProject = Join-Path $repoRoot "Avalonia.Ribbon.w11/Avalonia.Ribbon.w11.csproj"
+$desktopProject = Join-Path $repoRoot "AvaloniaUI.Ribbon.W11/AvaloniaUI.Ribbon.W11.csproj"
 
 if (-not (Test-Path $desktopProject)) {
     Write-Host "ERROR: Desktop project not found at $desktopProject" -ForegroundColor Red
@@ -44,7 +44,7 @@ if ([string]::IsNullOrWhiteSpace($tfm)) {
     exit 1
 }
 
-Write-Host "Building: Avalonia.Ribbon.w11" -ForegroundColor Cyan
+Write-Host "Building: AvaloniaUI.Ribbon.W11" -ForegroundColor Cyan
 Write-Host "  Configuration: $Configuration" -ForegroundColor Gray
 Write-Host "  TargetFramework: $tfm" -ForegroundColor Gray
 

@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace Avalonia.Ribbon.W11;
+namespace AvaloniaUI.Ribbon.W11;
 
 public class App : Application
 {
