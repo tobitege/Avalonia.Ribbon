@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Avalonia.Markup.Xaml.Templates;
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Helpers;
 using AvaloniaUI.Ribbon.Models;
@@ -14,22 +13,22 @@ public class RibbonButton : Button, IRibbonInputControl, IRibbonCommand, ICanAdd
     public static readonly StyledProperty<bool> CanAddToQuickAccessProperty =
         AvaloniaProperty.Register<RibbonButton, bool>(nameof(CanAddToQuickAccess), true);
 
-    public static readonly StyledProperty<object> IconProperty =
-        AvaloniaProperty.Register<RibbonButton, object>(nameof(Icon));
+    public static readonly StyledProperty<object?> IconProperty =
+        AvaloniaProperty.Register<RibbonButton, object?>(nameof(Icon));
 
-    public static readonly StyledProperty<object> LargeIconProperty =
-        AvaloniaProperty.Register<RibbonButton, object>(nameof(LargeIcon));
+    public static readonly StyledProperty<object?> LargeIconProperty =
+        AvaloniaProperty.Register<RibbonButton, object?>(nameof(LargeIcon));
 
-    public static readonly AvaloniaProperty<RibbonControlSize> MaxSizeProperty;
-    public static readonly AvaloniaProperty<RibbonControlSize> MinSizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> MaxSizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> MinSizeProperty;
 
-    public static readonly StyledProperty<object> QuickAccessIconProperty =
-        AvaloniaProperty.Register<RibbonButton, object>(nameof(QuickAccessIcon));
+    public static readonly StyledProperty<object?> QuickAccessIconProperty =
+        AvaloniaProperty.Register<RibbonButton, object?>(nameof(QuickAccessIcon));
 
     public static readonly StyledProperty<IControlTemplate> QuickAccessTemplateProperty =
         AvaloniaProperty.Register<RibbonButton, IControlTemplate>(nameof(QuickAccessTemplate));
 
-    public static readonly AvaloniaProperty<RibbonControlSize> SizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> SizeProperty;
 
     static RibbonButton()
     {
@@ -37,19 +36,19 @@ public class RibbonButton : Button, IRibbonInputControl, IRibbonCommand, ICanAdd
         FocusableProperty.OverrideDefaultValue<RibbonButton>(false);
     }
 
-    public object Icon
+    public object? Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
     }
 
-    public object LargeIcon
+    public object? LargeIcon
     {
         get => GetValue(LargeIconProperty);
         set => SetValue(LargeIconProperty, value);
     }
 
-    public object QuickAccessIcon
+    public object? QuickAccessIcon
     {
         get => GetValue(QuickAccessIconProperty);
         set => SetValue(QuickAccessIconProperty, value);
@@ -65,30 +64,25 @@ public class RibbonButton : Button, IRibbonInputControl, IRibbonCommand, ICanAdd
 
     public IControlTemplate QuickAccessTemplate
     {
-        get
-        {
-            var value = GetValue(QuickAccessTemplateProperty);
-            var controlTemplate = value as ControlTemplate;
-            return value;
-        }
+        get => GetValue(QuickAccessTemplateProperty);
         set => SetValue(QuickAccessTemplateProperty, value);
     }
 
     public RibbonControlSize MaxSize
     {
-        get => (RibbonControlSize)GetValue(MaxSizeProperty);
+        get => GetValue(MaxSizeProperty);
         set => SetValue(MaxSizeProperty, value);
     }
 
     public RibbonControlSize MinSize
     {
-        get => (RibbonControlSize)GetValue(MinSizeProperty);
+        get => GetValue(MinSizeProperty);
         set => SetValue(MinSizeProperty, value);
     }
 
     public RibbonControlSize Size
     {
-        get => (RibbonControlSize)GetValue(SizeProperty);
+        get => GetValue(SizeProperty);
         set => SetValue(SizeProperty, value);
     }
 }

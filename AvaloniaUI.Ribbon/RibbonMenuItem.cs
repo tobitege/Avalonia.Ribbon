@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Specialized;
 using System.Windows.Input;
 using Avalonia;
@@ -36,10 +36,10 @@ public class RibbonMenuItem : HeaderedItemsControl
     public static readonly StyledProperty<bool> IsSelectedProperty =
         AvaloniaProperty.Register<RibbonMenuItem, bool>(nameof(IsSelected));
 
-    public static readonly StyledProperty<ICommand> CommandProperty = Button.CommandProperty.AddOwner<RibbonMenuItem>();
+    public static readonly StyledProperty<ICommand?> CommandProperty = Button.CommandProperty.AddOwner<RibbonMenuItem>();
 
 
-    public static readonly StyledProperty<object> CommandParameterProperty =
+    public static readonly StyledProperty<object?> CommandParameterProperty =
         Button.CommandParameterProperty.AddOwner<RibbonMenuItem>();
 
     public static readonly RoutedEvent<RoutedEventArgs> ClickEvent =
@@ -99,13 +99,13 @@ public class RibbonMenuItem : HeaderedItemsControl
     }
 
 
-    public ICommand Command
+    public ICommand? Command
     {
         get => GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
     }
 
-    public object CommandParameter
+    public object? CommandParameter
     {
         get => GetValue(CommandParameterProperty);
         set => SetValue(CommandParameterProperty, value);

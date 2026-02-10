@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -35,7 +35,7 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
                 o => o.BottomDockedGroupedItems);
 
     // Content Property for the RibbonMenu
-    public static readonly StyledProperty<object> ContentProperty =
+    public static readonly StyledProperty<object?> ContentProperty =
         ContentControl.ContentProperty.AddOwner<RibbonMenu>();
 
     // AvaloniaProperty for the IsMenuOpen state
@@ -43,20 +43,22 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
         AvaloniaProperty.Register<RibbonMenu, bool>(nameof(IsMenuOpen));
 
     // AvaloniaProperty for SelectedItemContent
-    public static readonly StyledProperty<object> SelectedItemContentProperty =
-        AvaloniaProperty.Register<RibbonMenu, object>(nameof(SelectedItemContent));
+    public static readonly StyledProperty<object?> SelectedItemContentProperty =
+        AvaloniaProperty.Register<RibbonMenu, object?>(nameof(SelectedItemContent));
 
     // AvaloniaProperty for SelectedSubItems
-    public static readonly StyledProperty<object> SelectedSubItemsProperty =
-        AvaloniaProperty.Register<RibbonMenu, object>(nameof(SelectedSubItems));
+    public static readonly StyledProperty<object?> SelectedSubItemsProperty =
+        AvaloniaProperty.Register<RibbonMenu, object?>(nameof(SelectedSubItems));
 
     // Default panel template used when no other template is specified
     private static readonly FuncTemplate<Panel> DefaultPanel = new(() => new StackPanel());
 
     // Private fields to hold the grouped items for top and bottom docks
-    private IEnumerable<IGrouping<string, RibbonMenuItem>> _bottomDockedGroupedItems;
+    private IEnumerable<IGrouping<string, RibbonMenuItem>> _bottomDockedGroupedItems =
+        Array.Empty<IGrouping<string, RibbonMenuItem>>();
 
-    private IEnumerable<IGrouping<string, RibbonMenuItem>> _topDockedGroupedItems;
+    private IEnumerable<IGrouping<string, RibbonMenuItem>> _topDockedGroupedItems =
+        Array.Empty<IGrouping<string, RibbonMenuItem>>();
 
     static RibbonMenu()
     {
@@ -82,21 +84,21 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     }
 
     // Public getter and setter for Content
-    public object Content
+    public object? Content
     {
         get => GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
     }
 
     // Public getter and setter for SelectedItemContent
-    public object SelectedItemContent
+    public object? SelectedItemContent
     {
         get => GetValue(SelectedItemContentProperty);
         set => SetValue(SelectedItemContentProperty, value);
     }
 
     // Public getter and setter for SelectedSubItems
-    public object SelectedSubItems
+    public object? SelectedSubItems
     {
         get => GetValue(SelectedSubItemsProperty);
         set => SetValue(SelectedSubItemsProperty, value);

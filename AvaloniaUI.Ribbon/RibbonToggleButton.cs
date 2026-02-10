@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
@@ -10,17 +10,17 @@ namespace AvaloniaUI.Ribbon;
 
 public class RibbonToggleButton : ToggleButton, IRibbonControl, ICanAddToQuickAccess
 {
-    public static readonly AvaloniaProperty<RibbonControlSize> SizeProperty;
-    public static readonly AvaloniaProperty<RibbonControlSize> MinSizeProperty;
-    public static readonly AvaloniaProperty<RibbonControlSize> MaxSizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> SizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> MinSizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> MaxSizeProperty;
 
-    public static readonly StyledProperty<object> IconProperty =
+    public static readonly StyledProperty<object?> IconProperty =
         RibbonButton.IconProperty.AddOwner<RibbonToggleButton>();
 
-    public static readonly StyledProperty<object> LargeIconProperty =
+    public static readonly StyledProperty<object?> LargeIconProperty =
         RibbonButton.LargeIconProperty.AddOwner<RibbonToggleButton>();
 
-    public static readonly StyledProperty<object> QuickAccessIconProperty =
+    public static readonly StyledProperty<object?> QuickAccessIconProperty =
         RibbonButton.QuickAccessIconProperty.AddOwner<RibbonToggleButton>();
 
     public static readonly StyledProperty<bool> CanAddToQuickAccessProperty =
@@ -38,19 +38,19 @@ public class RibbonToggleButton : ToggleButton, IRibbonControl, ICanAddToQuickAc
 
     protected override Type StyleKeyOverride => typeof(RibbonToggleButton);
 
-    public object Icon
+    public object? Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
     }
 
-    public object LargeIcon
+    public object? LargeIcon
     {
         get => GetValue(LargeIconProperty);
         set => SetValue(LargeIconProperty, value);
     }
 
-    public object QuickAccessIcon
+    public object? QuickAccessIcon
     {
         get => GetValue(QuickAccessIconProperty);
         set => SetValue(QuickAccessIconProperty, value);
@@ -70,19 +70,19 @@ public class RibbonToggleButton : ToggleButton, IRibbonControl, ICanAddToQuickAc
 
     public RibbonControlSize Size
     {
-        get => (RibbonControlSize)GetValue(SizeProperty);
+        get => GetValue(SizeProperty);
         set => SetValue(SizeProperty, value);
     }
 
     public RibbonControlSize MinSize
     {
-        get => (RibbonControlSize)GetValue(MinSizeProperty);
+        get => GetValue(MinSizeProperty);
         set => SetValue(MinSizeProperty, value);
     }
 
     public RibbonControlSize MaxSize
     {
-        get => (RibbonControlSize)GetValue(MaxSizeProperty);
+        get => GetValue(MaxSizeProperty);
         set => SetValue(MaxSizeProperty, value);
     }
 }

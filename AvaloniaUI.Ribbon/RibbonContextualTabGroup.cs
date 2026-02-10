@@ -34,8 +34,7 @@ public class RibbonContextualTabGroup : HeaderedItemsControl
 
     private void SwitchToNextVisibleTab()
     {
-        var rbn = (Ribbon)RibbonControlExtensions.GetParentRibbon(this);
-        if (rbn != null && Items.Contains(rbn.SelectedItem))
+        if (RibbonControlExtensions.GetParentRibbon(this) is Ribbon rbn && Items.Contains(rbn.SelectedItem))
         {
             var selIndex = rbn.SelectedIndex;
 

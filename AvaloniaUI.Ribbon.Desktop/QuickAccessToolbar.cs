@@ -24,27 +24,37 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         element.SetValue(IsCheckedProperty, value);
     }
 
-    public bool AddItem(ICanAddToQuickAccess item)
+    public bool AddItem(ICanAddToQuickAccess? item)
     {
         var contains = ContainsItem(item, out var obj);
         if (item == null || contains)
             return false;
+
+        if (ItemsSource is not ObservableCollection<QuickAccessItem> itemsSource)
+            return false;
+
         if (item.CanAddToQuickAccess)
         {
-            (ItemsSource as ObservableCollection<QuickAccessItem>).Add(new QuickAccessItem { Item = item });
+            itemsSource.Add(new QuickAccessItem { Item = item });
             return true;
         }
 
         return false;
     }
 
-    public bool ContainsItem(ICanAddToQuickAccess item)
+    public bool ContainsItem(ICanAddToQuickAccess? item)
     {
         return ContainsItem(item, out var result);
     }
 
-    public bool ContainsItem(ICanAddToQuickAccess item, out object result)
+    public bool ContainsItem(ICanAddToQuickAccess? item, out object? result)
     {
+        if (item == null)
+        {
+            result = null;
+            return false;
+        }
+
         if (Items.OfType<ICanAddToQuickAccess>().Contains(item))
         {
             result = Items.OfType<ICanAddToQuickAccess>().First();
@@ -61,7 +71,7 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         return false;
     }
 
-    public void MoreFlyoutMenuItemCommand(object parameter)
+    public void MoreFlyoutMenuItemCommand(object? parameter)
     {
         if (parameter is ICanAddToQuickAccess item)
         {
@@ -74,13 +84,17 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         }
     }
 
-    public bool RemoveItem(ICanAddToQuickAccess item)
+    public bool RemoveItem(ICanAddToQuickAccess? item)
     {
         var contains = ContainsItem(item, out var obj);
         if (item == null || !contains)
             return false;
-        var items = (ItemsSource as ObservableCollection<QuickAccessItem>).ToList();
-        return (ItemsSource as ObservableCollection<QuickAccessItem>).Remove(items.First(x => x.Item == item));
+
+        if (ItemsSource is not ObservableCollection<QuickAccessItem> itemsSource)
+            return false;
+
+        var items = itemsSource.ToList();
+        return itemsSource.Remove(items.First(x => x.Item == item));
         /*
             Items.Remove(items.First(x =>
             {
@@ -154,8 +168,8 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
             AvaloniaProperty.RegisterDirect<QuickAccessToolbar, ObservableCollection<QuickAccessRecommendation>>(
                 nameof(RecommendedItems), o => o.RecommendedItems, (o, v) => o.RecommendedItems = v);
 
-    public static readonly StyledProperty<DesktopRibbon> RibbonProperty =
-        AvaloniaProperty.Register<QuickAccessToolbar, DesktopRibbon>("Ribbon");
+    public static readonly StyledProperty<DesktopRibbon?> RibbonProperty =
+        AvaloniaProperty.Register<QuickAccessToolbar, DesktopRibbon?>(nameof(Ribbon));
 
     private static readonly string FIXED_ITEM_CLASS = "quickAccessFixedItem";
 
@@ -203,7 +217,7 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         set => SetAndRaise(RecommendedItemsProperty, ref _recommendedItems, value);
     }
 
-    public DesktopRibbon Ribbon
+    public DesktopRibbon? Ribbon
     {
         get => GetValue(RibbonProperty);
         set => SetValue(RibbonProperty, value);

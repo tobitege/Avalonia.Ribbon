@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -47,24 +47,27 @@ public class Gallery : ListBox, IRibbonControl
 
     public RibbonControlSize MaxSize
     {
-        get => (RibbonControlSize)GetValue(MaxSizeProperty);
+        get => GetValue(MaxSizeProperty);
         set => SetValue(MaxSizeProperty, value);
     }
 
     public RibbonControlSize MinSize
     {
-        get => (RibbonControlSize)GetValue(MinSizeProperty);
+        get => GetValue(MinSizeProperty);
         set => SetValue(MinSizeProperty, value);
     }
 
     public RibbonControlSize Size
     {
-        get => (RibbonControlSize)GetValue(SizeProperty);
+        get => GetValue(SizeProperty);
         set => SetValue(SizeProperty, value);
     }
 
     private void UpdatePresenterLocation(bool intoFlyout)
     {
+        if (_itemsPresenter == null || _mainPresenter == null || _flyoutPresenter == null)
+            return;
+
         if (_itemsPresenter.Parent is ContentPresenter presenter)
             presenter.Content = null;
         else if (_itemsPresenter.Parent is ContentControl control)
@@ -85,18 +88,29 @@ public class Gallery : ListBox, IRibbonControl
         _mainPresenter = e.NameScope.Find<ContentControl>("PART_ItemsPresenterHolder");
 
         var pres = e.NameScope.Find<GalleryScrollContentPresenter>("PART_ScrollContentPresenter");
-        e.NameScope.Find<RepeatButton>("PART_UpButton").Click += (sneder, args) =>
-            pres.Offset = pres.Offset.WithY(Math.Max(0, pres.Offset.Y - ItemHeight));
-        e.NameScope.Find<RepeatButton>("PART_DownButton").Click += (sneder, args) =>
-            pres.Offset = pres.Offset.WithY(Math.Min(pres.Offset.Y + ItemHeight,
-                _mainPresenter.Bounds.Height - pres.Bounds.Height));
+        var upButton = e.NameScope.Find<RepeatButton>("PART_UpButton");
+        var downButton = e.NameScope.Find<RepeatButton>("PART_DownButton");
+        if (pres != null && upButton != null)
+        {
+            upButton.Click += (_, _) =>
+                pres.Offset = pres.Offset.WithY(Math.Max(0, pres.Offset.Y - ItemHeight));
+        }
+
+        if (pres != null && downButton != null)
+        {
+            downButton.Click += (_, _) =>
+                pres.Offset = pres.Offset.WithY(Math.Min(pres.Offset.Y + ItemHeight,
+                    (_mainPresenter?.Bounds.Height ?? 0) - pres.Bounds.Height));
+        }
 
         _flyoutPresenter = e.NameScope.Find<ContentControl>("PART_FlyoutItemsPresenterHolder");
         /*_flyoutPresenter.PointerWheelChanged += (s, a) =>
         {
             a.Handled = true;
         };*/
-        e.NameScope.Find<Control>("PART_FlyoutRoot").PointerExited += (sneder, a) => IsDropDownOpen = false;
+        var flyoutRoot = e.NameScope.Find<Control>("PART_FlyoutRoot");
+        if (flyoutRoot != null)
+            flyoutRoot.PointerExited += (_, _) => IsDropDownOpen = false;
 
         UpdatePresenterLocation(IsDropDownOpen);
     }
@@ -108,17 +122,17 @@ public class Gallery : ListBox, IRibbonControl
     public static readonly StyledProperty<double> ItemHeightProperty =
         AvaloniaProperty.Register<Gallery, double>(nameof(ItemHeight));
 
-    public static readonly AvaloniaProperty<RibbonControlSize> MaxSizeProperty;
-    public static readonly AvaloniaProperty<RibbonControlSize> MinSizeProperty;
-    public static readonly AvaloniaProperty<RibbonControlSize> SizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> MaxSizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> MinSizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> SizeProperty;
 
     #endregion Static Properties
 
     #region Fields
 
-    private ContentControl _flyoutPresenter;
-    private ItemsPresenter _itemsPresenter;
-    private ContentControl _mainPresenter;
+    private ContentControl? _flyoutPresenter;
+    private ItemsPresenter? _itemsPresenter;
+    private ContentControl? _mainPresenter;
 
     #endregion Fields
 }

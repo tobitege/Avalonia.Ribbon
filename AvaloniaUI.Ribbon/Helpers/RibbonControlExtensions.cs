@@ -1,4 +1,4 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using Avalonia.VisualTree;
 using AvaloniaUI.Ribbon.Contracts;
 
@@ -6,7 +6,7 @@ namespace AvaloniaUI.Ribbon.Helpers;
 
 public static class RibbonControlExtensions
 {
-    public static IRibbon GetParentRibbon(Control control)
+    public static IRibbon? GetParentRibbon(Control control)
     {
         return control.FindAncestorOfType<IRibbon>(true);
         /*IControl parentRbn = control.Parent;

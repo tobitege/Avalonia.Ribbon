@@ -21,7 +21,8 @@ public class RibbonGroupWrapPanel : WrapPanel
 
         DisplayModeProperty.Changed.AddClassHandler<RibbonGroupWrapPanel>((sender, args) =>
         {
-            sender.ApplyDisplayMode((GroupDisplayMode)args.NewValue);
+            if (args.NewValue is GroupDisplayMode displayMode)
+                sender.ApplyDisplayMode(displayMode);
         });
     }
 

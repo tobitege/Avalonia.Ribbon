@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -21,8 +21,8 @@ public class DesktopRibbon : Ribbon
 {
     #region Static Properties
 
-    public static readonly StyledProperty<QuickAccessToolbar> QuickAccessToolbarProperty =
-        AvaloniaProperty.Register<DesktopRibbon, QuickAccessToolbar>(nameof(QuickAccessToolbar));
+    public static readonly StyledProperty<QuickAccessToolbar?> QuickAccessToolbarProperty =
+        AvaloniaProperty.Register<DesktopRibbon, QuickAccessToolbar?>(nameof(QuickAccessToolbar));
 
     #endregion Static Properties
 
@@ -32,7 +32,7 @@ public class DesktopRibbon : Ribbon
 
     #region Properties
 
-    public QuickAccessToolbar QuickAccessToolbar
+    public QuickAccessToolbar? QuickAccessToolbar
     {
         get => GetValue(QuickAccessToolbarProperty);
         set => SetValue(QuickAccessToolbarProperty, value);
@@ -62,7 +62,7 @@ public class DesktopRibbon : Ribbon
         {
             _groupsHost.PointerExited += (_, _) =>
             {
-                if (!_ctxMenu.IsOpen)
+                if (_ctxMenu == null || !_ctxMenu.IsOpen)
                     _rightClicked = null;
             };
             _groupsHost.AddHandler(PointerReleasedEvent,

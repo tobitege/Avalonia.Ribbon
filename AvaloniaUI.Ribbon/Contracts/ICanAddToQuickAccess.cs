@@ -8,5 +8,5 @@ public interface ICanAddToQuickAccess
 
     bool CanAddToQuickAccess { get; set; }
 
-    public object QuickAccessIcon { get; set; }
+    public object? QuickAccessIcon { get; set; }
 }

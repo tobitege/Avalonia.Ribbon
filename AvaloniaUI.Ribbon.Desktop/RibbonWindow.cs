@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Timers;
@@ -23,11 +23,11 @@ public class RibbonWindow : Window
     public static readonly StyledProperty<Orientation> OrientationProperty =
         StackPanel.OrientationProperty.AddOwner<RibbonWindow>();
 
-    public static readonly StyledProperty<QuickAccessToolbar> QuickAccessToolbarProperty =
+    public static readonly StyledProperty<QuickAccessToolbar?> QuickAccessToolbarProperty =
         DesktopRibbon.QuickAccessToolbarProperty.AddOwner<RibbonWindow>();
 
-    public static readonly StyledProperty<DesktopRibbon> RibbonProperty =
-        AvaloniaProperty.Register<RibbonWindow, DesktopRibbon>("Ribbon");
+    public static readonly StyledProperty<DesktopRibbon?> RibbonProperty =
+        AvaloniaProperty.Register<RibbonWindow, DesktopRibbon?>(nameof(Ribbon));
 
     public static readonly StyledProperty<IBrush> TitleBarBackgroundProperty =
         AvaloniaProperty.Register<RibbonWindow, IBrush>(nameof(TitleBarBackground));
@@ -100,13 +100,13 @@ public class RibbonWindow : Window
     }
 
 
-    public QuickAccessToolbar QuickAccessToolbar
+    public QuickAccessToolbar? QuickAccessToolbar
     {
         get => GetValue(QuickAccessToolbarProperty);
         set => SetValue(QuickAccessToolbarProperty, value);
     }
 
-    public DesktopRibbon Ribbon
+    public DesktopRibbon? Ribbon
     {
         get => GetValue(RibbonProperty);
         set => SetValue(RibbonProperty, value);
@@ -212,7 +212,7 @@ public class RibbonWindow : Window
         return e.NameScope.Get<T>(name);
     }
 
-    private void RefreshQat(object oldValue, object newValue)
+    private void RefreshQat(object? oldValue, object? newValue)
     {
         if (oldValue != null && oldValue is QuickAccessToolbar oldQat)
             oldQat.Ribbon = null;
@@ -230,7 +230,7 @@ public class RibbonWindow : Window
         }
     }
 
-    private void RefreshRibbon(object oldValue, object newValue)
+    private void RefreshRibbon(object? oldValue, object? newValue)
     {
         if (oldValue != null && oldValue is DesktopRibbon oldRibbon)
         {

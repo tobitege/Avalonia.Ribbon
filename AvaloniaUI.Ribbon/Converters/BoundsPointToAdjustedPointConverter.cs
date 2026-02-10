@@ -29,14 +29,16 @@ namespace AvaloniaUI.Ribbon.Converters;
 
 public class BoundsPointToAdjustedPointConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         double x = 0;
         double y = 0;
 
-        if (value is Rect rect && parameter != null)
+        if (value is Rect rect && parameter is string rawParameter)
         {
-            string[] paramParts = parameter.ToString().Replace(" ", string.Empty).Split(',');
+            string[] paramParts = rawParameter.Replace(" ", string.Empty).Split(',');
+            if (paramParts.Length < 3 || paramParts[2].Length < 2)
+                return new Point(x, y);
 
             var pt = paramParts[2];
             var ptX = pt[1];
@@ -65,7 +67,7 @@ public class BoundsPointToAdjustedPointConverter : IValueConverter
         return new Point(x, y);
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

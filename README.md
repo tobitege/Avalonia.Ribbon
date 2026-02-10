@@ -373,6 +373,10 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 - Add a new Windows 11 demo project (`AvaloniaUI.Ribbon.W11`) and centralize Windows 11 ribbon icon resources.
 - Add `RibbonGroupContainerTests` to tests project
 - Add new documentation pages for group containers and main library controls (docs).
+- Refactor nullable contracts for ribbon interfaces and quick-access contracts to match Avalonia API nullability.
+- Align converter signatures and null handling (`IValueConverter` / `IMultiValueConverter`) to remove interface nullability mismatches.
+- Normalize ribbon control property declarations (`StyledProperty<T>`/`StyledProperty<T?>`) and remove unsafe null unboxing paths.
+- Harden template-part and key-tip traversal logic in ribbon/desktop controls to eliminate possible null dereferences.
 
 ### Update (2026-02-09)
 

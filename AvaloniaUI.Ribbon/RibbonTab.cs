@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -44,12 +45,13 @@ public class RibbonTab : TabItem, IKeyTipHandler
         var retVal = false;
         foreach (var g in Groups)
         {
-            foreach (Control c in g.Items)
+            foreach (var c in g.Items.OfType<Control>())
                 if (KeyTip.HasKeyTipKey(c, key))
                 {
                     if (c is IKeyTipHandler hdlr)
                     {
-                        hdlr.ActivateKeyTips(_ribbon, this);
+                        if (_ribbon != null)
+                            hdlr.ActivateKeyTips(_ribbon, this);
                         Debug.WriteLine("Group handled " + key + " for IKeyTipHandler");
                     }
                     else
@@ -58,7 +60,7 @@ public class RibbonTab : TabItem, IKeyTipHandler
                             btn.Command.Execute(btn.CommandParameter);
                         else
                             c.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-                        _ribbon.Close();
+                        _ribbon?.Close();
                         retVal = true;
                     }
 
@@ -100,7 +102,10 @@ public class RibbonTab : TabItem, IKeyTipHandler
     {
         e.Handled = HandleKeyTipKeyPress(e.Key);
         if (e.Handled)
-            _ribbon.IsCollapsedPopupOpen = false;
+        {
+            if (_ribbon != null)
+                _ribbon.IsCollapsedPopupOpen = false;
+        }
 
         KeyTip.SetShowChildKeyTipKeys(this, false);
         KeyDown -= RibbonTab_KeyDown;
@@ -121,8 +126,8 @@ public class RibbonTab : TabItem, IKeyTipHandler
         AvaloniaProperty.Register<RibbonTab, bool>(nameof(IsContextual));
 
     private ObservableCollection<RibbonGroupBox> _groups = new();
-    private IKeyTipHandler _prev;
-    private IRibbon _ribbon;
+    private IKeyTipHandler? _prev;
+    private IRibbon? _ribbon;
 
     #endregion Fields
 
@@ -132,13 +137,13 @@ public class RibbonTab : TabItem, IKeyTipHandler
     {
         KeyTip.ShowChildKeyTipKeysProperty.Changed.AddClassHandler<RibbonTab>((sender, args) =>
         {
-            if ((bool)args.NewValue)
+            if (args.NewValue is bool show && show)
                 foreach (var g in sender.Groups)
                 {
                     if (g.Command != null && KeyTip.HasKeyTipKeys(g))
                         KeyTip.GetKeyTip(g).IsOpen = true;
 
-                    foreach (Control c in g.Items)
+                    foreach (var c in g.Items.OfType<Control>())
                         if (KeyTip.HasKeyTipKeys(c))
                             KeyTip.GetKeyTip(c).IsOpen = true;
                 }
@@ -147,7 +152,7 @@ public class RibbonTab : TabItem, IKeyTipHandler
                 {
                     KeyTip.GetKeyTip(g).IsOpen = false;
 
-                    foreach (Control c in g.Items)
+                    foreach (var c in g.Items.OfType<Control>())
                         KeyTip.GetKeyTip(c).IsOpen = false;
                 }
         });

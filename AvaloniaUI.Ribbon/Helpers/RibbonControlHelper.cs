@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
@@ -9,14 +9,14 @@ namespace AvaloniaUI.Ribbon.Helpers;
 
 public static class RibbonControlHelper<T> where T : Layoutable
 {
-    private static readonly AvaloniaProperty<RibbonControlSize> SizeProperty =
+    private static readonly StyledProperty<RibbonControlSize> SizeProperty =
         AvaloniaProperty.Register<TemplatedControl, RibbonControlSize>("Size", RibbonControlSize.Large,
             coerce: CoerceSize);
 
-    private static readonly AvaloniaProperty<RibbonControlSize> MinSizeProperty =
+    private static readonly StyledProperty<RibbonControlSize> MinSizeProperty =
         AvaloniaProperty.Register<TemplatedControl, RibbonControlSize>("MinSize");
 
-    private static readonly AvaloniaProperty<RibbonControlSize> MaxSizeProperty =
+    private static readonly StyledProperty<RibbonControlSize> MaxSizeProperty =
         AvaloniaProperty.Register<TemplatedControl, RibbonControlSize>("MaxSize", RibbonControlSize.Large);
 
     private static RibbonControlSize CoerceSize(AvaloniaObject obj, RibbonControlSize val)
@@ -33,8 +33,8 @@ public static class RibbonControlHelper<T> where T : Layoutable
         throw new Exception("obj must be an IRibbonControl!");
     }
 
-    public static void SetProperties(out AvaloniaProperty<RibbonControlSize> size,
-        out AvaloniaProperty<RibbonControlSize> minSize, out AvaloniaProperty<RibbonControlSize> maxSize)
+    public static void SetProperties(out StyledProperty<RibbonControlSize> size,
+        out StyledProperty<RibbonControlSize> minSize, out StyledProperty<RibbonControlSize> maxSize)
     {
         size = SizeProperty;
         minSize = MinSizeProperty;
@@ -42,14 +42,20 @@ public static class RibbonControlHelper<T> where T : Layoutable
 
         minSize.Changed.AddClassHandler<T>((sender, args) =>
         {
-            if ((int)args.NewValue > (int)(sender as IRibbonControl).Size)
-                (sender as IRibbonControl).Size = (RibbonControlSize)args.NewValue;
+            if (sender is not IRibbonControl control || args.NewValue is not RibbonControlSize newValue)
+                return;
+
+            if ((int)newValue > (int)control.Size)
+                control.Size = newValue;
         });
 
         maxSize.Changed.AddClassHandler<T>((sender, args) =>
         {
-            if ((int)args.NewValue < (int)(sender as IRibbonControl).Size)
-                (sender as IRibbonControl).Size = (RibbonControlSize)args.NewValue;
+            if (sender is not IRibbonControl control || args.NewValue is not RibbonControlSize newValue)
+                return;
+
+            if ((int)newValue < (int)control.Size)
+                control.Size = newValue;
         });
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls.Primitives;
@@ -10,7 +10,7 @@ public class RibbonGroupBox : HeaderedItemsControl
 {
     #region Fields
 
-    private ICommand _command;
+    private ICommand? _command;
 
     #endregion
 
@@ -20,16 +20,16 @@ public class RibbonGroupBox : HeaderedItemsControl
         AffectsMeasure<RibbonGroupBox>(DisplayModeProperty);
         AffectsRender<RibbonGroupBox>(DisplayModeProperty);
 
-        CommandProperty = AvaloniaProperty.RegisterDirect<RibbonGroupBox, ICommand>(nameof(Command),
+        CommandProperty = AvaloniaProperty.RegisterDirect<RibbonGroupBox, ICommand?>(nameof(Command),
             button => button.Command, (button, command) => button.Command = command, enableDataValidation: true);
     }
 
     #region Static Properties
 
-    public static readonly StyledProperty<object> CommandParameterProperty =
-        AvaloniaProperty.Register<RibbonGroupBox, object>(nameof(CommandParameter));
+    public static readonly StyledProperty<object?> CommandParameterProperty =
+        AvaloniaProperty.Register<RibbonGroupBox, object?>(nameof(CommandParameter));
 
-    public static readonly DirectProperty<RibbonGroupBox, ICommand> CommandProperty;
+    public static readonly DirectProperty<RibbonGroupBox, ICommand?> CommandProperty;
 
     public static readonly StyledProperty<GroupDisplayMode> DisplayModeProperty =
         StyledProperty<RibbonGroupBox>.Register<RibbonGroupBox, GroupDisplayMode>(nameof(DisplayMode),
@@ -39,9 +39,9 @@ public class RibbonGroupBox : HeaderedItemsControl
 
     #region Properties
 
-    public event EventHandler Rearranged;
+    public event EventHandler? Rearranged;
 
-    public event EventHandler Remeasured;
+    public event EventHandler? Remeasured;
 
 
     protected override Size ArrangeOverride(Size finalSize)
@@ -58,13 +58,13 @@ public class RibbonGroupBox : HeaderedItemsControl
 
     protected override Type StyleKeyOverride => typeof(RibbonGroupBox);
 
-    public ICommand Command
+    public ICommand? Command
     {
         get => _command;
         set => SetAndRaise(CommandProperty, ref _command, value);
     }
 
-    public object CommandParameter
+    public object? CommandParameter
     {
         get => GetValue(CommandParameterProperty);
         set => SetValue(CommandParameterProperty, value);

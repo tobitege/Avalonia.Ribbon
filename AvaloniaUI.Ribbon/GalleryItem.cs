@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
@@ -6,19 +6,19 @@ namespace AvaloniaUI.Ribbon;
 
 public class GalleryItem : ListBoxItem
 {
-    public static readonly StyledProperty<object> IconProperty =
+    public static readonly StyledProperty<object?> IconProperty =
         RibbonButton.IconProperty.AddOwner<GalleryItem>();
 
-    public static readonly StyledProperty<object> LargeIconProperty =
+    public static readonly StyledProperty<object?> LargeIconProperty =
         RibbonButton.LargeIconProperty.AddOwner<GalleryItem>();
 
-    public object Icon
+    public object? Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
     }
 
-    public object LargeIcon
+    public object? LargeIcon
     {
         get => GetValue(LargeIconProperty);
         set => SetValue(LargeIconProperty, value);

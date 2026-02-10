@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,7 +53,9 @@ public class Ribbon : TabControl, IRibbon
 
         KeyTip.ShowChildKeyTipKeysProperty.Changed.AddClassHandler<Ribbon>((sender, args) =>
         {
-            var isOpen = (bool)args.NewValue;
+            if (args.NewValue is not bool isOpen)
+                return;
+
             if (isOpen)
                 sender.Focus();
             sender.SetChildKeyTipsVisibility(isOpen);
@@ -100,8 +102,8 @@ public class Ribbon : TabControl, IRibbon
     public static readonly RoutedEvent<RoutedEventArgs> MenuClosedEvent =
         RoutedEvent.Register<Ribbon, RoutedEventArgs>(nameof(MenuClosed), RoutingStrategies.Bubble);
 
-    public static readonly StyledProperty<IRibbonMenu> MenuProperty =
-        AvaloniaProperty.Register<Ribbon, IRibbonMenu>(nameof(Menu));
+    public static readonly StyledProperty<IRibbonMenu?> MenuProperty =
+        AvaloniaProperty.Register<Ribbon, IRibbonMenu?>(nameof(Menu));
 
     public static readonly StyledProperty<Orientation> OrientationProperty =
         StackPanel.OrientationProperty.AddOwner<Ribbon>();
@@ -129,25 +131,25 @@ public class Ribbon : TabControl, IRibbon
 
     #region Fields
 
-    protected ContextMenu _ctxMenu;
+    protected ContextMenu? _ctxMenu;
 
-    private ContentControl _flyoutPresenter;
+    private ContentControl? _flyoutPresenter;
 
-    protected ItemsControl _groupsHost;
+    protected ItemsControl? _groupsHost;
 
     private bool _isOpen;
 
-    private ItemsPresenter _itemHeadersPresenter;
+    private ItemsPresenter? _itemHeadersPresenter;
 
-    private ContentControl _mainPresenter;
+    private ContentControl? _mainPresenter;
 
-    private Popup _popup;
+    private Popup? _popup;
 
-    private IInputElement _prevFocusedElement;
+    private IInputElement? _prevFocusedElement;
 
-    private RibbonTab _prevSelectedTab;
+    private RibbonTab? _prevSelectedTab;
 
-    protected ICanAddToQuickAccess _rightClicked;
+    protected ICanAddToQuickAccess? _rightClicked;
 
     private ObservableCollection<RibbonGroupBox> _selectedGroups = new();
 
@@ -199,7 +201,7 @@ public class Ribbon : TabControl, IRibbon
         protected set => SetAndRaise(MenuBase.IsOpenProperty, ref _isOpen, value);
     }
 
-    public IRibbonMenu Menu
+    public IRibbonMenu? Menu
     {
         get => GetValue(MenuProperty);
         set => SetValue(MenuProperty, value);
@@ -241,11 +243,11 @@ public class Ribbon : TabControl, IRibbon
 
     public void ActivateKeyTips(IRibbon ribbon, IKeyTipHandler prev)
     {
-        foreach (RibbonTab t in Items)
+        foreach (var t in Items.OfType<RibbonTab>())
             KeyTip.GetKeyTipKeys(t);
 
-        if (Menu != null)
-            KeyTip.GetKeyTipKeys(Menu as Control);
+        if (Menu is Control menuControl)
+            KeyTip.GetKeyTipKeys(menuControl);
     }
 
     public void Close()
@@ -303,7 +305,12 @@ public class Ribbon : TabControl, IRibbon
 
             var contextualVisible = true;
             if (newTab.IsContextual)
-                contextualVisible = (newTab.Parent as RibbonContextualTabGroup).IsVisible;
+            {
+                if (newTab.Parent is RibbonContextualTabGroup contextualGroup)
+                    contextualVisible = contextualGroup.IsVisible;
+                else
+                    contextualVisible = false;
+            }
             if (newTab.IsEffectivelyVisible && newTab.IsEnabled && contextualVisible)
             {
                 switchTabs = true;
@@ -327,7 +334,7 @@ public class Ribbon : TabControl, IRibbon
         if (IsOpen)
         {
             var tabKeyMatched = false;
-            foreach (RibbonTab t in Items)
+            foreach (var t in Items.OfType<RibbonTab>())
                 if (KeyTip.HasKeyTipKey(t, key))
                 {
                     SelectedItem = t;
@@ -339,8 +346,8 @@ public class Ribbon : TabControl, IRibbon
                     break;
                 }
 
-            if (!tabKeyMatched && Menu != null)
-                if (KeyTip.HasKeyTipKey(Menu as Control, key))
+            if (!tabKeyMatched && Menu is Control menuControl)
+                if (KeyTip.HasKeyTipKey(menuControl, key))
                 {
                     Menu.IsMenuOpen = true;
                     if (Menu is IKeyTipHandler handler) handler.ActivateKeyTips(this, this);
@@ -394,8 +401,8 @@ public class Ribbon : TabControl, IRibbon
             {
                 if (IsCollapsed)
                 {
-                    RibbonTab mouseOverItem = null;
-                    foreach (RibbonTab tab in Items)
+                    RibbonTab? mouseOverItem = null;
+                    foreach (var tab in Items.OfType<RibbonTab>())
                         if (tab.IsPointerOver)
                         {
                             mouseOverItem = tab;
@@ -414,7 +421,7 @@ public class Ribbon : TabControl, IRibbon
                 }
                 else
                 {
-                    foreach (RibbonTab tab in Items)
+                    foreach (var tab in Items.OfType<RibbonTab>())
                         if (tab.IsPointerOver && !tab.IsContextual)
                         {
                             SelectedItem = tab;
@@ -452,7 +459,7 @@ public class Ribbon : TabControl, IRibbon
         {
             _groupsHost.PointerExited += (_, _) =>
             {
-                if (!_ctxMenu.IsOpen)
+                if (_ctxMenu == null || !_ctxMenu.IsOpen)
                     _rightClicked = null;
             };
             _groupsHost.AddHandler(PointerReleasedEvent,
@@ -544,7 +551,7 @@ public class Ribbon : TabControl, IRibbon
 
     private void InputRoot_PointerPressed(object sender, PointerPressedEventArgs e)
     {
-        if (IsCollapsedPopupOpen && !_groupsHost.IsPointerOver)
+        if (IsCollapsedPopupOpen && _groupsHost?.IsPointerOver != true)
             IsCollapsedPopupOpen = false;
     }
 
@@ -579,7 +586,7 @@ public class Ribbon : TabControl, IRibbon
                 list.Clear();
                 foreach (var ctrl in Tabs)
                     if (ctrl is RibbonContextualTabGroup ctx)
-                        foreach (RibbonTab tb in ctx.Items)
+                        foreach (var tb in ctx.Items.OfType<RibbonTab>())
                             list.Add(tb);
                     else if (ctrl is RibbonTab tab)
                         list.Add(tab);
@@ -589,7 +596,7 @@ public class Ribbon : TabControl, IRibbon
                 var newTabsList = new List<Control>();
                 foreach (var ctrl in Tabs)
                     if (ctrl is RibbonContextualTabGroup ctx)
-                        foreach (RibbonTab tb in ctx.Items)
+                        foreach (var tb in ctx.Items.OfType<RibbonTab>())
                             newTabsList.Add(tb);
                     else if (ctrl is RibbonTab tab)
                         newTabsList.Add(tab);
@@ -601,11 +608,11 @@ public class Ribbon : TabControl, IRibbon
 
     private void SetChildKeyTipsVisibility(bool open)
     {
-        foreach (RibbonTab t in Items)
+        foreach (var t in Items.OfType<RibbonTab>())
             if (t.IsVisible)
                 KeyTip.GetKeyTip(t).IsOpen = open;
-        if (Menu != null)
-            KeyTip.GetKeyTip(Menu as Control).IsOpen = open;
+        if (Menu is Control menuControl)
+            KeyTip.GetKeyTip(menuControl).IsOpen = open;
     }
 
     /*private object _selectedContent;
@@ -657,6 +664,9 @@ public class Ribbon : TabControl, IRibbon
 
     protected void UpdatePresenterLocation(bool intoFlyout)
     {
+        if (_groupsHost == null || _flyoutPresenter == null || _mainPresenter == null)
+            return;
+
         if (_groupsHost.Parent is ContentPresenter presenter)
             presenter.Content = null;
         else if (_groupsHost.Parent is ContentControl control)

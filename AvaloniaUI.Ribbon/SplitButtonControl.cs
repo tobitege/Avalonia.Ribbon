@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Styling;
@@ -16,7 +16,7 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
             out MaxSizeProperty);
     }
 
-    public object Icon
+    public object? Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
@@ -28,13 +28,13 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
         set => SetValue(IsDropDownOpenProperty, value);
     }
 
-    public object LargeIcon
+    public object? LargeIcon
     {
         get => GetValue(LargeIconProperty);
         set => SetValue(LargeIconProperty, value);
     }
 
-    public object QuickAccessIcon
+    public object? QuickAccessIcon
     {
         get => GetValue(QuickAccessIconProperty);
         set => SetValue(QuickAccessIconProperty, value);
@@ -54,19 +54,19 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
 
     public RibbonControlSize MaxSize
     {
-        get => (RibbonControlSize)GetValue(MaxSizeProperty);
+        get => GetValue(MaxSizeProperty);
         set => SetValue(MaxSizeProperty, value);
     }
 
     public RibbonControlSize MinSize
     {
-        get => (RibbonControlSize)GetValue(MinSizeProperty);
+        get => GetValue(MinSizeProperty);
         set => SetValue(MinSizeProperty, value);
     }
 
     public RibbonControlSize Size
     {
-        get => (RibbonControlSize)GetValue(SizeProperty);
+        get => GetValue(SizeProperty);
         set
         {
             SetValue(SizeProperty, value);
@@ -75,9 +75,12 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
             {
                 case RibbonControlSize.Large:
                     //TODO: Figure out a way to optimize this.
-                    Application.Current.Resources.TryGetResource("LargeSplitButton", null, out var theme);
-                    if (theme as ControlTheme != null)
-                        Theme = theme as ControlTheme;
+                    if (Application.Current?.Resources != null)
+                    {
+                        Application.Current.Resources.TryGetResource("LargeSplitButton", null, out var theme);
+                        if (theme is ControlTheme controlTheme)
+                            Theme = controlTheme;
+                    }
                     break;
 
                 case RibbonControlSize.Small:
@@ -96,25 +99,25 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
     public static readonly StyledProperty<bool> CanAddToQuickAccessProperty =
         RibbonButton.CanAddToQuickAccessProperty.AddOwner<SplitButton>();
 
-    public static readonly StyledProperty<object> IconProperty =
+    public static readonly StyledProperty<object?> IconProperty =
         RibbonButton.IconProperty.AddOwner<SplitButton>();
 
     public static readonly StyledProperty<bool> IsDropDownOpenProperty =
         ComboBox.IsDropDownOpenProperty.AddOwner<SplitButton>();
 
-    public static readonly StyledProperty<object> LargeIconProperty =
+    public static readonly StyledProperty<object?> LargeIconProperty =
         RibbonButton.LargeIconProperty.AddOwner<SplitButton>();
 
-    public static readonly AvaloniaProperty<RibbonControlSize> MaxSizeProperty;
-    public static readonly AvaloniaProperty<RibbonControlSize> MinSizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> MaxSizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> MinSizeProperty;
 
-    public static readonly StyledProperty<object> QuickAccessIconProperty =
+    public static readonly StyledProperty<object?> QuickAccessIconProperty =
         RibbonButton.QuickAccessIconProperty.AddOwner<RibbonToggleButton>();
 
     public static readonly StyledProperty<IControlTemplate> QuickAccessTemplateProperty =
         RibbonButton.QuickAccessTemplateProperty.AddOwner<SplitButton>();
 
-    public static readonly AvaloniaProperty<RibbonControlSize> SizeProperty;
+    public static readonly StyledProperty<RibbonControlSize> SizeProperty;
 
     #endregion Static Properties
 }
