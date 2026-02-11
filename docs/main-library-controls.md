@@ -208,6 +208,7 @@ Purpose:
 
 - Container for commands/groups under a tab.
 - Propagates display mode to child containers/controls.
+- Fluent default template uses `RibbonGroupWrapPanel` for internal command layout.
 
 Key properties:
 
@@ -559,7 +560,7 @@ Notes:
 
 - This is primarily a framework/internal layout surface.
 
-## RibbonGroupWrapPanel (legacy helper)
+## RibbonGroupWrapPanel
 
 Source: `AvaloniaUI.Ribbon/RibbonGroupWrapPanel.cs`
 
@@ -570,10 +571,13 @@ Purpose:
 Key properties:
 
 - `DisplayMode` (`GroupDisplayMode`, inherited owner pattern)
+- `LargeLineCount` (`int`, default `3`)
+- `SmallLineCount` (`int`, default `3`)
 
 Notes:
 
 - The modern overflow behavior is centered on `RibbonGroupsStackPanel`.
+- In horizontal `WrapThenShrink`, default template binding caps `SmallLineCount` with ribbon `MaxGroupRows`.
 
 ## RibbonGroupContainer (base class)
 

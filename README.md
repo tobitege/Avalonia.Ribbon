@@ -279,6 +279,7 @@ For narrow layouts, you can opt in to wrapping groups across rows before shrinki
 - `GroupOverflowBehavior="WrapThenShrink"`: use up to `MaxGroupRows` rows, then shrink if still overflowing.
 - `MaxGroupRows`: minimum value is `1`.
 - `MaxGroupRows` has no built-in upper limit in the control; demos can clamp the value for UX (for example `1..10`).
+- In horizontal `WrapThenShrink`, default `RibbonGroupWrapPanel` internals cap small-item lines with `MaxGroupRows`.
 
 ### Group Containers (Triple / Lines / Cluster)
 
@@ -365,6 +366,14 @@ Composing banks in rows:
 Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many banks appear per row via its line-count properties.
 
 ## Change Log
+
+### Update (2026-02-11)
+
+- Keep `RibbonGroupWrapPanel` as the default internal layout panel in `RibbonGroupBox`.
+- Add line-cap support to `RibbonGroupWrapPanel` via `LargeLineCount` / `SmallLineCount`, including cap-aware measure/arrange behavior.
+- Bind default horizontal `RibbonGroupWrapPanel.SmallLineCount` to ribbon `MaxGroupRows` when `GroupOverflowBehavior="WrapThenShrink"` to prevent internal over-row rendering.
+- Expand regression coverage for group layout behavior in `AvaloniaUI.Ribbon.Tests` (`RibbonGroupContainerTests` and `RibbonGroupsStackPanelTests`).
+- Update control/docs references in `README.md` and `docs/main-library-controls.md` to match current `RibbonGroupWrapPanel` behavior.
 
 ### Update (2026-02-10)
 

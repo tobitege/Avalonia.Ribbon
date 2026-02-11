@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -8,7 +8,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <PackageId>AvaloniaControls.Ribbon.Desktop.Flowery</PackageId>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
-        <Version>2026.2.10</Version>
+        <Version>2026.2.11</Version>
         <LangVersion>latest</LangVersion>
         <FileAlignment>512</FileAlignment>
         <Deterministic>true</Deterministic>

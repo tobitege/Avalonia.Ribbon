@@ -1,3 +1,4 @@
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -92,6 +93,29 @@ public class RibbonGroupContainerTests
         Assert.Equal(Orientation.Vertical, wrapPanel.Orientation);
         Assert.Equal(GroupDisplayMode.Small, lines.DisplayMode);
         Assert.Equal(RibbonControlSize.Small, child.Size);
+    }
+
+    [Fact]
+    public void GroupWrapPanel_SmallDisplayModeRespectsSmallLineCount()
+    {
+        var wrapPanel = new RibbonGroupWrapPanel
+        {
+            SmallLineCount = 2
+        };
+
+        for (var i = 0; i < 5; i++)
+            wrapPanel.Children.Add(new TestRibbonControl());
+
+        wrapPanel.DisplayMode = GroupDisplayMode.Small;
+        wrapPanel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        wrapPanel.Arrange(new Rect(0, 0, wrapPanel.DesiredSize.Width, wrapPanel.DesiredSize.Height));
+
+        var rowCount = wrapPanel.Children
+            .Select(child => Math.Round(child.Bounds.Y, 3))
+            .Distinct()
+            .Count();
+
+        Assert.Equal(2, rowCount);
     }
 
     private sealed class TestRibbonControl : Control, IRibbonControl

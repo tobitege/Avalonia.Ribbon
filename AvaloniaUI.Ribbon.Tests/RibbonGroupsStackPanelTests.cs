@@ -102,6 +102,29 @@ public class RibbonGroupsStackPanelTests
         Assert.All(groups, group => Assert.Equal(GroupDisplayMode.Large, group.DisplayMode));
     }
 
+    [Fact]
+    public void VerticalOrientation_RemainsSingleColumnWithWrapThenShrinkSettings()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Vertical,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 2
+        };
+
+        var groups = CreateGroups(panel, 4);
+
+        RunVerticalLayout(panel, 1000);
+
+        var columnCount = groups
+            .Select(group => Math.Round(group.Bounds.X, 3))
+            .Distinct()
+            .Count();
+
+        Assert.Equal(1, columnCount);
+        Assert.All(groups, group => Assert.Equal(GroupDisplayMode.Large, group.DisplayMode));
+    }
+
     private static List<TestRibbonGroupBox> CreateGroups(RibbonGroupsStackPanel panel, int count)
     {
         var groups = new List<TestRibbonGroupBox>();
@@ -136,6 +159,14 @@ public class RibbonGroupsStackPanelTests
 
         var height = Math.Max(1, panel.DesiredSize.Height);
         panel.Arrange(new Rect(0, 0, width, height));
+    }
+
+    private static void RunVerticalLayout(RibbonGroupsStackPanel panel, double height)
+    {
+        panel.Measure(new Size(double.PositiveInfinity, height));
+
+        var arrangedWidth = Math.Max(1, panel.DesiredSize.Width);
+        panel.Arrange(new Rect(0, 0, arrangedWidth, height));
     }
 
     private sealed class TestRibbonGroupBox : RibbonGroupBox
