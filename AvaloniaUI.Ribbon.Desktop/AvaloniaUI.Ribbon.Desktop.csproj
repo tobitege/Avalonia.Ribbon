@@ -8,7 +8,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <PackageId>AvaloniaControls.Ribbon.Desktop.Flowery</PackageId>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
-        <Version>2026.2.11</Version>
+        <Version>2026.2.13</Version>
         <LangVersion>latest</LangVersion>
         <FileAlignment>512</FileAlignment>
         <Deterministic>true</Deterministic>
