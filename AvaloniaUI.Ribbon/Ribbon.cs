@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -65,6 +66,7 @@ public class Ribbon : TabControl, IRibbon
     public Ribbon()
     {
         ContextualTabGroups = new ObservableCollection<RibbonContextualTabGroup>();
+        QuickAccessItems = new QuickAccessItemsCollection();
     }
 
     protected override Type StyleKeyOverride => typeof(Ribbon);
@@ -112,6 +114,10 @@ public class Ribbon : TabControl, IRibbon
         AvaloniaProperty.Register<Ribbon, RibbonGroupOverflowBehavior>(nameof(GroupOverflowBehavior),
             RibbonGroupOverflowBehavior.ShrinkOnly);
 
+    public static readonly StyledProperty<RibbonQatLocation> QuickAccessLocationProperty =
+        AvaloniaProperty.Register<Ribbon, RibbonQatLocation>(nameof(QuickAccessLocation),
+            RibbonQatLocation.Above);
+
     public static readonly StyledProperty<int> MaxGroupRowsProperty =
         AvaloniaProperty.Register<Ribbon, int>(nameof(MaxGroupRows), 1,
             coerce: (_, value) => Math.Max(1, value));
@@ -126,6 +132,14 @@ public class Ribbon : TabControl, IRibbon
     public static readonly DirectProperty<Ribbon, ObservableCollection<Control>> TabsProperty =
         AvaloniaProperty.RegisterDirect<Ribbon, ObservableCollection<Control>>(nameof(Tabs), o => o.Tabs,
             (o, v) => o.Tabs = v);
+
+    public static readonly DirectProperty<Ribbon, bool> ShowQatOverflowButtonProperty =
+        AvaloniaProperty.RegisterDirect<Ribbon, bool>(nameof(ShowQatOverflowButton), o => o.ShowQatOverflowButton,
+            (o, v) => o.ShowQatOverflowButton = v);
+
+    public static readonly DirectProperty<Ribbon, ObservableCollection<ICanAddToQuickAccess>> QuickAccessItemsProperty =
+        AvaloniaProperty.RegisterDirect<Ribbon, ObservableCollection<ICanAddToQuickAccess>>(
+            nameof(QuickAccessItems), o => o.QuickAccessItems, (o, v) => o.QuickAccessItems = v);
 
     #endregion Static Properties
 
@@ -154,6 +168,10 @@ public class Ribbon : TabControl, IRibbon
     private ObservableCollection<RibbonGroupBox> _selectedGroups = new();
 
     private ObservableCollection<Control> _tabs = new();
+
+    private bool _showQatOverflowButton = true;
+
+    private ObservableCollection<ICanAddToQuickAccess> _quickAccessItems = new QuickAccessItemsCollection();
 
     #endregion Fields
 
@@ -219,6 +237,12 @@ public class Ribbon : TabControl, IRibbon
         set => SetValue(GroupOverflowBehaviorProperty, value);
     }
 
+    public RibbonQatLocation QuickAccessLocation
+    {
+        get => GetValue(QuickAccessLocationProperty);
+        set => SetValue(QuickAccessLocationProperty, value);
+    }
+
     public int MaxGroupRows
     {
         get => GetValue(MaxGroupRowsProperty);
@@ -235,6 +259,18 @@ public class Ribbon : TabControl, IRibbon
     {
         get => _tabs;
         set => SetAndRaise(TabsProperty, ref _tabs, value);
+    }
+
+    public bool ShowQatOverflowButton
+    {
+        get => _showQatOverflowButton;
+        set => SetAndRaise(ShowQatOverflowButtonProperty, ref _showQatOverflowButton, value);
+    }
+
+    public ObservableCollection<ICanAddToQuickAccess> QuickAccessItems
+    {
+        get => _quickAccessItems;
+        set => SetAndRaise(QuickAccessItemsProperty, ref _quickAccessItems, value);
     }
 
     #endregion Properties
@@ -521,12 +557,25 @@ public class Ribbon : TabControl, IRibbon
     {
         if (IsFocused || IsPointerOver)
         {
+            if (TryHandleShortcut(e.Key, e.KeyModifiers))
+            {
+                e.Handled = true;
+                return;
+            }
+
             KeyTip.SetShowChildKeyTipKeys(this, false);
 
             if (!IsOpen)
                 Open();
-            else if (e.Key == Key.LeftAlt || e.Key == Key.RightAlt || e.Key == Key.F10 || e.Key == Key.Escape)
+            else if (e.Key == Key.Escape)
+            {
+                if (!TryNavigateBackFromTabKeyTips())
+                    Close();
+            }
+            else if (e.Key == Key.LeftAlt || e.Key == Key.RightAlt || e.Key == Key.F10)
+            {
                 Close();
+            }
             else
                 HandleKeyTipKeyPress(e.Key);
         }
@@ -613,6 +662,132 @@ public class Ribbon : TabControl, IRibbon
                 KeyTip.GetKeyTip(t).IsOpen = open;
         if (Menu is Control menuControl)
             KeyTip.GetKeyTip(menuControl).IsOpen = open;
+    }
+
+    protected internal bool TryNavigateBackFromTabKeyTips()
+    {
+        if (SelectedItem is not RibbonTab tab)
+            return false;
+
+        if (!KeyTip.GetShowChildKeyTipKeys(tab))
+            return false;
+
+        KeyTip.SetShowChildKeyTipKeys(tab, false);
+        KeyTip.SetShowChildKeyTipKeys(this, true);
+        return true;
+    }
+
+    protected internal bool TryHandleShortcut(Key key, KeyModifiers modifiers)
+    {
+        if (IsOpen)
+            return false;
+
+        foreach (var control in EnumerateSelectedGroupControls())
+        {
+            if (!control.IsEnabled || !control.IsEffectivelyVisible)
+                continue;
+
+            switch (control)
+            {
+                case RibbonButton button when ShortcutMatches(button.ShortcutKeys, key, modifiers):
+                    return ExecuteShortcutCommand(button.Command, button.CommandParameter, button);
+                case RibbonToggleButton toggleButton when ShortcutMatches(toggleButton.ShortcutKeys, key, modifiers):
+                    return ExecuteShortcutCommand(toggleButton.Command, toggleButton.CommandParameter, toggleButton);
+                case RibbonSplitButton splitButton when ShortcutMatches(splitButton.ShortcutKeys, key, modifiers):
+                    return ExecuteShortcutCommand(splitButton.Command, splitButton.CommandParameter, splitButton);
+                case SplitButtonControl splitButtonControl when ShortcutMatches(splitButtonControl.ShortcutKeys, key, modifiers):
+                    return ExecuteShortcutCommand(splitButtonControl.Command, splitButtonControl.CommandParameter, splitButtonControl);
+                case RibbonDropDownButton dropDownButton when ShortcutMatches(dropDownButton.ShortcutKeys, key, modifiers):
+                    dropDownButton.IsDropDownOpen = true;
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool ShortcutMatches(KeyGesture? shortcut, Key key, KeyModifiers modifiers)
+    {
+        return shortcut != null && shortcut.Key == key && shortcut.KeyModifiers == modifiers;
+    }
+
+    private static bool ExecuteShortcutCommand(ICommand? command, object? parameter, Control source)
+    {
+        if (command != null)
+        {
+            if (!command.CanExecute(parameter))
+                return false;
+
+            command.Execute(parameter);
+            return true;
+        }
+
+        source.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        return true;
+    }
+
+    private IEnumerable<Control> EnumerateSelectedGroupControls()
+    {
+        foreach (var group in SelectedGroups)
+        {
+            foreach (var control in EnumerateGroupControls(group))
+                yield return control;
+        }
+    }
+
+    private static IEnumerable<Control> EnumerateGroupControls(RibbonGroupBox group)
+    {
+        foreach (var control in group.Items.OfType<Control>())
+        {
+            yield return control;
+
+            if (control is RibbonGroupContainer container)
+            {
+                foreach (var nested in EnumerateContainerControls(container))
+                    yield return nested;
+            }
+        }
+    }
+
+    private static IEnumerable<Control> EnumerateContainerControls(RibbonGroupContainer container)
+    {
+        foreach (var child in container.Children.OfType<Control>())
+        {
+            yield return child;
+
+            if (child is RibbonGroupContainer nestedContainer)
+            {
+                foreach (var nested in EnumerateContainerControls(nestedContainer))
+                    yield return nested;
+            }
+        }
+    }
+
+    private sealed class QuickAccessItemsCollection : ObservableCollection<ICanAddToQuickAccess>
+    {
+        public QuickAccessItemsCollection()
+        {
+        }
+
+        protected override void InsertItem(int index, ICanAddToQuickAccess item)
+        {
+            if (item == null || Contains(item))
+                return;
+
+            base.InsertItem(index, item);
+        }
+
+        protected override void SetItem(int index, ICanAddToQuickAccess item)
+        {
+            if (item == null)
+                return;
+
+            var existingIndex = IndexOf(item);
+            if (existingIndex >= 0 && existingIndex != index)
+                return;
+
+            base.SetItem(index, item);
+        }
     }
 
     /*private object _selectedContent;

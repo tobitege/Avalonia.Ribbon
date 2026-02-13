@@ -1,9 +1,14 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Helpers;
 using AvaloniaUI.Ribbon.Models;
@@ -63,6 +68,30 @@ public class Gallery : ListBox, IRibbonControl
         set => SetValue(SizeProperty, value);
     }
 
+    public ObservableCollection<GalleryRange> Ranges
+    {
+        get => _ranges;
+        set => SetAndRaise(RangesProperty, ref _ranges, value);
+    }
+
+    public event EventHandler<GalleryItemHoverChangedEventArgs>? ItemHoverChanged;
+
+    public void BringIntoView(int index)
+    {
+        if (_scrollPresenter == null || _mainPresenter == null)
+            return;
+
+        if (index < 0 || index >= ItemCount || ItemHeight <= 0)
+            return;
+
+        var columns = GetColumnCount();
+        var rowIndex = index / columns;
+        var targetOffset = rowIndex * ItemHeight;
+        var maxOffset = Math.Max(0, (_mainPresenter.Bounds.Height - _scrollPresenter.Bounds.Height));
+        var clampedOffset = Math.Max(0, Math.Min(targetOffset, maxOffset));
+        _scrollPresenter.Offset = _scrollPresenter.Offset.WithY(clampedOffset);
+    }
+
     private void UpdatePresenterLocation(bool intoFlyout)
     {
         if (_itemsPresenter == null || _mainPresenter == null || _flyoutPresenter == null)
@@ -90,6 +119,7 @@ public class Gallery : ListBox, IRibbonControl
         var pres = e.NameScope.Find<GalleryScrollContentPresenter>("PART_ScrollContentPresenter");
         var upButton = e.NameScope.Find<RepeatButton>("PART_UpButton");
         var downButton = e.NameScope.Find<RepeatButton>("PART_DownButton");
+        _scrollPresenter = pres;
         if (pres != null && upButton != null)
         {
             upButton.Click += (_, _) =>
@@ -112,6 +142,11 @@ public class Gallery : ListBox, IRibbonControl
         if (flyoutRoot != null)
             flyoutRoot.PointerExited += (_, _) => IsDropDownOpen = false;
 
+        RemoveHandler(InputElement.PointerEnteredEvent, OnItemPointerEntered);
+        RemoveHandler(InputElement.PointerExitedEvent, OnItemPointerExited);
+        AddHandler(InputElement.PointerEnteredEvent, OnItemPointerEntered, RoutingStrategies.Tunnel, true);
+        AddHandler(InputElement.PointerExitedEvent, OnItemPointerExited, RoutingStrategies.Tunnel, true);
+
         UpdatePresenterLocation(IsDropDownOpen);
     }
 
@@ -126,6 +161,10 @@ public class Gallery : ListBox, IRibbonControl
     public static readonly StyledProperty<RibbonControlSize> MinSizeProperty;
     public static readonly StyledProperty<RibbonControlSize> SizeProperty;
 
+    public static readonly DirectProperty<Gallery, ObservableCollection<GalleryRange>> RangesProperty =
+        AvaloniaProperty.RegisterDirect<Gallery, ObservableCollection<GalleryRange>>(
+            nameof(Ranges), o => o.Ranges, (o, v) => o.Ranges = v);
+
     #endregion Static Properties
 
     #region Fields
@@ -133,6 +172,69 @@ public class Gallery : ListBox, IRibbonControl
     private ContentControl? _flyoutPresenter;
     private ItemsPresenter? _itemsPresenter;
     private ContentControl? _mainPresenter;
+    private ObservableCollection<GalleryRange> _ranges = new();
+    private GalleryScrollContentPresenter? _scrollPresenter;
 
     #endregion Fields
+
+    #region Methods
+
+    private int GetColumnCount()
+    {
+        return Size switch
+        {
+            RibbonControlSize.Small => 1,
+            RibbonControlSize.Medium => 2,
+            _ => 3
+        };
+    }
+
+    private void OnItemPointerEntered(object? sender, PointerEventArgs e)
+    {
+        if (!TryGetGalleryItem(e.Source, out var galleryItem))
+            return;
+
+        RaiseItemHoverChanged(galleryItem, true);
+    }
+
+    private void OnItemPointerExited(object? sender, PointerEventArgs e)
+    {
+        if (!TryGetGalleryItem(e.Source, out var galleryItem))
+            return;
+
+        RaiseItemHoverChanged(galleryItem, false);
+    }
+
+    private bool TryGetGalleryItem(object? source, out GalleryItem galleryItem)
+    {
+        if (source is GalleryItem item)
+        {
+            galleryItem = item;
+            return true;
+        }
+
+        if (source is Visual visual)
+        {
+            var parentItem = visual.FindAncestorOfType<GalleryItem>();
+            if (parentItem != null)
+            {
+                galleryItem = parentItem;
+                return true;
+            }
+        }
+
+        galleryItem = null!;
+        return false;
+    }
+
+    private void RaiseItemHoverChanged(GalleryItem galleryItem, bool isHovering)
+    {
+        var indexedItems = Items.Cast<object>().ToList();
+        var dataItem = galleryItem.DataContext ?? galleryItem;
+        var index = indexedItems.FindIndex(item => ReferenceEquals(item, dataItem) || Equals(item, dataItem));
+        var item = index >= 0 && index < indexedItems.Count ? indexedItems[index] : dataItem;
+        ItemHoverChanged?.Invoke(this, new GalleryItemHoverChangedEventArgs(index, item, isHovering));
+    }
+
+    #endregion Methods
 }

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Input;
 
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Helpers;
@@ -63,6 +64,9 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
         RibbonButton.QuickAccessTemplateProperty.AddOwner<RibbonDropDownButton>();
 
     public static readonly StyledProperty<RibbonControlSize> SizeProperty;
+
+    public static readonly StyledProperty<KeyGesture?> ShortcutKeysProperty =
+        AvaloniaProperty.Register<RibbonDropDownButton, KeyGesture?>(nameof(ShortcutKeys));
 
     #endregion Static Properties
 
@@ -126,6 +130,12 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
     {
         get => GetValue(SizeProperty);
         set => SetValue(SizeProperty, value);
+    }
+
+    public KeyGesture? ShortcutKeys
+    {
+        get => GetValue(ShortcutKeysProperty);
+        set => SetValue(ShortcutKeysProperty, value);
     }
 
     #endregion Properties

@@ -1,4 +1,4 @@
-﻿<Styles
+<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:AvaloniaUI.Ribbon.Converters;assembly=AvaloniaUI.Ribbon"
@@ -142,11 +142,13 @@
                                 IsVisible="False" />
                             <ContentControl Name="PART_GroupsPresenterHolder"
                                             Background="{DynamicResource SystemControlForegroundChromeMediumBrush}"
-                                            HorizontalAlignment="Stretch">
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch">
                                 <ItemsControl
                                     Name="PART_SelectedGroupsHost"
                                     MinHeight="96"
                                     MinWidth="100"
+                                    Width="{Binding $parent[local:Ribbon].Bounds.Width}"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                     ItemsSource="{TemplateBinding SelectedGroups}"
@@ -171,7 +173,7 @@
                                                 x:Name="PART_ItemsPanel"
                                                 Width="{Binding $parent[ItemsControl].Bounds.Width}"
                                                 Margin="0"
-                                                HorizontalAlignment="Left"
+                                                HorizontalAlignment="Stretch"
                                                 Background="Transparent"
                                                 VerticalAlignment="Stretch"
                                                 GroupOverflowBehavior="{Binding $parent[local:Ribbon].GroupOverflowBehavior}"

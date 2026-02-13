@@ -26,6 +26,11 @@ public class RibbonGroupContainerTests
         Assert.Equal(GroupDisplayMode.Small, triple.DisplayMode);
         Assert.Equal(RibbonControlSize.Medium, child.Size);
 
+        triple.ApplyDisplayMode(GroupDisplayMode.Medium);
+
+        Assert.Equal(GroupDisplayMode.Medium, triple.DisplayMode);
+        Assert.Equal(RibbonControlSize.Medium, child.Size);
+
         triple.ApplyDisplayMode(GroupDisplayMode.Large);
 
         Assert.Equal(RibbonControlSize.Large, child.Size);
@@ -42,6 +47,11 @@ public class RibbonGroupContainerTests
         };
 
         lines.Children.Add(child);
+        lines.ApplyDisplayMode(GroupDisplayMode.Medium);
+
+        Assert.Equal(RibbonControlSize.Medium, lines.CurrentSize);
+        Assert.Equal(RibbonControlSize.Medium, child.Size);
+
         lines.ApplyDisplayMode(GroupDisplayMode.Large);
 
         Assert.Equal(RibbonControlSize.Medium, lines.CurrentSize);

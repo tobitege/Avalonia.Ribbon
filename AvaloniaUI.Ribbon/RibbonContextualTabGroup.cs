@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.Primitives;
+using Avalonia.Media;
 using AvaloniaUI.Ribbon.Helpers;
 
 namespace AvaloniaUI.Ribbon;
@@ -11,6 +12,14 @@ public class RibbonContextualTabGroup : HeaderedItemsControl
 {
     static RibbonContextualTabGroup()
     {
+        ContextColorProperty.Changed.AddClassHandler<RibbonContextualTabGroup>((sender, e) =>
+        {
+            sender.SyncContextColorToBackground(e.NewValue as IBrush);
+        });
+        BackgroundProperty.Changed.AddClassHandler<RibbonContextualTabGroup>((sender, e) =>
+        {
+            sender.SyncBackgroundToContextColor(e.NewValue as IBrush);
+        });
         IsVisibleProperty.Changed.AddClassHandler<RibbonContextualTabGroup>((sender, e) =>
         {
             if (e.NewValue is bool visible && !visible)
@@ -31,6 +40,15 @@ public class RibbonContextualTabGroup : HeaderedItemsControl
     }
 
     protected override Type StyleKeyOverride => typeof(RibbonContextualTabGroup);
+
+    public static readonly StyledProperty<IBrush?> ContextColorProperty =
+        AvaloniaProperty.Register<RibbonContextualTabGroup, IBrush?>(nameof(ContextColor));
+
+    public IBrush? ContextColor
+    {
+        get => GetValue(ContextColorProperty);
+        set => SetValue(ContextColorProperty, value);
+    }
 
     private void SwitchToNextVisibleTab()
     {
@@ -81,4 +99,40 @@ public class RibbonContextualTabGroup : HeaderedItemsControl
             foreach (var tab in e.NewItems.OfType<RibbonTab>())
                 tab.IsContextual = true;
     }
+
+    private void SyncContextColorToBackground(IBrush? contextColor)
+    {
+        if (_isSyncingContextColor)
+            return;
+
+        _isSyncingContextColor = true;
+        try
+        {
+            if (!ReferenceEquals(Background, contextColor))
+                Background = contextColor;
+        }
+        finally
+        {
+            _isSyncingContextColor = false;
+        }
+    }
+
+    private void SyncBackgroundToContextColor(IBrush? background)
+    {
+        if (_isSyncingContextColor)
+            return;
+
+        _isSyncingContextColor = true;
+        try
+        {
+            if (!ReferenceEquals(ContextColor, background))
+                ContextColor = background;
+        }
+        finally
+        {
+            _isSyncingContextColor = false;
+        }
+    }
+
+    private bool _isSyncingContextColor;
 }

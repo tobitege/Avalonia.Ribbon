@@ -46,6 +46,10 @@ public class RibbonTab : TabItem, IKeyTipHandler
         foreach (var g in Groups)
         {
             foreach (var c in g.Items.OfType<Control>())
+            {
+                if (!c.IsEnabled || !c.IsEffectivelyVisible)
+                    continue;
+
                 if (KeyTip.HasKeyTipKey(c, key))
                 {
                     if (c is IKeyTipHandler hdlr)
@@ -66,6 +70,7 @@ public class RibbonTab : TabItem, IKeyTipHandler
 
                     break;
                 }
+            }
 
             if (retVal)
                 break;
@@ -100,6 +105,16 @@ public class RibbonTab : TabItem, IKeyTipHandler
 
     private void RibbonTab_KeyDown(object sender, KeyEventArgs e)
     {
+        if (e.Key == Key.Escape)
+        {
+            KeyTip.SetShowChildKeyTipKeys(this, false);
+            KeyDown -= RibbonTab_KeyDown;
+            if (_ribbon != null)
+                KeyTip.SetShowChildKeyTipKeys((Control)_ribbon, true);
+            e.Handled = true;
+            return;
+        }
+
         e.Handled = HandleKeyTipKeyPress(e.Key);
         if (e.Handled)
         {

@@ -1,4 +1,4 @@
-﻿<Styles
+<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
@@ -92,6 +92,44 @@
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
+
+                                            <Border Grid.Row="1"
+                                                    Margin="12,8,12,8"
+                                                    Padding="8"
+                                                    Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                                                    CornerRadius="4">
+                                                <StackPanel Spacing="4">
+                                                    <TextBlock FontWeight="SemiBold" Text="Recent" />
+                                                    <ItemsControl ItemsSource="{TemplateBinding RecentDocuments}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Button
+                                                                    Padding="6,4"
+                                                                    HorizontalAlignment="Stretch"
+                                                                    HorizontalContentAlignment="Stretch"
+                                                                    Background="Transparent"
+                                                                    BorderBrush="Transparent"
+                                                                    Command="{Binding $parent[local:RibbonMenu].RecentDocumentClickCommand}"
+                                                                    CommandParameter="{Binding}">
+                                                                    <DockPanel>
+                                                                        <ContentPresenter
+                                                                            Margin="0,0,6,0"
+                                                                            Content="{Binding Icon}"
+                                                                            DockPanel.Dock="Left" />
+                                                                        <StackPanel>
+                                                                            <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+                                                                            <TextBlock
+                                                                                Opacity="0.7"
+                                                                                Text="{Binding Path}"
+                                                                                TextTrimming="CharacterEllipsis" />
+                                                                        </StackPanel>
+                                                                    </DockPanel>
+                                                                </Button>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                            </Border>
 
                                             <!--  Bottom Docked Grouped Items  -->
                                             <ItemsControl Grid.Row="2"

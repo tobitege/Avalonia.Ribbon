@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform;
@@ -35,6 +36,7 @@ public class RibbonWindow : Window
     public static readonly StyledProperty<IBrush> TitleBarForegroundProperty =
         AvaloniaProperty.Register<RibbonWindow, IBrush>(nameof(TitleBarForeground));
 
+    private const double ResizeBorderThickness = 6;
     private bool _titlebarSecondClick;
 
     static RibbonWindow()
@@ -85,6 +87,7 @@ public class RibbonWindow : Window
             });
         RefreshRibbon(null, Ribbon);
         RefreshQat(null, QuickAccessToolbar);
+        AddHandler(PointerPressedEvent, OnWindowPointerPressed, RoutingStrategies.Tunnel, handledEventsToo: true);
     }
 
     public bool LeftSideCaptionButtons
@@ -250,6 +253,59 @@ public class RibbonWindow : Window
         {
             QuickAccessToolbar.Ribbon = null;
         }
+    }
+
+    private void OnWindowPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (SystemDecorations != SystemDecorations.None || WindowState != WindowState.Normal || !CanResize)
+            return;
+
+        if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            return;
+
+        var edge = ResolveResizeEdge(e.GetPosition(this), Bounds.Size);
+        if (!edge.HasValue)
+            return;
+
+        BeginResizeDrag(edge.Value, e);
+        e.Handled = true;
+    }
+
+    private WindowEdge? ResolveResizeEdge(Point position, Size bounds)
+    {
+        if (bounds.Width <= 0 || bounds.Height <= 0)
+            return null;
+
+        var onLeft = position.X <= ResizeBorderThickness;
+        var onRight = position.X >= bounds.Width - ResizeBorderThickness;
+        var onTop = position.Y <= ResizeBorderThickness;
+        var onBottom = position.Y >= bounds.Height - ResizeBorderThickness;
+
+        if (onTop && onLeft)
+            return WindowEdge.NorthWest;
+
+        if (onTop && onRight)
+            return WindowEdge.NorthEast;
+
+        if (onBottom && onLeft)
+            return WindowEdge.SouthWest;
+
+        if (onBottom && onRight)
+            return WindowEdge.SouthEast;
+
+        if (onLeft)
+            return WindowEdge.West;
+
+        if (onRight)
+            return WindowEdge.East;
+
+        if (onTop)
+            return WindowEdge.North;
+
+        if (onBottom)
+            return WindowEdge.South;
+
+        return null;
     }
 
     private void SetupSide(string name, StandardCursorType cursor, WindowEdge edge, ref TemplateAppliedEventArgs e)

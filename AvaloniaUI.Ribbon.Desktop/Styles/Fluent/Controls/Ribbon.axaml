@@ -1,4 +1,4 @@
-﻿<Styles
+<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:AvaloniaUI.Ribbon.Converters;assembly=AvaloniaUI.Ribbon"
@@ -40,6 +40,9 @@
                             BoxShadow="0 4 10 #40000000" />
                     </DockPanel>
                     <DockPanel Background="Transparent">
+                        <ContentPresenter
+                            x:Name="PART_QuickAccessToolbarHostAbove"
+                            DockPanel.Dock="Top" />
                         <!--  Margin="0,34,0,0"  -->
                         <DockPanel.Resources>
                             <PathGeometry x:Key="TabHeadersClipBorderClip">
@@ -142,11 +145,13 @@
                                 ContentTemplate="{TemplateBinding SelectedContentTemplate}"
                                 IsVisible="False" />
                             <ContentControl Name="PART_GroupsPresenterHolder" HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch"
                                             Background="{DynamicResource SystemControlForegroundChromeMediumBrush}">
                                 <ItemsControl
                                     Name="PART_SelectedGroupsHost"
                                     MinHeight="96"
                                     MinWidth="100"
+                                    Width="{Binding $parent[windows:DesktopRibbon].Bounds.Width}"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                     ItemsSource="{TemplateBinding SelectedGroups}"
@@ -174,7 +179,7 @@
                                                 Width="{Binding $parent[ItemsControl].Bounds.Width}"
                                                 Margin="0"
                                                 Background="{TemplateBinding Background}"
-                                                HorizontalAlignment="Left"
+                                                HorizontalAlignment="Stretch"
                                                 VerticalAlignment="Stretch"
                                                 GroupOverflowBehavior="{Binding $parent[windows:DesktopRibbon].GroupOverflowBehavior}"
                                                 MaxGroupRows="{Binding $parent[windows:DesktopRibbon].MaxGroupRows}"
@@ -184,6 +189,9 @@
                                 </ItemsControl>
                             </ContentControl>
                         </Panel>
+                        <ContentPresenter
+                            x:Name="PART_QuickAccessToolbarHostBelow"
+                            DockPanel.Dock="Bottom" />
                     </DockPanel>
                 </Panel>
             </ControlTemplate>
@@ -275,59 +283,66 @@
                                     BorderThickness="1,0" />
                             </Popup>
                         </DockPanel>
-                        <Border
-                            Grid.Column="1"
-                            VerticalAlignment="Stretch"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1,0">
-                            <Grid>
-                                <ContentPresenter
-                                    Name="PART_SelectedContentHost"
-                                    Content="{TemplateBinding SelectedContent}"
-                                    ContentTemplate="{TemplateBinding SelectedContentTemplate}"
-                                    IsVisible="False" />
-                                <ContentControl Name="PART_GroupsPresenterHolder" VerticalAlignment="Stretch"
-                                                Background="{DynamicResource SystemControlForegroundChromeMediumBrush}">
-                                    <ItemsControl
-                                        Name="PART_SelectedGroupsHost"
-                                        Width="138"
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalAlignment="Stretch"
-                                        ItemsSource="{TemplateBinding SelectedGroups}"
-                                        TextBlock.Foreground="{TemplateBinding Foreground}">
-                                        <ItemsControl.ContextMenu>
-                                            <ContextMenu x:Name="PART_ContentAreaContextMenu">
-                                                <ContextMenu.Styles>
-                                                    <Style Selector="MenuItem">
-                                                        <Setter Property="Template"
-                                                                Value="{DynamicResource CheckableMenuItemControlTemplate}" />
-                                                    </Style>
-                                                </ContextMenu.Styles>
-                                                <MenuItem x:Name="PART_PinLastHoveredControlToQuickAccess"
-                                                          Header="{DynamicResource AvaloniaRibbon.AddToQAT}" />
-                                                <MenuItem
-                                                    x:Name="PART_CollapseRibbon"
-                                                    windows:QuickAccessToolbar.IsChecked="{Binding IsCollapsed, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                                    Header="{DynamicResource AvaloniaRibbon.MinimizeRibbon}" />
-                                            </ContextMenu>
-                                        </ItemsControl.ContextMenu>
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <RibbonGroupsStackPanel
-                                                    x:Name="PART_ItemsPanel"
-                                                    Height="{Binding $parent[ItemsControl].Bounds.Height}"
-                                                    Margin="0"
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Top"
-                                                    Background="{TemplateBinding Background}"
-                                                    Orientation="Vertical" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                    </ItemsControl>
-                                </ContentControl>
-                            </Grid>
-                        </Border>
+                        <DockPanel Grid.Column="1">
+                            <ContentPresenter
+                                x:Name="PART_QuickAccessToolbarHostAbove"
+                                DockPanel.Dock="Top" />
+                            <Border
+                                VerticalAlignment="Stretch"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1,0">
+                                <Grid>
+                                    <ContentPresenter
+                                        Name="PART_SelectedContentHost"
+                                        Content="{TemplateBinding SelectedContent}"
+                                        ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+                                        IsVisible="False" />
+                                    <ContentControl Name="PART_GroupsPresenterHolder" VerticalAlignment="Stretch"
+                                                    Background="{DynamicResource SystemControlForegroundChromeMediumBrush}">
+                                        <ItemsControl
+                                            Name="PART_SelectedGroupsHost"
+                                            Width="138"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="Stretch"
+                                            ItemsSource="{TemplateBinding SelectedGroups}"
+                                            TextBlock.Foreground="{TemplateBinding Foreground}">
+                                            <ItemsControl.ContextMenu>
+                                                <ContextMenu x:Name="PART_ContentAreaContextMenu">
+                                                    <ContextMenu.Styles>
+                                                        <Style Selector="MenuItem">
+                                                            <Setter Property="Template"
+                                                                    Value="{DynamicResource CheckableMenuItemControlTemplate}" />
+                                                        </Style>
+                                                    </ContextMenu.Styles>
+                                                    <MenuItem x:Name="PART_PinLastHoveredControlToQuickAccess"
+                                                              Header="{DynamicResource AvaloniaRibbon.AddToQAT}" />
+                                                    <MenuItem
+                                                        x:Name="PART_CollapseRibbon"
+                                                        windows:QuickAccessToolbar.IsChecked="{Binding IsCollapsed, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                                        Header="{DynamicResource AvaloniaRibbon.MinimizeRibbon}" />
+                                                </ContextMenu>
+                                            </ItemsControl.ContextMenu>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <RibbonGroupsStackPanel
+                                                        x:Name="PART_ItemsPanel"
+                                                        Height="{Binding $parent[ItemsControl].Bounds.Height}"
+                                                        Margin="0"
+                                                        HorizontalAlignment="Stretch"
+                                                        VerticalAlignment="Top"
+                                                        Background="{TemplateBinding Background}"
+                                                        Orientation="Vertical" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </ContentControl>
+                                </Grid>
+                            </Border>
+                            <ContentPresenter
+                                x:Name="PART_QuickAccessToolbarHostBelow"
+                                DockPanel.Dock="Bottom" />
+                        </DockPanel>
                     </Grid>
                 </Panel>
             </ControlTemplate>

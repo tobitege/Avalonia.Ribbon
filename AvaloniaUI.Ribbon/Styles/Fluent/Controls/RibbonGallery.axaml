@@ -5,7 +5,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="GalleryItem.axaml" />
-        <ResourceInclude Source="/SizeResources.axaml" />
+        <ResourceInclude Source="avares://AvaloniaUI.Ribbon/SizeResources.axaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--  Add Resources Here  -->

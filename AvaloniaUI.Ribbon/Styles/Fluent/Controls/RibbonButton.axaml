@@ -3,7 +3,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Add Resources Here -->
     <ResourceDictionary.MergedDictionaries>
-        <ResourceInclude Source="/SizeResources.axaml" />
+        <ResourceInclude Source="avares://AvaloniaUI.Ribbon/SizeResources.axaml" />
     </ResourceDictionary.MergedDictionaries>
     <!-- Designer Preview -->
     <Design.PreviewWith>
@@ -13,21 +13,21 @@
                     <RibbonButton Content="Large Ribbon Button">
                         <RibbonButton.LargeIcon>
                             <ControlTemplate>
-                                <Image Source="/Assets/settings.png" Width="32" Height="32" />
+                                <Image Source="avares://AvaloniaUI.Ribbon/Assets/settings.png" Width="32" Height="32" />
                             </ControlTemplate>
                         </RibbonButton.LargeIcon>
                     </RibbonButton>
                     <RibbonButton Size="Medium" Content="Medium Ribbon Button">
                         <RibbonButton.Icon>
                             <ControlTemplate>
-                                <Image Source="/Assets/settings.png" Width="16" Height="16" />
+                                <Image Source="avares://AvaloniaUI.Ribbon/Assets/settings.png" Width="16" Height="16" />
                             </ControlTemplate>
                         </RibbonButton.Icon>
                     </RibbonButton>
                     <RibbonButton Size="Small" Content="Small Ribbon Button">
                         <RibbonButton.Icon>
                             <ControlTemplate>
-                                <Image Source="/Assets/settings.png" Width="16" Height="16" />
+                                <Image Source="avares://AvaloniaUI.Ribbon/Assets/settings.png" Width="16" Height="16" />
                             </ControlTemplate>
                         </RibbonButton.Icon>
                     </RibbonButton>

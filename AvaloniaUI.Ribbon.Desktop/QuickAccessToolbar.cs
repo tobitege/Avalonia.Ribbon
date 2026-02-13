@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -14,6 +15,10 @@ namespace AvaloniaUI.Ribbon.Desktop;
 [TemplatePart("PART_MoreButton", typeof(ToggleButton))]
 public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyTipHandler
 {
+    public event EventHandler<ICanAddToQuickAccess?>? ItemAdded;
+
+    public event EventHandler<ICanAddToQuickAccess?>? ItemRemoved;
+
     public static bool GetIsChecked(MenuItem element)
     {
         return element.GetValue(IsCheckedProperty);
@@ -26,7 +31,7 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
     public bool AddItem(ICanAddToQuickAccess? item)
     {
-        var contains = ContainsItem(item, out var obj);
+        var contains = ContainsItem(item, out _);
         if (item == null || contains)
             return false;
 
@@ -36,6 +41,7 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         if (item.CanAddToQuickAccess)
         {
             itemsSource.Add(new QuickAccessItem { Item = item });
+            ItemAdded?.Invoke(this, item);
             return true;
         }
 
@@ -44,7 +50,7 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
     public bool ContainsItem(ICanAddToQuickAccess? item)
     {
-        return ContainsItem(item, out var result);
+        return ContainsItem(item, out _);
     }
 
     public bool ContainsItem(ICanAddToQuickAccess? item, out object? result)
@@ -57,7 +63,7 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
         if (Items.OfType<ICanAddToQuickAccess>().Contains(item))
         {
-            result = Items.OfType<ICanAddToQuickAccess>().First();
+            result = item;
             return true;
         }
 
@@ -86,26 +92,38 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
     public bool RemoveItem(ICanAddToQuickAccess? item)
     {
-        var contains = ContainsItem(item, out var obj);
+        var contains = ContainsItem(item, out var result);
         if (item == null || !contains)
             return false;
 
         if (ItemsSource is not ObservableCollection<QuickAccessItem> itemsSource)
             return false;
 
-        var items = itemsSource.ToList();
-        return itemsSource.Remove(items.First(x => x.Item == item));
-        /*
-            Items.Remove(items.First(x =>
-            {
-                if (x == item)
-                    return true;
-                else if (x is QuickAccessItem itm && itm.Item == item)
-                    return true;
-
+        var match = result as QuickAccessItem;
+        if (match == null)
+        {
+            match = itemsSource.FirstOrDefault(x => x.Item == item);
+            if (match == null)
                 return false;
-            }));
-            */
+        }
+
+        var removed = itemsSource.Remove(match);
+        if (removed)
+            ItemRemoved?.Invoke(this, item);
+
+        return removed;
+    }
+
+    public void SyncItems(IEnumerable<ICanAddToQuickAccess> items)
+    {
+        if (ItemsSource is not ObservableCollection<QuickAccessItem> itemsSource)
+            return;
+
+        itemsSource.Clear();
+
+        foreach (var item in items.Distinct())
+            if (item != null && item.CanAddToQuickAccess)
+                itemsSource.Add(new QuickAccessItem { Item = item });
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -114,7 +132,9 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         var more = e.NameScope.Find<ToggleButton>("PART_MoreButton");
         if (more is null)
             return;
-        var morCtx = more.ContextMenu;
+
+        _moreButton = more;
+        _moreButton.IsVisible = ShowOverflowButton;
 
         var moreCmdItem = new MenuItem
         {
@@ -124,6 +144,8 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         moreCmdItem.Classes.Add(FIXED_ITEM_CLASS);
         moreCmdItem[!HeaderedSelectingItemsControl.HeaderProperty] =
             moreCmdItem.GetResourceObservable("AvaloniaRibbon.MoreQATCommands").ToBinding();
+
+        var morCtx = more.ContextMenu;
 
         if (morCtx is null)
             return;
@@ -163,6 +185,11 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
     public static readonly AttachedProperty<bool> IsCheckedProperty =
         AvaloniaProperty.RegisterAttached<QuickAccessToolbar, MenuItem, bool>("IsChecked");
 
+    public static readonly DirectProperty<QuickAccessToolbar, bool> ShowOverflowButtonProperty =
+        AvaloniaProperty.RegisterDirect<QuickAccessToolbar, bool>(nameof(ShowOverflowButton),
+            o => o.ShowOverflowButton,
+            (o, v) => o.ShowOverflowButton = v);
+
     public static readonly DirectProperty<QuickAccessToolbar, ObservableCollection<QuickAccessRecommendation>>
         RecommendedItemsProperty =
             AvaloniaProperty.RegisterDirect<QuickAccessToolbar, ObservableCollection<QuickAccessRecommendation>>(
@@ -175,7 +202,11 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
     private readonly MenuItem _collapseRibbonItem = new();
 
+    private ToggleButton? _moreButton;
+
     private ObservableCollection<QuickAccessRecommendation> _recommendedItems = new();
+
+    private bool _showOverflowButton = true;
 
     #endregion Fields
 
@@ -183,6 +214,9 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
     static QuickAccessToolbar()
     {
+        ShowOverflowButtonProperty.Changed.AddClassHandler<QuickAccessToolbar>((sender, e) =>
+            sender.UpdateOverflowButtonVisibility());
+
         RibbonProperty.Changed.AddClassHandler<QuickAccessToolbar>((sender, e) =>
         {
             if (sender.Ribbon != null)
@@ -195,7 +229,6 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
     public QuickAccessToolbar()
     {
         _collapseRibbonItem.Classes.Add(FIXED_ITEM_CLASS);
-        //_collapseRibbonItem.Header = new DynamicResourceExtension("AvaloniaRibbon.MinimizeRibbon"); // "Minimize the Ribbon";
         _collapseRibbonItem[!HeaderedSelectingItemsControl.HeaderProperty] = _collapseRibbonItem
             .GetResourceObservable("AvaloniaRibbon.MinimizeRibbon").ToBinding();
         _collapseRibbonItem[!IsEnabledProperty] = this.GetObservable(RibbonProperty).Select(x => x != null).ToBinding();
@@ -217,6 +250,12 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         set => SetAndRaise(RecommendedItemsProperty, ref _recommendedItems, value);
     }
 
+    public bool ShowOverflowButton
+    {
+        get => _showOverflowButton;
+        set => SetAndRaise(ShowOverflowButtonProperty, ref _showOverflowButton, value);
+    }
+
     public DesktopRibbon? Ribbon
     {
         get => GetValue(RibbonProperty);
@@ -226,6 +265,12 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
     protected override Type StyleKeyOverride => typeof(QuickAccessToolbar);
 
     #endregion Properties
+
+    private void UpdateOverflowButtonVisibility()
+    {
+        if (_moreButton != null)
+            _moreButton.IsVisible = ShowOverflowButton;
+    }
 
     /*protected override void ItemsChanged(AvaloniaPropertyChangedEventArgs e)
     {

@@ -83,7 +83,12 @@ public abstract class RibbonGroupContainer : Panel, IRibbonGroupContainer
 
     protected virtual RibbonControlSize ResolveTargetSize(GroupDisplayMode displayMode)
     {
-        return displayMode == GroupDisplayMode.Small ? MinimumSize : MaximumSize;
+        return displayMode switch
+        {
+            GroupDisplayMode.Small => MinimumSize,
+            GroupDisplayMode.Medium => RibbonControlSize.Medium,
+            _ => MaximumSize
+        };
     }
 
     protected static RibbonControlSize ClampControlSize(RibbonControlSize value, RibbonControlSize min, RibbonControlSize max)

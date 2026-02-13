@@ -46,7 +46,7 @@ For this library, the practical mapping is:
 | Grouped commands on active tab surface | Supported | `RibbonGroupBox` + command controls. |
 | Group-level adaptive layout when narrow | Supported | `GroupOverflowBehavior` + `MaxGroupRows`. |
 | Simplified vs classic ribbon mode toggle | Partial | Collapse/overflow exists; no dedicated built-in simplified/classic mode API. |
-| Quick Access Toolbar in title area | Desktop package | `QuickAccessToolBar` is in `AvaloniaUI.Ribbon.Desktop`, not main library. |
+| Quick Access Toolbar support | Core + Desktop | Core exposes QAT API (`QuickAccessItems`, `QuickAccessLocation`, `ShowQatOverflowButton`), enforces reference-unique default QAT items, and `Desktop` hosts/toggles add-remove via title bar or inline context menu. |
 
 External reference points for the baseline model:
 
@@ -86,6 +86,13 @@ Behavior:
 | Ribbon split button | `RibbonSplitButton` | `AvaloniaUI.Ribbon/RibbonSplitButton.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonSplitButton.axaml` |
 | Split button control | `SplitButtonControl` | `AvaloniaUI.Ribbon/SplitButtonControl.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/SplitButtonControl.axaml` |
 | Ribbon combo box | `RibbonComboBox` | `AvaloniaUI.Ribbon/RibbonComboBox.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonComboBox.axaml` |
+| Ribbon text box | `RibbonTextBox` | `AvaloniaUI.Ribbon/RibbonTextBox.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonTextBox.axaml` |
+| Ribbon date picker | `RibbonDatePicker` | `AvaloniaUI.Ribbon/RibbonDatePicker.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonDatePicker.axaml` |
+| Ribbon numeric up-down | `RibbonNumericUpDown` | `AvaloniaUI.Ribbon/RibbonNumericUpDown.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonNumericUpDown.axaml` |
+| Ribbon check box | `RibbonCheckBox` | `AvaloniaUI.Ribbon/RibbonCheckBox.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonCheckBox.axaml` |
+| Ribbon radio button | `RibbonRadioButton` | `AvaloniaUI.Ribbon/RibbonRadioButton.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonRadioButton.axaml` |
+| Ribbon label | `RibbonLabel` | `AvaloniaUI.Ribbon/RibbonLabel.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonLabel.axaml` |
+| Ribbon separator | `RibbonSeparator` | `AvaloniaUI.Ribbon/RibbonSeparator.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonSeparator.axaml` |
 | Ribbon gallery | `Gallery` | `AvaloniaUI.Ribbon/Gallery.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonGallery.axaml` |
 | Gallery item | `GalleryItem` | `AvaloniaUI.Ribbon/GalleryItem.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/GalleryItem.axaml` |
 | Ribbon menu (backstage) | `RibbonMenu` | `AvaloniaUI.Ribbon/RibbonMenu.cs` | `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonMenu.axaml` |
@@ -119,6 +126,9 @@ Key properties:
 | `IsCollapsedPopupOpen` | `bool` | `false` |
 | `Menu` | `IRibbonMenu` | `null` |
 | `ContextualTabGroups` | `IList<RibbonContextualTabGroup>` | initialized in ctor |
+| `QuickAccessItems` | `ObservableCollection<ICanAddToQuickAccess>` | empty (reference-unique default collection) |
+| `QuickAccessLocation` | `RibbonQatLocation` | `RibbonQatLocation.Above` |
+| `ShowQatOverflowButton` | `bool` | `true` |
 
 Template parts:
 
@@ -195,6 +205,7 @@ Behavior notes:
 
 - Toggle visibility with `IsVisible` on `RibbonContextualTabGroup`.
 - When `IsVisible` becomes `false` while one of its tabs is selected, the control attempts to switch to another visible tab automatically.
+- `ContextColor` is the dedicated contextual tint API; `Background` stays synchronized for backward compatibility.
 
 Customization:
 
@@ -215,8 +226,11 @@ Key properties:
 | Property | Type | Default |
 | --- | --- | --- |
 | `DisplayMode` | `GroupDisplayMode` | `Small` |
-| `Command` | `ICommand` | `null` |
-| `CommandParameter` | `object` | `null` |
+| `DialogLauncherCommand` | `ICommand` | `null` |
+| `DialogLauncherCommandParameter` | `object` | `null` |
+| `Command` / `CommandParameter` | alias to dialog launcher properties | `null` |
+| `AllowCollapsedPopup` | `bool` | `true` |
+| `IsCollapsedToPopup` | `bool` (read-only/direct) | `false` |
 
 Events:
 
@@ -264,6 +278,7 @@ Key properties:
 | `LargeIcon` | `object` | `null` |
 | `QuickAccessIcon` | `object` | `null` |
 | `QuickAccessTemplate` | `IControlTemplate` | `null` |
+| `ShortcutKeys` | `KeyGesture` | `null` |
 | `Size` | `RibbonControlSize` | `Large` |
 | `MinSize` | `RibbonControlSize` | `Small` |
 | `MaxSize` | `RibbonControlSize` | `Large` |
@@ -287,6 +302,7 @@ Purpose:
 Key properties:
 
 - `Icon`, `LargeIcon`, `QuickAccessIcon`, `CanAddToQuickAccess`, `QuickAccessTemplate`
+- `ShortcutKeys`
 - `Size`, `MinSize`, `MaxSize`
 
 Notes:
@@ -316,6 +332,7 @@ Key properties:
 | `Content` | `object?` | inherited |
 | `IsDropDownOpen` | `bool` | `false` |
 | `Icon` / `LargeIcon` | `object` | `null` |
+| `ShortcutKeys` | `KeyGesture` | `null` |
 | `QuickAccessIcon` / `QuickAccessTemplate` | ribbon quick-access model | inherited |
 | `Size` / `MinSize` / `MaxSize` | ribbon sizing model | helper defaults |
 
@@ -339,6 +356,7 @@ Extra properties:
 
 - `Command`
 - `CommandParameter`
+- `ShortcutKeys`
 
 Customization:
 
@@ -355,6 +373,7 @@ Purpose:
 Key properties:
 
 - `Icon`, `LargeIcon`, `IsDropDownOpen`
+- `ShortcutKeys`
 - `CanAddToQuickAccess`, `QuickAccessIcon`, `QuickAccessTemplate`
 - `Size`, `MinSize`, `MaxSize`
 
@@ -387,6 +406,44 @@ Customization:
 
 - `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonComboBox.axaml`
 
+## RibbonTextBox / RibbonDatePicker / RibbonNumericUpDown
+
+Sources:
+
+- `AvaloniaUI.Ribbon/RibbonTextBox.cs`
+- `AvaloniaUI.Ribbon/RibbonDatePicker.cs`
+- `AvaloniaUI.Ribbon/RibbonNumericUpDown.cs`
+
+Purpose:
+
+- Ribbon-native text/date/numeric input controls that participate in ribbon `Size`/`MinSize`/`MaxSize`.
+
+Customization:
+
+- `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonTextBox.axaml`
+- `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonDatePicker.axaml`
+- `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonNumericUpDown.axaml`
+
+## RibbonCheckBox / RibbonRadioButton / RibbonLabel / RibbonSeparator
+
+Sources:
+
+- `AvaloniaUI.Ribbon/RibbonCheckBox.cs`
+- `AvaloniaUI.Ribbon/RibbonRadioButton.cs`
+- `AvaloniaUI.Ribbon/RibbonLabel.cs`
+- `AvaloniaUI.Ribbon/RibbonSeparator.cs`
+
+Purpose:
+
+- Ribbon-native option/annotation/separator controls with ribbon sizing contracts.
+
+Customization:
+
+- `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonCheckBox.axaml`
+- `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonRadioButton.axaml`
+- `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonLabel.axaml`
+- `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonSeparator.axaml`
+
 ## Gallery (RibbonGallery)
 
 Source: `AvaloniaUI.Ribbon/Gallery.cs`
@@ -411,12 +468,19 @@ Key properties:
 | --- | --- | --- |
 | `IsDropDownOpen` | `bool` | inherited |
 | `ItemHeight` | `double` | `0` unless set |
+| `Ranges` | `ObservableCollection<GalleryRange>` | empty |
 | `Size` / `MinSize` / `MaxSize` | ribbon sizing model | helper defaults |
+
+API additions:
+
+- `BringIntoView(int index)`
+- `ItemHoverChanged` event (`GalleryItemHoverChangedEventArgs`)
 
 Behavior notes:
 
 - Moves shared `ItemsPresenter` between inline and flyout hosts.
 - Up/down buttons move presenter offset by `ItemHeight`.
+- `BringIntoView(int index)` scrolls to the target row/index using current gallery size column rules.
 
 Customization:
 
@@ -461,15 +525,33 @@ Key properties:
 | `SelectedSubItems` | `object` | `null` |
 | `TopDockedGroupedItems` | grouped collection | computed |
 | `BottomDockedGroupedItems` | grouped collection | computed |
+| `RecentDocuments` | `ObservableCollection<RibbonRecentDocument>` | empty |
+| `RecentDocumentClickCommand` | `ICommand` | initialized in ctor |
 
 Behavior notes:
 
 - Regroups items by `RibbonMenuItem.Group`.
 - Updates `IsLastItem` flags per group.
+- Recent-doc entries execute per-item command and raise `RecentDocumentInvoked`.
 
 Customization:
 
 - `AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonMenu.axaml`
+
+## RibbonRecentDocument
+
+Source: `AvaloniaUI.Ribbon/Models/RibbonRecentDocument.cs`
+
+Purpose:
+
+- Data model for the dedicated recent-documents section in `RibbonMenu`.
+
+Key properties:
+
+- `Title`
+- `Path`
+- `Icon`
+- `Command` / `CommandParameter`
 
 ## RibbonMenuItem
 

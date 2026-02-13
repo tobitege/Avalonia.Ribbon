@@ -23,7 +23,27 @@ public class RibbonGroupsStackPanelTests
         RunLayout(panel, 450);
 
         Assert.Equal(1, GetRowCount(groups));
-        Assert.Contains(groups, group => group.DisplayMode == GroupDisplayMode.Small);
+        Assert.Contains(groups, group => group.DisplayMode == GroupDisplayMode.Medium);
+        Assert.All(groups, group => Assert.NotEqual(GroupDisplayMode.Small, group.DisplayMode));
+    }
+
+    [Fact]
+    public void WrapThenShrink_UsesMediumBeforeSmall()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 2
+        };
+
+        var groups = CreateGroups(panel, 5, mediumWidth: 150);
+
+        RunLayout(panel, 550);
+
+        Assert.Equal(2, GetRowCount(groups));
+        Assert.Contains(groups, group => group.DisplayMode == GroupDisplayMode.Medium);
+        Assert.All(groups, group => Assert.NotEqual(GroupDisplayMode.Small, group.DisplayMode));
     }
 
     [Fact]
@@ -85,6 +105,28 @@ public class RibbonGroupsStackPanelTests
     }
 
     [Fact]
+    public void ReExpandsThroughMediumBeforeReturningToLarge()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1
+        };
+
+        var groups = CreateGroups(panel, 3, smallWidth: 100, mediumWidth: 150, largeWidth: 200);
+
+        RunLayout(panel, 350);
+        var smallCountAtNarrowWidth = groups.Count(group => group.DisplayMode == GroupDisplayMode.Small);
+        Assert.True(smallCountAtNarrowWidth > 0);
+
+        RunLayout(panel, 500);
+        Assert.All(groups, group => Assert.NotEqual(GroupDisplayMode.Small, group.DisplayMode));
+        Assert.Contains(groups, group => group.DisplayMode == GroupDisplayMode.Medium);
+        Assert.Contains(groups, group => group.DisplayMode == GroupDisplayMode.Large);
+    }
+
+    [Fact]
     public void WrapThenShrink_AllowsMoreThanTwoRowsWhenConfigured()
     {
         var panel = new RibbonGroupsStackPanel
@@ -125,7 +167,12 @@ public class RibbonGroupsStackPanelTests
         Assert.All(groups, group => Assert.Equal(GroupDisplayMode.Large, group.DisplayMode));
     }
 
-    private static List<TestRibbonGroupBox> CreateGroups(RibbonGroupsStackPanel panel, int count)
+    private static List<TestRibbonGroupBox> CreateGroups(
+        RibbonGroupsStackPanel panel,
+        int count,
+        double smallWidth = 100,
+        double mediumWidth = 125,
+        double largeWidth = 200)
     {
         var groups = new List<TestRibbonGroupBox>();
 
@@ -134,8 +181,9 @@ public class RibbonGroupsStackPanelTests
             var group = new TestRibbonGroupBox
             {
                 DisplayMode = GroupDisplayMode.Large,
-                LargeDesiredSize = new Size(200, 96),
-                SmallDesiredSize = new Size(100, 96)
+                LargeDesiredSize = new Size(largeWidth, 96),
+                MediumDesiredSize = new Size(mediumWidth, 96),
+                SmallDesiredSize = new Size(smallWidth, 96)
             };
 
             panel.Children.Add(group);
@@ -173,11 +221,18 @@ public class RibbonGroupsStackPanelTests
     {
         public Size LargeDesiredSize { get; set; } = new(200, 96);
 
+        public Size MediumDesiredSize { get; set; } = new(125, 96);
+
         public Size SmallDesiredSize { get; set; } = new(100, 96);
 
         protected override Size MeasureOverride(Size availableSize)
         {
-            return DisplayMode == GroupDisplayMode.Large ? LargeDesiredSize : SmallDesiredSize;
+            return DisplayMode switch
+            {
+                GroupDisplayMode.Medium => MediumDesiredSize,
+                GroupDisplayMode.Small => SmallDesiredSize,
+                _ => LargeDesiredSize
+            };
         }
     }
 }

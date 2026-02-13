@@ -4,6 +4,8 @@ public enum GroupDisplayMode
 {
     Large,
 
+    Medium,
+
     Small /*,
     Flyout*/
 }

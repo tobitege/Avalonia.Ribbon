@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Chrome;
@@ -13,6 +15,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.VisualTree;
 using AvaloniaUI.Ribbon.Contracts;
+using AvaloniaUI.Ribbon.Models;
 
 namespace AvaloniaUI.Ribbon;
 
@@ -33,6 +36,13 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
             AvaloniaProperty.RegisterDirect<RibbonMenu, IEnumerable<IGrouping<string, RibbonMenuItem>>>(
                 nameof(BottomDockedGroupedItems),
                 o => o.BottomDockedGroupedItems);
+
+    public static readonly DirectProperty<RibbonMenu, ObservableCollection<RibbonRecentDocument>>
+        RecentDocumentsProperty =
+            AvaloniaProperty.RegisterDirect<RibbonMenu, ObservableCollection<RibbonRecentDocument>>(
+                nameof(RecentDocuments),
+                o => o.RecentDocuments,
+                (o, v) => o.RecentDocuments = v);
 
     // Content Property for the RibbonMenu
     public static readonly StyledProperty<object?> ContentProperty =
@@ -60,6 +70,8 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     private IEnumerable<IGrouping<string, RibbonMenuItem>> _topDockedGroupedItems =
         Array.Empty<IGrouping<string, RibbonMenuItem>>();
 
+    private ObservableCollection<RibbonRecentDocument> _recentDocuments = new();
+
     static RibbonMenu()
     {
         // Class handler for IsMenuOpenProperty when it changes
@@ -67,6 +79,11 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
 
         // Class handler for ItemsSourceProperty when it changes
         ItemsSourceProperty.Changed.AddClassHandler<RibbonMenu>((x, e) => x.ItemsChanged(e));
+    }
+
+    public RibbonMenu()
+    {
+        RecentDocumentClickCommand = new RelayCommand(ExecuteRecentDocumentCommand);
     }
 
     // Public getter and setter for TopDockedGroupedItems
@@ -81,6 +98,12 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     {
         get => _bottomDockedGroupedItems;
         private set => SetAndRaise(BottomDockedGroupedItemsProperty, ref _bottomDockedGroupedItems, value);
+    }
+
+    public ObservableCollection<RibbonRecentDocument> RecentDocuments
+    {
+        get => _recentDocuments;
+        set => SetAndRaise(RecentDocumentsProperty, ref _recentDocuments, value);
     }
 
     // Public getter and setter for Content
@@ -110,6 +133,10 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
         get => GetValue(IsMenuOpenProperty);
         set => SetValue(IsMenuOpenProperty, value);
     }
+
+    public ICommand RecentDocumentClickCommand { get; }
+
+    public event EventHandler<RibbonRecentDocument>? RecentDocumentInvoked;
 
     // Constructor: Called when the template is applied
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -222,6 +249,18 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
         SelectedItemContent = item.Content;
     }
 
+    private void ExecuteRecentDocumentCommand(object? parameter)
+    {
+        if (parameter is not RibbonRecentDocument recentDocument)
+            return;
+
+        var commandParameter = recentDocument.CommandParameter ?? recentDocument;
+        if (recentDocument.Command != null && recentDocument.Command.CanExecute(commandParameter))
+            recentDocument.Command.Execute(commandParameter);
+
+        RecentDocumentInvoked?.Invoke(this, recentDocument);
+    }
+
     // Updates grouped items based on top-docked and bottom-docked criteria
     private void UpdateGroupedItems()
     {
@@ -288,5 +327,28 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     {
         if (ItemsSource is INotifyCollectionChanged collectionChanged)
             collectionChanged.CollectionChanged -= ItemsCollectionChanged;
+    }
+
+    private sealed class RelayCommand : ICommand
+    {
+        private readonly Action<object?> _execute;
+
+        public RelayCommand(Action<object?> execute)
+        {
+            _execute = execute;
+        }
+
+        public bool CanExecute(object? parameter) => true;
+
+        public void Execute(object? parameter)
+        {
+            _execute(parameter);
+        }
+
+        public event EventHandler? CanExecuteChanged
+        {
+            add { }
+            remove { }
+        }
     }
 }

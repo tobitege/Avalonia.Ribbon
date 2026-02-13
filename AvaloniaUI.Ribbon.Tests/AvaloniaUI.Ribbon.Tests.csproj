@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\\AvaloniaUI.Ribbon.Desktop\\AvaloniaUI.Ribbon.Desktop.csproj" />
     <ProjectReference Include="..\\AvaloniaUI.Ribbon\\AvaloniaUI.Ribbon.csproj" />
   </ItemGroup>
 

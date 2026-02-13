@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:AvaloniaUI.Ribbon.Models;assembly=AvaloniaUI.Ribbon"
     xmlns:viewModels="clr-namespace:AvaloniaUI.Ribbon.Demo.ViewModels"
     d:DesignWidth="1200"
     Background="Transparent"
@@ -336,6 +337,11 @@
 	</Ribbon.HelpPaneContent>
 	<Ribbon.Menu>
 		<RibbonMenu KeyTip.KeyTipKeys="F">
+			<RibbonMenu.RecentDocuments>
+				<models:RibbonRecentDocument Path="C:\Docs\Quarterly-Report.docx" Title="Quarterly-Report.docx" />
+				<models:RibbonRecentDocument Path="C:\Docs\Product-Backlog.xlsx" Title="Product-Backlog.xlsx" />
+				<models:RibbonRecentDocument Path="C:\Docs\Team-Notes.md" Title="Team-Notes.md" />
+			</RibbonMenu.RecentDocuments>
 			<RibbonMenuItem
                 Group="File"
                 Header="New"
@@ -591,6 +597,22 @@
 							<ComboBoxItem>THREE</ComboBoxItem>
 							<ComboBoxItem>FOUR</ComboBoxItem>
 						</RibbonComboBox>
+					</RibbonGroupWrapPanel>
+				</RibbonGroupBox>
+				<RibbonGroupBox Header="Input Controls" KeyTip.KeyTipKeys="I">
+					<RibbonGroupWrapPanel Orientation="Vertical">
+						<RibbonGroupWrapPanel Orientation="Horizontal">
+							<RibbonLabel Content="Name:" MaxSize="Medium" MinSize="Medium" />
+							<RibbonTextBox Text="Document A" MaxSize="Medium" MinSize="Medium" />
+							<RibbonSeparator MaxSize="Medium" MinSize="Medium" />
+							<RibbonNumericUpDown Value="42" MaxSize="Medium" MinSize="Medium" />
+						</RibbonGroupWrapPanel>
+						<RibbonGroupWrapPanel Orientation="Horizontal">
+							<RibbonDatePicker SelectedDate="2026-02-13" MaxSize="Medium" MinSize="Medium" />
+							<RibbonCheckBox Content="Read only" MaxSize="Medium" MinSize="Medium" />
+							<RibbonRadioButton Content="Pinned" GroupName="InputControlsState" MaxSize="Medium" MinSize="Medium" />
+							<RibbonRadioButton Content="Floating" GroupName="InputControlsState" IsChecked="True" MaxSize="Medium" MinSize="Medium" />
+						</RibbonGroupWrapPanel>
 					</RibbonGroupWrapPanel>
 				</RibbonGroupBox>
 			</RibbonTab.Groups>
@@ -1061,7 +1083,7 @@
 		</RibbonTab>
 		<RibbonTab Header="Invisible tab" IsVisible="False" />
 		<RibbonContextualTabGroup
-            Background="Red"
+            ContextColor="Red"
             Header="Contextual Group 1"
             IsVisible="{Binding ShowContextualGroup1, Mode=OneWay}">
 			<RibbonTab Header="Test A" KeyTip.KeyTipKeys="T">
@@ -1315,7 +1337,7 @@
 			</RibbonTab>
 		</RibbonContextualTabGroup>
 		<RibbonContextualTabGroup
-            Background="Green"
+            ContextColor="Green"
             Header="Contextual Group 2"
             IsVisible="{Binding ShowContextualGroup2}">
 			<RibbonTab Header="This tab's name is really long" KeyTip.KeyTipKeys="T">
@@ -1353,7 +1375,7 @@
 			</RibbonTab>
 		</RibbonContextualTabGroup>
 		<RibbonContextualTabGroup
-            Background="Yellow"
+            ContextColor="Yellow"
             Header="Contextual Group 3 with a very long name"
             IsVisible="{Binding ShowContextualGroup3}">
 			<RibbonTab Header="lol" KeyTip.KeyTipKeys="T">

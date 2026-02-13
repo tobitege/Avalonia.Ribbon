@@ -1,4 +1,4 @@
-﻿<Styles
+<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:AvaloniaUI.Ribbon.Converters;assembly=AvaloniaUI.Ribbon"
@@ -57,7 +57,7 @@
 	<Styles.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceInclude Source="/SizeResources.axaml" />
+				<ResourceInclude Source="avares://AvaloniaUI.Ribbon/SizeResources.axaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Styles.Resources>
@@ -123,8 +123,8 @@
                                 Padding="0"
                                 HorizontalAlignment="Right"
                                 Background="Transparent"
-                                Command="{TemplateBinding Command}"
-                                CommandParameter="{TemplateBinding CommandParameter}"
+                                Command="{TemplateBinding DialogLauncherCommand}"
+                                CommandParameter="{TemplateBinding DialogLauncherCommandParameter}"
                                 DockPanel.Dock="Right"
                                 Focusable="False"
                                 Foreground="{DynamicResource SystemControlBackgroundBaseMediumHighBrush}">
@@ -132,7 +132,7 @@
 									<Binding
                                         Converter="{x:Static ObjectConverters.IsNotNull}"
                                         Mode="OneWay"
-                                        Path="Command"
+                                        Path="DialogLauncherCommand"
                                         RelativeSource="{RelativeSource Mode=TemplatedParent}" />
 								</Button.IsVisible>
 								<Border
@@ -206,7 +206,6 @@
   </Style-->
 	<Style Selector="local|Ribbon[Orientation=Horizontal] local|RibbonGroupBox /template/ local|RibbonGroupWrapPanel#PART_ItemsPanel">
 		<Setter Property="Orientation" Value="Vertical" />
-		<Setter Property="Height" Value="72" />
 		<Setter Property="SmallLineCount" Value="3" />
 	</Style>
 	<Style Selector="local|Ribbon[Orientation=Horizontal][GroupOverflowBehavior=WrapThenShrink] local|RibbonGroupBox /template/ local|RibbonGroupWrapPanel#PART_ItemsPanel">
@@ -214,7 +213,6 @@
 	</Style>
 	<Style Selector="local|Ribbon[Orientation=Vertical] local|RibbonGroupBox /template/ local|RibbonGroupWrapPanel#PART_ItemsPanel">
 		<Setter Property="Orientation" Value="Horizontal" />
-		<Setter Property="Width" Value="132" />
 	</Style>
 	<Style Selector="local|Ribbon[Orientation=Horizontal] local|RibbonGroupBox">
 		<Setter Property="VerticalAlignment" Value="Stretch" />
@@ -241,6 +239,56 @@
 	<Style Selector="local|RibbonGroupBox /template/ Button#PART_CommandButton:pointerover">
 		<Setter Property="Background" Value="{DynamicResource ThemeControlMidBrush}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
+	</Style>
+	<Style Selector="local|RibbonGroupBox[IsCollapsedToPopup=True]">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border
+                    Width="30"
+                    Height="{StaticResource LargeControlHeight}"
+                    Margin="2"
+                    Padding="3"
+                    Background="{DynamicResource ThemeControlMidBrush}"
+                    BorderBrush="{DynamicResource ThemeBorderMidBrush}"
+                    BorderThickness="{DynamicResource ThemeBorderThickness}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
+					<Grid>
+						<ToggleButton
+                            x:Name="PART_CollapsedPopupButton"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            IsChecked="False">
+							<Path
+                                Width="8"
+                                Height="6"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M 0 0 L 4 4 L 8 0"
+                                Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                StrokeThickness="1" />
+						</ToggleButton>
+						<Popup
+                            IsLightDismissEnabled="True"
+                            IsOpen="{Binding IsChecked, ElementName=PART_CollapsedPopupButton, Mode=TwoWay}"
+                            Placement="Bottom"
+                            PlacementTarget="{Binding #PART_CollapsedPopupButton}">
+							<Border
+                                MinWidth="180"
+                                Padding="8"
+                                Background="{DynamicResource ThemeControlHighBrush}"
+                                BorderBrush="{DynamicResource ThemeBorderMidBrush}"
+                                BorderThickness="{DynamicResource ThemeBorderThickness}">
+								<StackPanel Spacing="4">
+									<TextBlock FontWeight="SemiBold" Text="{TemplateBinding Header}" />
+									<Separator />
+									<ItemsPresenter />
+								</StackPanel>
+							</Border>
+						</Popup>
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
 	</Style>
 	<!--Style Selector="local|RibbonGroupBox /template/ Button#PART_CommandButton:pointerover /template/ ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource HoveredBackgroundColorBrush}" />

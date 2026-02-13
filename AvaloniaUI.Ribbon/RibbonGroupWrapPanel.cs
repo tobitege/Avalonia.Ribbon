@@ -131,8 +131,27 @@ public class RibbonGroupWrapPanel : WrapPanel
                 groupContainer.ApplyDisplayMode(displayMode);
 
             if (Children[i] is IRibbonControl control)
-                control.Size = displayMode == GroupDisplayMode.Small ? control.MinSize : control.MaxSize;
+                control.Size = displayMode switch
+                {
+                    GroupDisplayMode.Small => control.MinSize,
+                    GroupDisplayMode.Medium => ClampControlSize(RibbonControlSize.Medium, control.MinSize, control.MaxSize),
+                    _ => control.MaxSize
+                };
         }
+    }
+
+    private static RibbonControlSize ClampControlSize(RibbonControlSize value, RibbonControlSize min, RibbonControlSize max)
+    {
+        if (min > max)
+            (min, max) = (max, min);
+
+        if (value < min)
+            return min;
+
+        if (value > max)
+            return max;
+
+        return value;
     }
 
     private int ResolveLineCount()

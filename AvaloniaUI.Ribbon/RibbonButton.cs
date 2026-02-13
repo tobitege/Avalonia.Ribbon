@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Controls.Templates;
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Helpers;
@@ -29,6 +30,9 @@ public class RibbonButton : Button, IRibbonInputControl, IRibbonCommand, ICanAdd
         AvaloniaProperty.Register<RibbonButton, IControlTemplate>(nameof(QuickAccessTemplate));
 
     public static readonly StyledProperty<RibbonControlSize> SizeProperty;
+
+    public static readonly StyledProperty<KeyGesture?> ShortcutKeysProperty =
+        AvaloniaProperty.Register<RibbonButton, KeyGesture?>(nameof(ShortcutKeys));
 
     static RibbonButton()
     {
@@ -84,5 +88,11 @@ public class RibbonButton : Button, IRibbonInputControl, IRibbonCommand, ICanAdd
     {
         get => GetValue(SizeProperty);
         set => SetValue(SizeProperty, value);
+    }
+
+    public KeyGesture? ShortcutKeys
+    {
+        get => GetValue(ShortcutKeysProperty);
+        set => SetValue(ShortcutKeysProperty, value);
     }
 }

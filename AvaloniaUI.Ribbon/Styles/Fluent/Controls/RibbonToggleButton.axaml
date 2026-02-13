@@ -9,21 +9,21 @@
                     <RibbonToggleButton Content="Large Ribbon Toggle Button">
                         <RibbonToggleButton.LargeIcon>
                             <ControlTemplate>
-                                <Image Source="/Assets/settings.png" Width="32" Height="32" />
+                                <Image Source="avares://AvaloniaUI.Ribbon/Assets/settings.png" Width="32" Height="32" />
                             </ControlTemplate>
                         </RibbonToggleButton.LargeIcon>
                     </RibbonToggleButton>
                     <RibbonToggleButton Size="Medium" Content="Medium Ribbon Toggle Button">
                         <RibbonToggleButton.Icon>
                             <ControlTemplate>
-                                <Image Source="/Assets/settings.png" Width="16" Height="16" />
+                                <Image Source="avares://AvaloniaUI.Ribbon/Assets/settings.png" Width="16" Height="16" />
                             </ControlTemplate>
                         </RibbonToggleButton.Icon>
                     </RibbonToggleButton>
                     <RibbonToggleButton Size="Small" Content="Small Ribbon Toggle Button">
                         <RibbonToggleButton.Icon>
                             <ControlTemplate>
-                                <Image Source="/Assets/settings.png" Width="16" Height="16" />
+                                <Image Source="avares://AvaloniaUI.Ribbon/Assets/settings.png" Width="16" Height="16" />
                             </ControlTemplate>
                         </RibbonToggleButton.Icon>
                     </RibbonToggleButton>

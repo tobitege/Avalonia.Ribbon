@@ -1,4 +1,4 @@
-﻿<Styles
+<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
@@ -82,7 +82,7 @@
     </Style>
 
     <Style Selector="local|RibbonTab[IsContextual=True] /template/ Border#SelectedBorder">
-        <Setter Property="Background" Value="{Binding $parent[RibbonContextualTabGroup].Background}" />
+        <Setter Property="Background" Value="{Binding $parent[RibbonContextualTabGroup].ContextColor}" />
     </Style>
     <Style Selector="local|RibbonTab[IsContextual=False] /template/ Border#SelectedBorder">
         <Setter Property="Background" Value="{DynamicResource TabItemHeaderSelectedPipeFill}" />

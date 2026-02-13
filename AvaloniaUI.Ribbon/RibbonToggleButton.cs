@@ -1,5 +1,6 @@
 using System;
 using Avalonia;
+using Avalonia.Input;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using AvaloniaUI.Ribbon.Contracts;
@@ -28,6 +29,9 @@ public class RibbonToggleButton : ToggleButton, IRibbonControl, ICanAddToQuickAc
 
     public static readonly StyledProperty<IControlTemplate> QuickAccessTemplateProperty =
         AvaloniaProperty.Register<RibbonButton, IControlTemplate>(nameof(Template));
+
+    public static readonly StyledProperty<KeyGesture?> ShortcutKeysProperty =
+        AvaloniaProperty.Register<RibbonToggleButton, KeyGesture?>(nameof(ShortcutKeys));
 
     static RibbonToggleButton()
     {
@@ -84,5 +88,11 @@ public class RibbonToggleButton : ToggleButton, IRibbonControl, ICanAddToQuickAc
     {
         get => GetValue(MaxSizeProperty);
         set => SetValue(MaxSizeProperty, value);
+    }
+
+    public KeyGesture? ShortcutKeys
+    {
+        get => GetValue(ShortcutKeysProperty);
+        set => SetValue(ShortcutKeysProperty, value);
     }
 }

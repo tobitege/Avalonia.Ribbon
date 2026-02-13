@@ -32,4 +32,5 @@ public class RibbonSplitButton : RibbonDropDownButton, IRibbonCommand
         get => GetValue(CommandParameterProperty);
         set => SetValue(CommandParameterProperty, value);
     }
+
 }

@@ -801,6 +801,31 @@
 					</RibbonTab.Groups>
 				</RibbonTab>
 
+				<RibbonTab Header="New Controls" KeyTip.KeyTipKeys="N">
+					<RibbonTab.Groups>
+						<RibbonGroupBox Header="Inputs" KeyTip.KeyTipKeys="IN">
+							<RibbonGroupTriple MaxItemsPerColumn="2">
+								<RibbonLabel Content="Filter" MaxSize="Medium" />
+								<RibbonTextBox Text="*.cs" MaxSize="Medium" />
+								<RibbonNumericUpDown Value="7" MaxSize="Medium" />
+							</RibbonGroupTriple>
+						</RibbonGroupBox>
+						<RibbonGroupBox Header="Date" KeyTip.KeyTipKeys="DT">
+							<RibbonGroupTriple MaxItemsPerColumn="1">
+								<RibbonDatePicker SelectedDate="2026-02-13" MonthFormat="MMMM" MaxSize="Medium" />
+							</RibbonGroupTriple>
+						</RibbonGroupBox>
+						<RibbonGroupBox Header="View options" KeyTip.KeyTipKeys="VO">
+							<RibbonGroupTriple MaxItemsPerColumn="2">
+								<RibbonCheckBox Content="Hidden" MaxSize="Medium" />
+								<RibbonRadioButton Content="Details" GroupName="ViewMode" IsChecked="True" MaxSize="Medium" />
+								<RibbonRadioButton Content="Tiles" GroupName="ViewMode" MaxSize="Medium" />
+								<RibbonSeparator MaxSize="Medium" />
+							</RibbonGroupTriple>
+						</RibbonGroupBox>
+					</RibbonTab.Groups>
+				</RibbonTab>
+
 				<RibbonTab Header="Galleries" KeyTip.KeyTipKeys="G">
 					<RibbonTab.Groups>
 						<RibbonGroupBox

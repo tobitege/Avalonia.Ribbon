@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Controls.Templates;
 using Avalonia.Styling;
 using AvaloniaUI.Ribbon.Contracts;
@@ -38,6 +39,12 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
     {
         get => GetValue(QuickAccessIconProperty);
         set => SetValue(QuickAccessIconProperty, value);
+    }
+
+    public KeyGesture? ShortcutKeys
+    {
+        get => GetValue(ShortcutKeysProperty);
+        set => SetValue(ShortcutKeysProperty, value);
     }
 
     public bool CanAddToQuickAccess
@@ -118,6 +125,9 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
         RibbonButton.QuickAccessTemplateProperty.AddOwner<SplitButton>();
 
     public static readonly StyledProperty<RibbonControlSize> SizeProperty;
+
+    public static readonly StyledProperty<KeyGesture?> ShortcutKeysProperty =
+        AvaloniaProperty.Register<SplitButtonControl, KeyGesture?>(nameof(ShortcutKeys));
 
     #endregion Static Properties
 }

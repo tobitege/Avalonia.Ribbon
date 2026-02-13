@@ -1,0 +1,30 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://AvaloniaUI.Ribbon/SizeResources.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ControlTheme x:Key="{x:Type local:RibbonNumericUpDown}" BasedOn="{StaticResource {x:Type NumericUpDown}}" TargetType="local:RibbonNumericUpDown" />
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <Style Selector="local|RibbonNumericUpDown">
+        <Setter Property="Height" Value="{StaticResource MediumControlHeight}" />
+        <Setter Property="MinWidth" Value="82" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+    <Style Selector="local|RibbonNumericUpDown[Size=Large]">
+        <Setter Property="Width" Value="140" />
+    </Style>
+    <Style Selector="local|RibbonNumericUpDown[Size=Medium]">
+        <Setter Property="Width" Value="110" />
+    </Style>
+    <Style Selector="local|RibbonNumericUpDown[Size=Small]">
+        <Setter Property="Height" Value="{StaticResource SmallControlHeight}" />
+        <Setter Property="Width" Value="90" />
+    </Style>
+</Styles>

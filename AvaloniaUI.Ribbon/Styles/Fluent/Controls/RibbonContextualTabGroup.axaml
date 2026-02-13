@@ -1,4 +1,4 @@
-﻿<Styles
+<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
@@ -13,7 +13,7 @@
                     <Border
                         Grid.RowSpan="2"
                         Margin="0,2"
-                        Background="{TemplateBinding Background}"
+                        Background="{TemplateBinding ContextColor}"
                         CornerRadius="{DynamicResource ControlCornerRadius}"
                         IsHitTestVisible="False">
                         <Border.OpacityMask>
@@ -72,7 +72,7 @@
                     <Panel DockPanel.Dock="Left">
                         <Border
                             x:Name="EdgeTopBorder"
-                            Background="{TemplateBinding Background}"
+                            Background="{TemplateBinding ContextColor}"
                             CornerRadius="3,0,0,3"
                             IsHitTestVisible="False"
                             Opacity="0.25" />
@@ -103,7 +103,7 @@
             </LayoutTransformControl-->
                         <Border
                             x:Name="EdgeBottomBorder"
-                            Background="{TemplateBinding Background}"
+                            Background="{TemplateBinding ContextColor}"
                             CornerRadius="0,3,3,0"
                             Opacity="0.125" />
                         <ItemsPresenter

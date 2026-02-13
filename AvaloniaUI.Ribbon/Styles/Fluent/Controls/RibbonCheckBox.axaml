@@ -1,0 +1,27 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://AvaloniaUI.Ribbon/SizeResources.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ControlTheme x:Key="{x:Type local:RibbonCheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="local:RibbonCheckBox" />
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <Style Selector="local|RibbonCheckBox">
+        <Setter Property="Margin" Value="2,1" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="local|RibbonCheckBox[Size=Large]">
+        <Setter Property="MinHeight" Value="{StaticResource LargeControlHeight}" />
+    </Style>
+    <Style Selector="local|RibbonCheckBox[Size=Medium]">
+        <Setter Property="MinHeight" Value="{StaticResource MediumControlHeight}" />
+    </Style>
+    <Style Selector="local|RibbonCheckBox[Size=Small]">
+        <Setter Property="MinHeight" Value="{StaticResource SmallControlHeight}" />
+    </Style>
+</Styles>

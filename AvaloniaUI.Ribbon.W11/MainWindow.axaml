@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:desktop="clr-namespace:AvaloniaUI.Ribbon.Desktop;assembly=AvaloniaUI.Ribbon.Desktop"
+    xmlns:models="clr-namespace:AvaloniaUI.Ribbon.Models;assembly=AvaloniaUI.Ribbon"
     xmlns:ribbon="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon"
     Title="File Explorer"
     Width="1200"
@@ -13,15 +14,16 @@
     MinHeight="560"
     Background="#191919"
     BorderBrush="#2B2B2B"
-    Icon="/Assets/avalonia-logo.ico"
-    SystemDecorations="None"
+    Icon="avares://AvaloniaUI.Ribbon.W11/Assets/avalonia-logo.ico"
+    CanResize="True"
+    SystemDecorations="BorderOnly"
     TitleBarForeground="#F2F2F2"
     mc:Ignorable="d">
 
-  <desktop:RibbonWindow.Resources>
-    <ResourceDictionary>
+    <desktop:RibbonWindow.Resources>
+        <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceInclude Source="avares://AvaloniaUI.Ribbon/Resources/W11RibbonIcons.axaml" />
+      <ResourceInclude Source="avares://AvaloniaUI.Ribbon/Resources/W11RibbonIcons.axaml" />
       </ResourceDictionary.MergedDictionaries>
       <SolidColorBrush x:Key="W11HeaderBg" Color="#0A0A0A" />
       <SolidColorBrush x:Key="W11BodyBg" Color="#1E1E1E" />
@@ -38,6 +40,12 @@
     </Style>
     <Style Selector="desktop|DesktopRibbon /template/ ContentControl#PART_GroupsPresenterHolder">
       <Setter Property="Background" Value="{DynamicResource W11BodyBg}" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    </Style>
+    <Style Selector="desktop|DesktopRibbon /template/ ItemsControl#PART_SelectedGroupsHost">
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="Width" Value="{Binding $parent[desktop:DesktopRibbon].Bounds.Width}" />
     </Style>
     <Style Selector="desktop|DesktopRibbon /template/ ToggleButton#ExpandCollapseToggleButton:not(:pointerover):not(:pressed)">
       <Setter Property="Background" Value="Transparent" />
@@ -63,6 +71,12 @@
     <Style Selector="ribbon|RibbonGroupBox">
       <Setter Property="BorderBrush" Value="#3A3A3A" />
       <Setter Property="Foreground" Value="#999999" />
+      <Setter Property="AllowCollapsedPopup" Value="False" />
+    </Style>
+    <Style Selector="ribbon|RibbonGroupBox.Clipboard /template/ ribbon|RibbonGroupWrapPanel#PART_ItemsPanel">
+      <Setter Property="Orientation" Value="Horizontal" />
+      <Setter Property="SmallLineCount" Value="6" />
+      <Setter Property="LargeLineCount" Value="6" />
     </Style>
     <Style Selector="ribbon|RibbonButton, ribbon|RibbonDropDownButton">
       <Setter Property="Foreground" Value="#E0E0E0" />
@@ -78,7 +92,7 @@
   </desktop:RibbonWindow.QuickAccessToolbar>
 
   <desktop:RibbonWindow.Ribbon>
-    <desktop:DesktopRibbon>
+    <desktop:DesktopRibbon GroupOverflowBehavior="WrapThenShrink" MaxGroupRows="2">
       <desktop:DesktopRibbon.HelpPaneContent>
         <Button
           Width="22" Height="22" Margin="0,4,4,4"
@@ -100,6 +114,11 @@
 
       <desktop:DesktopRibbon.Menu>
         <ribbon:RibbonMenu Content="File" KeyTip.KeyTipKeys="F" Width="78">
+          <ribbon:RibbonMenu.RecentDocuments>
+            <models:RibbonRecentDocument Title="Notes.txt" Path="C:\Users\Public\Documents\Notes.txt" />
+            <models:RibbonRecentDocument Title="Screenshot.png" Path="C:\Users\Public\Pictures\Screenshot.png" />
+            <models:RibbonRecentDocument Title="Archive.zip" Path="C:\Users\Public\Documents\Archive.zip" />
+          </ribbon:RibbonMenu.RecentDocuments>
           <ribbon:RibbonMenuItem Header="Open PowerShell" IsTopDocked="True">
             <ribbon:RibbonMenuItem.Icon><ContentControl Content="{DynamicResource Open16}" /></ribbon:RibbonMenuItem.Icon>
           </ribbon:RibbonMenuItem>
@@ -118,28 +137,23 @@
           <ribbon:RibbonTab.Groups>
 
             <!-- ── Clipboard ──
-                 Pin = Large  |  Copy/Paste/Cut stacked 3-high  |  CopyPath/PasteShortcut stacked 2-high -->
-            <ribbon:RibbonGroupBox Header="Clipboard" KeyTip.KeyTipKeys="CB">
-              <ribbon:RibbonButton
-                x:Name="PinQuickAccessButton"
-                Content="Pin to Quick&#x0a;access"
-                Icon="{DynamicResource Pin16}"
-                LargeIcon="{DynamicResource Pin32}"
-                MinSize="Large" MaxSize="Large"
-                QuickAccessIcon="{DynamicResource Pin16}" />
+                 Pin = Large | Copy, Paste, Cut, Copy path, Paste shortcut on one row -->
+            <ribbon:RibbonGroupBox Header="Clipboard" KeyTip.KeyTipKeys="CB" Classes="Clipboard" DisplayMode="Large">
+              <ribbon:RibbonGroupLines LargeLineCount="1" SmallLineCount="1" ItemSpacing="2">
+                <ribbon:RibbonButton
+                  x:Name="PinQuickAccessButton"
+                  Content="Pin to Quick&#x0a;access"
+                  Icon="{DynamicResource Pin16}"
+                  LargeIcon="{DynamicResource Pin32}"
+                  MinSize="Large" MaxSize="Large"
+                  QuickAccessIcon="{DynamicResource Pin16}" />
 
-              <!-- Vertical stack: Copy / Paste / Cut -->
-              <ribbon:RibbonGroupTriple MaxItemsPerColumn="3">
                 <ribbon:RibbonButton x:Name="CopyButton" Icon="{DynamicResource Copy16}" MinSize="Small" MaxSize="Small" ToolTip.Tip="Copy" />
                 <ribbon:RibbonButton Icon="{DynamicResource Paste16}" MinSize="Small" MaxSize="Small" ToolTip.Tip="Paste" />
                 <ribbon:RibbonButton Icon="{DynamicResource Cut16}" MinSize="Small" MaxSize="Small" ToolTip.Tip="Cut" />
-              </ribbon:RibbonGroupTriple>
-
-              <!-- Vertical stack: Copy path / Paste shortcut -->
-              <ribbon:RibbonGroupTriple MaxItemsPerColumn="3">
                 <ribbon:RibbonButton Icon="{DynamicResource CopyPath16}" MinSize="Small" MaxSize="Small" ToolTip.Tip="Copy path" />
                 <ribbon:RibbonButton Icon="{DynamicResource PasteShortcut16}" MinSize="Small" MaxSize="Small" ToolTip.Tip="Paste shortcut" />
-              </ribbon:RibbonGroupTriple>
+              </ribbon:RibbonGroupLines>
             </ribbon:RibbonGroupBox>
 
             <!-- ── Organize ──
@@ -148,18 +162,18 @@
               <ribbon:RibbonGroupTriple MaxItemsPerColumn="2">
                 <ribbon:RibbonDropDownButton
                   Content="Move to" Icon="{DynamicResource MoveTo16}"
-                  MinSize="Medium" MaxSize="Medium">
+                  MaxSize="Medium">
                   <ribbon:RibbonDropDownItem Header="Desktop" />
                   <ribbon:RibbonDropDownItem Header="Documents" />
                 </ribbon:RibbonDropDownButton>
                 <ribbon:RibbonDropDownButton
                   Content="Copy to" Icon="{DynamicResource CopyTo16}"
-                  MinSize="Medium" MaxSize="Medium">
+                  MaxSize="Medium">
                   <ribbon:RibbonDropDownItem Header="Desktop" />
                   <ribbon:RibbonDropDownItem Header="Documents" />
                 </ribbon:RibbonDropDownButton>
-                <ribbon:RibbonButton Content="Delete" Icon="{DynamicResource Delete16}" MinSize="Medium" MaxSize="Medium" />
-                <ribbon:RibbonButton Content="Rename" Icon="{DynamicResource Rename16}" MinSize="Medium" MaxSize="Medium" />
+                <ribbon:RibbonButton Content="Delete" Icon="{DynamicResource Delete16}" MaxSize="Medium" />
+                <ribbon:RibbonButton Content="Rename" Icon="{DynamicResource Rename16}" MaxSize="Medium" />
               </ribbon:RibbonGroupTriple>
             </ribbon:RibbonGroupBox>
 
@@ -176,14 +190,14 @@
               <ribbon:RibbonGroupTriple MaxItemsPerColumn="3">
                 <ribbon:RibbonDropDownButton
                   Content="New item" Icon="{DynamicResource NewItem16}"
-                  MinSize="Medium" MaxSize="Medium">
+                  MaxSize="Medium">
                   <ribbon:RibbonDropDownItem Header="Folder" />
                   <ribbon:RibbonDropDownItem Header="Text document" />
                   <ribbon:RibbonDropDownItem Header="Bitmap image" />
                 </ribbon:RibbonDropDownButton>
                 <ribbon:RibbonDropDownButton
                   Content="Easy access" Icon="{DynamicResource EasyAccess16}"
-                  MinSize="Medium" MaxSize="Medium">
+                  MaxSize="Medium">
                   <ribbon:RibbonDropDownItem Header="Include in library" />
                   <ribbon:RibbonDropDownItem Header="Always available offline" />
                 </ribbon:RibbonDropDownButton>
@@ -202,12 +216,12 @@
               <ribbon:RibbonGroupTriple MaxItemsPerColumn="3">
                 <ribbon:RibbonDropDownButton
                   Content="Open" Icon="{DynamicResource Open16}"
-                  MinSize="Medium" MaxSize="Medium">
+                  MaxSize="Medium">
                   <ribbon:RibbonDropDownItem Header="Open in new tab" />
                   <ribbon:RibbonDropDownItem Header="Open in new window" />
                 </ribbon:RibbonDropDownButton>
-                <ribbon:RibbonButton Content="Edit" Icon="{DynamicResource Edit16}" MinSize="Medium" MaxSize="Medium" />
-                <ribbon:RibbonButton Content="History" Icon="{DynamicResource History16}" MinSize="Medium" MaxSize="Medium" />
+                <ribbon:RibbonButton Content="Edit" Icon="{DynamicResource Edit16}" MaxSize="Medium" />
+                <ribbon:RibbonButton Content="History" Icon="{DynamicResource History16}" MaxSize="Medium" />
               </ribbon:RibbonGroupTriple>
             </ribbon:RibbonGroupBox>
 
@@ -215,12 +229,38 @@
                  All 3 items stacked vertically -->
             <ribbon:RibbonGroupBox Header="Select" KeyTip.KeyTipKeys="S">
               <ribbon:RibbonGroupTriple MaxItemsPerColumn="3">
-                <ribbon:RibbonButton Content="Select all" Icon="{DynamicResource SelectAll16}" MinSize="Medium" MaxSize="Medium" />
-                <ribbon:RibbonButton Content="Select none" Icon="{DynamicResource SelectNone16}" MinSize="Medium" MaxSize="Medium" />
-                <ribbon:RibbonButton Content="Invert selection" Icon="{DynamicResource InvertSelection16}" MinSize="Medium" MaxSize="Medium" />
+                <ribbon:RibbonButton Content="Select all" Icon="{DynamicResource SelectAll16}" MaxSize="Medium" />
+                <ribbon:RibbonButton Content="Select none" Icon="{DynamicResource SelectNone16}" MaxSize="Medium" />
+                <ribbon:RibbonButton Content="Invert selection" Icon="{DynamicResource InvertSelection16}" MaxSize="Medium" />
               </ribbon:RibbonGroupTriple>
             </ribbon:RibbonGroupBox>
 
+          </ribbon:RibbonTab.Groups>
+        </ribbon:RibbonTab>
+
+        <!-- ═══════════════ NEW CONTROLS TAB ═══════════════ -->
+        <ribbon:RibbonTab Header="New Controls" KeyTip.KeyTipKeys="N">
+          <ribbon:RibbonTab.Groups>
+            <ribbon:RibbonGroupBox Header="Inputs" KeyTip.KeyTipKeys="IN">
+              <ribbon:RibbonGroupTriple MaxItemsPerColumn="2">
+                <ribbon:RibbonLabel Content="Filter" MaxSize="Medium" />
+                <ribbon:RibbonTextBox Text="*.cs" MaxSize="Medium" />
+                <ribbon:RibbonNumericUpDown Value="7" MaxSize="Medium" />
+              </ribbon:RibbonGroupTriple>
+            </ribbon:RibbonGroupBox>
+            <ribbon:RibbonGroupBox Header="Date" KeyTip.KeyTipKeys="DT">
+              <ribbon:RibbonGroupTriple MaxItemsPerColumn="1">
+                <ribbon:RibbonDatePicker SelectedDate="2026-02-13" MonthFormat="MMMM" MaxSize="Medium" />
+              </ribbon:RibbonGroupTriple>
+            </ribbon:RibbonGroupBox>
+            <ribbon:RibbonGroupBox Header="View options" KeyTip.KeyTipKeys="VO">
+              <ribbon:RibbonGroupTriple MaxItemsPerColumn="2">
+                <ribbon:RibbonCheckBox Content="Hidden" MaxSize="Medium" />
+                <ribbon:RibbonRadioButton Content="Details" GroupName="ViewMode" IsChecked="True" MaxSize="Medium" />
+                <ribbon:RibbonRadioButton Content="Tiles" GroupName="ViewMode" MaxSize="Medium" />
+                <ribbon:RibbonSeparator MaxSize="Medium" />
+              </ribbon:RibbonGroupTriple>
+            </ribbon:RibbonGroupBox>
           </ribbon:RibbonTab.Groups>
         </ribbon:RibbonTab>
 
@@ -228,7 +268,7 @@
         <ribbon:RibbonTab Header="Share" KeyTip.KeyTipKeys="R">
           <ribbon:RibbonTab.Groups>
             <ribbon:RibbonGroupBox Header="Share">
-              <ribbon:RibbonButton Content="Share" Icon="{DynamicResource Share16}" MinSize="Medium" MaxSize="Medium" />
+              <ribbon:RibbonButton Content="Share" Icon="{DynamicResource Share16}" MaxSize="Medium" />
             </ribbon:RibbonGroupBox>
           </ribbon:RibbonTab.Groups>
         </ribbon:RibbonTab>
@@ -237,7 +277,7 @@
         <ribbon:RibbonTab Header="View" KeyTip.KeyTipKeys="V">
           <ribbon:RibbonTab.Groups>
             <ribbon:RibbonGroupBox Header="View">
-              <ribbon:RibbonButton Content="Layout" Icon="{DynamicResource View16}" MinSize="Medium" MaxSize="Medium" />
+              <ribbon:RibbonButton Content="Layout" Icon="{DynamicResource View16}" MaxSize="Medium" />
             </ribbon:RibbonGroupBox>
           </ribbon:RibbonTab.Groups>
         </ribbon:RibbonTab>

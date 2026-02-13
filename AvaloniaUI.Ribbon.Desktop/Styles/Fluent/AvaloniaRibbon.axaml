@@ -1,8 +1,8 @@
-﻿<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<Styles.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceInclude Source="/Styles/Fluent/Res.axaml" />
+                <ResourceInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Fluent/Res.axaml" />
 				<ResourceInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/SplitButtonControl.axaml" />
 				<ResourceInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonGallery.axaml" />
 				<ResourceInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonButton.axaml" />
@@ -23,14 +23,21 @@
 	<!--  StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonSplitButton.axaml" /  -->
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonDropDownButton.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonToggleButton.axaml" />
+	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonTextBox.axaml" />
+	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonDatePicker.axaml" />
+	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonNumericUpDown.axaml" />
+	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonCheckBox.axaml" />
+	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonRadioButton.axaml" />
+	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonLabel.axaml" />
+	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonSeparator.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonGroupBox.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonGroupContainers.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/KeyTip.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonContextualTabGroup.axaml" />
 
-	<StyleInclude Source="/Styles/Fluent/Controls/Ribbon.axaml" />
-	<StyleInclude Source="/Styles/Fluent/Controls/RibbonWindow.axaml" />
-	<StyleInclude Source="/Styles/Fluent/Controls/QuickAccessToolbar.axaml" />
+    <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Fluent/Controls/Ribbon.axaml" />
+    <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Fluent/Controls/RibbonWindow.axaml" />
+    <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Fluent/Controls/QuickAccessToolbar.axaml" />
 
 	<Style Selector="SplitButtonControl[Size=Large]">
 		<Setter Property="Theme" Value="{StaticResource LargeSplitButton}" />

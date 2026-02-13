@@ -69,11 +69,17 @@ Apart from the above-mentioned global components, the desktop-specific controls 
 
 ## Previews
 
-| Desktop                                                                                                                                          | WASM                                                                                                                                               |
-|--------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+### Flowery demo (latest)
+
+| New controls | Group containers |
+| --- | --- |
+| ![Flowery demo preview showing new ribbon controls](ReadmeImages/Ribbon-Flowery-NewControls.png) | ![Flowery demo preview showing group containers](ReadmeImages/Ribbon-Flowery-GroupContainers.png) |
+| Wrapping / overflow | |
+| ![Flowery demo preview showing wrapping and 3-tier reduction behavior](ReadmeImages/Ribbon-Flowery-Wrapping.png) | |
+| Desktop | WASM |
 | ![Fluent-Light theme Desktop app preview, vertical orientation](https://github.com/user-attachments/assets/145d6530-f60f-4ce6-83e6-d91832c6b5eb) | ![Fluent-Dark theme WASM web app preview, horizontal orientation](https://github.com/user-attachments/assets/c9295d74-1c81-48b4-9d2e-f88eed6e1718) |
-| Ribbon Menu / Backstage                                                                                                                          |                                                                                                                                                    |
-| ![Ribbon Menu with grouping of controls and modern design](https://github.com/user-attachments/assets/06125b4b-fa39-49fa-9f20-138428eb3ebf)      |                                                                                                                                                    |
+| Ribbon Menu / Backstage | |
+| ![Ribbon Menu with grouping of controls and modern design](https://github.com/user-attachments/assets/06125b4b-fa39-49fa-9f20-138428eb3ebf) | |
 
 ## How to Use
 
@@ -366,6 +372,37 @@ Composing banks in rows:
 Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many banks appear per row via its line-count properties.
 
 ## Change Log
+
+### Update (2026-02-13)
+
+- Add first-class Quick Access Toolbar parity improvements:
+  - `Ribbon.QuickAccessItems` now defaults to a reference-unique collection so the same control instance cannot be added twice.
+  - Desktop ribbon context menu now toggles QAT add/remove (it no longer disables the action when the item is already pinned).
+  - Add/expand desktop QAT sync tests in `DesktopRibbonQuickAccessTests`.
+- Complete 3-stage group reduction behavior:
+  - `GroupDisplayMode` now includes `Medium`.
+  - Group sizing transitions now flow `Large -> Medium -> Small` and re-expand through `Medium`.
+  - `RibbonGroupsStackPanel` tests now verify wrap-first (`WrapThenShrink`) behavior before shrinking.
+- Normalize style/resource includes to explicit `avares://` URIs in updated ribbon style files and demos for consistent resource resolution.
+- Update docs to reflect current QAT API/behavior and parity status (`docs/main-library-controls.md`, `artifacts-local/avalonia-ribbon-krypton-parity-roadmap.md`).
+- Complete collapsed-group and launcher parity:
+  - `RibbonGroupBox` now exposes `AllowCollapsedPopup`, read-only `IsCollapsedToPopup`, and dedicated `DialogLauncherCommand` / `DialogLauncherCommandParameter` API (with legacy command aliases preserved).
+  - `RibbonGroupsStackPanel` can collapse overflowed groups into popup affordances when groups can no longer fit at small size.
+- Add missing high-value ribbon-native controls and Fluent styles:
+  - `RibbonTextBox`, `RibbonDatePicker`, `RibbonNumericUpDown`, `RibbonCheckBox`, `RibbonRadioButton`, `RibbonLabel`, `RibbonSeparator`.
+  - Demo coverage added in both default and Windows 11 demos.
+- Add keyboard/shortcut parity upgrades:
+  - `ShortcutKeys` support added to actionable controls (`RibbonButton`, `RibbonToggleButton`, `RibbonDropDownButton`, `RibbonSplitButton`, `SplitButtonControl`).
+  - Escape now steps back from active tab keytip level to ribbon keytip root before full close.
+- Add app-menu recent documents support:
+  - New `RibbonRecentDocument` model and `RibbonMenu.RecentDocuments` collection.
+  - Recent-doc entries render in dedicated menu section and support command + invocation event flow.
+- Add gallery parity upgrades:
+  - New gallery ranges model (`GalleryRange`) and hover tracking event (`ItemHoverChanged`).
+  - New `Gallery.BringIntoView(int index)` API for index-based navigation.
+- Add contextual tab color metadata parity:
+  - `RibbonContextualTabGroup.ContextColor` added and synchronized with `Background` for compatibility.
+- Add tests for new parity phases (`GroupPopupTests`, `DialogLauncherTests`, `NewControlsTests`, `KeyboardShortcutTests`, `RecentDocsTests`, `GalleryTests`, `ContextualTabGroupTests`).
 
 ### Update (2026-02-11)
 
