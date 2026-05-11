@@ -16,7 +16,7 @@
     BorderBrush="#2B2B2B"
     Icon="avares://AvaloniaUI.Ribbon.W11/Assets/avalonia-logo.ico"
     CanResize="True"
-    SystemDecorations="BorderOnly"
+    WindowDecorations="BorderOnly"
     TitleBarForeground="#F2F2F2"
     mc:Ignorable="d">
 

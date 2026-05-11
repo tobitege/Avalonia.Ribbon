@@ -118,7 +118,7 @@ public class RibbonMenuItem : HeaderedItemsControl
         if (args.NewValue is INotifyCollectionChanged newSource) newSource.CollectionChanged += ItemsCollectionChanged;
     }
 
-    private void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void ItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
     }
 

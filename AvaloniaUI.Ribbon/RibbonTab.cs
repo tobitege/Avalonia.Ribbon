@@ -83,8 +83,7 @@ public class RibbonTab : TabItem, IKeyTipHandler
     {
         base.OnAttachedToVisualTree(e);
 
-        var inputRoot = e.Root as IInputRoot;
-        if (inputRoot != null && inputRoot is WindowBase wnd)
+        if (TopLevel.GetTopLevel(this) is WindowBase wnd)
             wnd.Deactivated += InputRoot_Deactivated;
     }
 
@@ -92,18 +91,17 @@ public class RibbonTab : TabItem, IKeyTipHandler
     {
         base.OnDetachedFromVisualTree(e);
 
-        var inputRoot = e.Root as IInputRoot;
-        if (inputRoot != null && inputRoot is WindowBase wnd)
+        if (TopLevel.GetTopLevel(this) is WindowBase wnd)
             wnd.Deactivated -= InputRoot_Deactivated;
     }
 
-    private void InputRoot_Deactivated(object sender, EventArgs e)
+    private void InputRoot_Deactivated(object? sender, EventArgs e)
     {
         KeyTip.SetShowChildKeyTipKeys(this, false);
         RibbonControlExtensions.GetParentRibbon(this)?.Close();
     }
 
-    private void RibbonTab_KeyDown(object sender, KeyEventArgs e)
+    private void RibbonTab_KeyDown(object? sender, KeyEventArgs e)
     {
         if (e.Key == Key.Escape)
         {

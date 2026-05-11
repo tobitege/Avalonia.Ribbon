@@ -61,6 +61,8 @@ public class Ribbon : TabControl, IRibbon
                 sender.Focus();
             sender.SetChildKeyTipsVisibility(isOpen);
         });
+
+        LostFocusEvent.AddClassHandler<Ribbon>((sender, _) => KeyTip.SetShowChildKeyTipKeys(sender, false));
     }
 
     public Ribbon()
@@ -519,7 +521,7 @@ public class Ribbon : TabControl, IRibbon
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void OnCollapsedRibbon_Open(object sender, EventArgs e)
+    private void OnCollapsedRibbon_Open(object? sender, EventArgs e)
     {
         var popup = sender as Popup;
         if (popup == null) return;
@@ -534,10 +536,10 @@ public class Ribbon : TabControl, IRibbon
     {
         base.OnAttachedToVisualTree(e);
 
-        if (e.Root is WindowBase wnd)
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is WindowBase wnd)
             wnd.Deactivated += InputRoot_Deactivated;
-        if (e.Root is IInputRoot inputRoot)
-            inputRoot.AddHandler(PointerPressedEvent, InputRoot_PointerPressed, handledEventsToo: true);
+        topLevel?.AddHandler(PointerPressedEvent, InputRoot_PointerPressed, handledEventsToo: true);
 
         RefreshTabs();
         RefreshSelectedGroups();
@@ -547,10 +549,10 @@ public class Ribbon : TabControl, IRibbon
     {
         base.OnDetachedFromVisualTree(e);
 
-        if (e.Root is WindowBase wnd)
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is WindowBase wnd)
             wnd.Deactivated -= InputRoot_Deactivated;
-        if (e.Root is IInputRoot inputRoot)
-            inputRoot.RemoveHandler(PointerPressedEvent, InputRoot_PointerPressed);
+        topLevel?.RemoveHandler(PointerPressedEvent, InputRoot_PointerPressed);
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
@@ -581,24 +583,18 @@ public class Ribbon : TabControl, IRibbon
         }
     }
 
-    protected override void OnLostFocus(RoutedEventArgs e)
-    {
-        base.OnLostFocus(e);
-        KeyTip.SetShowChildKeyTipKeys(this, false);
-    }
-
     private void HandleKeyTipControl(Control item)
     {
         item.RaiseEvent(new RoutedEventArgs(PointerPressedEvent));
         item.RaiseEvent(new RoutedEventArgs(PointerReleasedEvent));
     }
 
-    private void InputRoot_Deactivated(object sender, EventArgs e)
+    private void InputRoot_Deactivated(object? sender, EventArgs e)
     {
         Close();
     }
 
-    private void InputRoot_PointerPressed(object sender, PointerPressedEventArgs e)
+    private void InputRoot_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (IsCollapsedPopupOpen && _groupsHost?.IsPointerOver != true)
             IsCollapsedPopupOpen = false;

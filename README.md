@@ -373,6 +373,19 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-05-11)
+
+- Update the library, desktop package, demos, and tests for Avalonia 12:
+  - `Avalonia` packages now target `12.0.3`.
+  - `AvaloniaUI.Ribbon` and `AvaloniaUI.Ribbon.Desktop` now target `net8.0`.
+  - Browser demo targets now use `net10.0-browser`.
+- Update related dependencies, including `Xaml.Behaviors`, `CommunityToolkit.Mvvm`, `System.Text.Json`, `Flowery.NET`, and `Material.Avalonia`.
+- Migrate Avalonia 12 API changes:
+  - use `WindowDecorations` in place of removed decoration APIs,
+  - replace obsolete visual-root access with `TopLevel.GetTopLevel`,
+  - remove obsolete binding-validator startup customization.
+- Rework desktop `RibbonWindow` chrome/template usage for Avalonia 12 compatibility.
+
 ### Update (2026-02-13)
 
 - Add first-class Quick Access Toolbar parity improvements:

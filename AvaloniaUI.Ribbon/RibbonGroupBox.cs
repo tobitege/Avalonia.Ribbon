@@ -50,13 +50,13 @@ public class RibbonGroupBox : HeaderedItemsControl
 
     protected override Size ArrangeOverride(Size finalSize)
     {
-        Rearranged?.Invoke(this, null);
+        Rearranged?.Invoke(this, EventArgs.Empty);
         return base.ArrangeOverride(finalSize);
     }
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        Remeasured?.Invoke(this, null);
+        Remeasured?.Invoke(this, EventArgs.Empty);
         return base.MeasureOverride(availableSize);
     }
 

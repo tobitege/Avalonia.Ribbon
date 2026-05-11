@@ -7,19 +7,21 @@ public class NewControlsTests
 {
     public static IEnumerable<object[]> ControlFactories()
     {
-        yield return new object[] { new RibbonTextBox() };
-        yield return new object[] { new RibbonDatePicker() };
-        yield return new object[] { new RibbonNumericUpDown() };
-        yield return new object[] { new RibbonCheckBox() };
-        yield return new object[] { new RibbonRadioButton() };
-        yield return new object[] { new RibbonLabel() };
-        yield return new object[] { new RibbonSeparator() };
+        yield return new object[] { typeof(RibbonTextBox) };
+        yield return new object[] { typeof(RibbonDatePicker) };
+        yield return new object[] { typeof(RibbonNumericUpDown) };
+        yield return new object[] { typeof(RibbonCheckBox) };
+        yield return new object[] { typeof(RibbonRadioButton) };
+        yield return new object[] { typeof(RibbonLabel) };
+        yield return new object[] { typeof(RibbonSeparator) };
     }
 
     [Theory]
     [MemberData(nameof(ControlFactories))]
-    public void NewControls_SizeContracts_CoerceWithinMinMax(IRibbonControl control)
+    public void NewControls_SizeContracts_CoerceWithinMinMax(Type controlType)
     {
+        var control = CreateControl(controlType);
+
         control.MinSize = RibbonControlSize.Medium;
         control.MaxSize = RibbonControlSize.Medium;
 
@@ -32,8 +34,10 @@ public class NewControlsTests
 
     [Theory]
     [MemberData(nameof(ControlFactories))]
-    public void NewControls_SupportLargeMediumSmallRenderStates(IRibbonControl control)
+    public void NewControls_SupportLargeMediumSmallRenderStates(Type controlType)
     {
+        var control = CreateControl(controlType);
+
         control.MinSize = RibbonControlSize.Small;
         control.MaxSize = RibbonControlSize.Large;
 
@@ -45,5 +49,10 @@ public class NewControlsTests
 
         control.Size = RibbonControlSize.Small;
         Assert.Equal(RibbonControlSize.Small, control.Size);
+    }
+
+    private static IRibbonControl CreateControl(Type controlType)
+    {
+        return Assert.IsAssignableFrom<IRibbonControl>(Activator.CreateInstance(controlType));
     }
 }

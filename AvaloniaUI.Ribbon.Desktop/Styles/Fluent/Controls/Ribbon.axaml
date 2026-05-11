@@ -350,7 +350,7 @@
     </Style>
 
     <Style
-        Selector="windows|RibbonWindow[SystemDecorations=None] windows|DesktopRibbon[Orientation=Horizontal] /template/ Border#TabHeadersClipBorder">
+        Selector="windows|RibbonWindow[WindowDecorations=None] windows|DesktopRibbon[Orientation=Horizontal] /template/ Border#TabHeadersClipBorder">
         <Setter Property="Clip" Value="{DynamicResource TabHeadersClipBorderClip}" />
     </Style>
     <Style Selector="windows|RibbonWindow windows|DesktopRibbon /template/ Rectangle#HeaderBackgroundRectangle">

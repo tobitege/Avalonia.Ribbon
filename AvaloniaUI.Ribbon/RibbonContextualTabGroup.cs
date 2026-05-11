@@ -89,7 +89,7 @@ public class RibbonContextualTabGroup : HeaderedItemsControl
         */
     }
 
-    private void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void ItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.OldItems != null)
             foreach (var tab in e.OldItems.OfType<RibbonTab>())

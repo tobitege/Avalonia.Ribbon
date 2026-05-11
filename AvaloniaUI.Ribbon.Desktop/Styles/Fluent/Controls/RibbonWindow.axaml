@@ -27,15 +27,13 @@
                     <Border Name="PART_TransparencyFallback" IsHitTestVisible="False" />
                     <Border Background="{TemplateBinding Background}" IsHitTestVisible="False" />
                     <Panel Margin="{TemplateBinding WindowDecorationMargin}" Background="Transparent" />
-                    <VisualLayerManager>
-                        <VisualLayerManager.ChromeOverlayLayer />
+                    <Panel>
                         <DockPanel>
                             <Grid DockPanel.Dock="Top">
-                                <TitleBar DockPanel.Dock="Left"
-                                          x:Name="PART_TitleBar"
-                                          Height="{TemplateBinding ExtendClientAreaTitleBarHeightHint}"
-                                          Background="{TemplateBinding TitleBarBackground}"
-                                          Foreground="{TemplateBinding TitleBarForeground}" />
+                                <Border DockPanel.Dock="Left"
+                                        x:Name="PART_TitleBar"
+                                        Height="{TemplateBinding ExtendClientAreaTitleBarHeightHint}"
+                                        Background="{TemplateBinding TitleBarBackground}" />
                                 <ContentPresenter
                                     x:Name="PART_QuickAccessToolbarPresenter"
                                     Margin="30,0,0,0"
@@ -81,65 +79,25 @@
                                     ContentTemplate="{TemplateBinding ContentTemplate}" />
                             </DockPanel>
                         </DockPanel>
-                    </VisualLayerManager>
-                </Panel>
-            </ControlTemplate>
-        </Setter>
-    </Style>
-
-    <Style Selector="TitleBar">
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Panel HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="Stretch">
-                    <Panel
-                        x:Name="PART_MouseTracker"
-                        Height="1"
-                        VerticalAlignment="Top" />
-                    <Panel x:Name="PART_Container">
-                        <Panel
-                            x:Name="PART_PictureBar"
-                            VerticalAlignment="Center"
-                            Background="Transparent">
-                            <Image
-                                MaxWidth="16"
-                                MaxHeight="16"
-                                Margin="9,0"
-                                RenderOptions.BitmapInterpolationMode="HighQuality"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Classes="IconImage"
-                                IsHitTestVisible="False"
-                                Source="{Binding Icon, RelativeSource={RelativeSource AncestorType=RibbonWindow}, Converter={StaticResource WindowIconToImageConverter}}" />
-                        </Panel>
-                        <Border
-                            x:Name="PART_Background"
-                            Background="{TemplateBinding Background}"
-                            IsHitTestVisible="False"
-                            ZIndex="-1" />
-                        <CaptionButtons
-                            x:Name="PART_CaptionButtons"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Stretch"
-                            Foreground="{TemplateBinding Foreground}" />
                     </Panel>
                 </Panel>
             </ControlTemplate>
         </Setter>
     </Style>
 
-    <Style Selector="windows|RibbonWindow[SystemDecorations=Full] /template/ Panel#PART_TitleBar">
+    <Style Selector="windows|RibbonWindow[WindowDecorations=Full] /template/ Panel#PART_TitleBar">
         <Setter Property="IsVisible" Value="True" />
         <Setter Property="Height" Value="33" />
     </Style>
 
-    <Style Selector="windows|RibbonWindow[SystemDecorations=None] /template/ Panel#PART_TitleBar">
+    <Style Selector="windows|RibbonWindow[WindowDecorations=None] /template/ Panel#PART_TitleBar">
         <Setter Property="Height" Value="33" />
     </Style>
 
     <!--Style Selector="windows|RibbonWindow /template/ Rectangle#TitlebarFill2">
     <Setter Property="IsVisible" Value="False" />
   </Style>
-  <Style Selector="windows|RibbonWindow[SystemDecorations=Full][Orientation=Vertical] /template/ Rectangle#TitlebarFill2">
+  <Style Selector="windows|RibbonWindow[WindowDecorations=Full][Orientation=Vertical] /template/ Rectangle#TitlebarFill2">
     <Setter Property="IsVisible" Value="True" />
   </Style-->
 
@@ -159,11 +117,11 @@
         <Setter Property="Grid.Column" Value="2" />
     </Style>
     <Style
-        Selector="windows|RibbonWindow[LeftSideCaptionButtons=False][SystemDecorations=None] /template/ ContentPresenter#PART_QuickAccessToolbarPresenter">
+        Selector="windows|RibbonWindow[LeftSideCaptionButtons=False][WindowDecorations=None] /template/ ContentPresenter#PART_QuickAccessToolbarPresenter">
         <Setter Property="Margin" Value="30,0,0,0" />
     </Style>
     <Style
-        Selector="windows|RibbonWindow[LeftSideCaptionButtons=False][SystemDecorations=Full] /template/ ContentPresenter#PART_QuickAccessToolbarPresenter">
+        Selector="windows|RibbonWindow[LeftSideCaptionButtons=False][WindowDecorations=Full] /template/ ContentPresenter#PART_QuickAccessToolbarPresenter">
         <Setter Property="Margin" Value="0,0,0,0" />
     </Style>
     <Style Selector="windows|RibbonWindow[LeftSideCaptionButtons=True] /template/ Grid#CaptionButtons">
@@ -182,7 +140,7 @@
         <Setter Property="Grid.Column" Value="0" />
     </Style>
     <Style
-        Selector="windows|RibbonWindow[LeftSideCaptionButtons=True][SystemDecorations=None] /template/ ContentPresenter#PART_QuickAccessToolbarPresenter">
+        Selector="windows|RibbonWindow[LeftSideCaptionButtons=True][WindowDecorations=None] /template/ ContentPresenter#PART_QuickAccessToolbarPresenter">
         <Setter Property="Margin" Value="135,0,0,0" />
     </Style>
     <Style Selector="windows|RibbonWindow[LeftSideCaptionButtons=True] /template/ Image#IconImage">
@@ -261,26 +219,26 @@
     <Style Selector="windows|RibbonWindow /template/ Image.IconImage:not(Image[Width=0])">
         <Setter Property="Margin" Value="0,0,5,0" />
     </Style>
-    <Style Selector="windows|RibbonWindow[SystemDecorations=None] /template/ Border.OuterBorder">
+    <Style Selector="windows|RibbonWindow[WindowDecorations=None] /template/ Border.OuterBorder">
         <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
     </Style>
-    <Style Selector="windows|RibbonWindow[SystemDecorations=None][WindowState=Normal] /template/ Border.OuterBorder">
+    <Style Selector="windows|RibbonWindow[WindowDecorations=None][WindowState=Normal] /template/ Border.OuterBorder">
         <Setter Property="CornerRadius" Value="4" />
     </Style>
-    <Style Selector="windows|RibbonWindow[SystemDecorations=None] /template/ Border#TitlebarFill">
+    <Style Selector="windows|RibbonWindow[WindowDecorations=None] /template/ Border#TitlebarFill">
         <Setter Property="CornerRadius" Value="3,3,0,0" />
     </Style>
     <Style Selector="windows|RibbonWindow[WindowState=Maximized] /template/ Border.OuterBorder">
         <Setter Property="BorderThickness" Value="0" />
     </Style>
-    <!--Style Selector="windows|RibbonWindow[SystemDecorations=None] /template/ Rectangle#RowDefinitionsHelper">
+    <!--Style Selector="windows|RibbonWindow[WindowDecorations=None] /template/ Rectangle#RowDefinitionsHelper">
     <Setter Property="Height" Value="34" />
   </Style>
-  <Style Selector="windows|RibbonWindow[SystemDecorations=Full] /template/ Rectangle#RowDefinitionsHelper">
+  <Style Selector="windows|RibbonWindow[WindowDecorations=Full] /template/ Rectangle#RowDefinitionsHelper">
     <Setter Property="Height" Value="0" />
   </Style-->
-    <Style Selector="windows|RibbonWindow[SystemDecorations=Full] /template/ Panel#PART_TitleBar">
+    <Style Selector="windows|RibbonWindow[WindowDecorations=Full] /template/ Panel#PART_TitleBar">
         <Setter Property="IsVisible" Value="False" />
     </Style>
     <Style Selector="windows|RibbonWindow /template/ Grid#ResizeGrid Border">
@@ -289,7 +247,7 @@
     <Style Selector="windows|RibbonWindow[WindowState=Maximized] /template/ Grid#ResizeGrid">
         <Setter Property="IsVisible" Value="False" />
     </Style>
-    <Style Selector="windows|RibbonWindow[SystemDecorations=Full] /template/ Grid#ResizeGrid">
+    <Style Selector="windows|RibbonWindow[WindowDecorations=Full] /template/ Grid#ResizeGrid">
         <Setter Property="IsVisible" Value="False" />
     </Style>
     <Style Selector="windows|RibbonWindow[IsActive=false]">

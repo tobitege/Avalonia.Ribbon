@@ -165,7 +165,7 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     ///     Handles the Popup Opened event.
     ///     Adjusts the Popup's position and size based on the top level window's size.
     /// </summary>
-    private void Popup_Opened(object sender, EventArgs e)
+    private void Popup_Opened(object? sender, EventArgs e)
     {
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel == null) return;
@@ -174,7 +174,7 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
         if (menuPopup == null) return;
 
         var descendants = topLevel.GetVisualDescendants();
-        var titleBar = descendants.FirstOrDefault(x => x is TitleBar);
+        var titleBar = descendants.OfType<Control>().FirstOrDefault(x => x.Name == "PART_TitleBar");
         var ribbon = descendants.FirstOrDefault(x => x is Ribbon) as Ribbon;
         if (ribbon == null) return;
 
@@ -210,7 +210,7 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     /// <summary>
     ///     Handles the Popup Closed event.
     /// </summary>
-    private void PopupOnClosed(object sender, EventArgs e)
+    private void PopupOnClosed(object? sender, EventArgs e)
     {
     }
 
@@ -241,7 +241,7 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     ///     Handles the Item Clicked event.
     ///     Updates the selected item content based on the clicked item.
     /// </summary>
-    private void Item_Clicked(object sender, RoutedEventArgs e)
+    private void Item_Clicked(object? sender, RoutedEventArgs e)
     {
         var item = sender as RibbonMenuItem;
         if (item == null) return;
@@ -295,7 +295,7 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     }
 
     // Handles collection changes for the items
-    private void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void ItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         ResetItemHoverEvents();
     }

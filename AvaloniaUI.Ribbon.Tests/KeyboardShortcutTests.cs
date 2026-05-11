@@ -91,6 +91,10 @@ public class KeyboardShortcutTests
             ExecuteCount++;
         }
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add { }
+            remove { }
+        }
     }
 }

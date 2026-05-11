@@ -20,10 +20,14 @@ public class GalleryTests
             gallery.Items.Add($"Item {i}");
 
         var presenter = new GalleryScrollContentPresenter();
-        presenter.Arrange(new Rect(0, 0, 100, 100));
-
         var host = new ContentControl();
+        presenter.Content = host;
+        SetPrivateField(presenter, "_extent", new Size(100, 280));
+        SetPrivateField(presenter, "_viewport", new Size(100, 100));
+        host.Measure(new Size(100, 280));
         host.Arrange(new Rect(0, 0, 100, 280));
+        presenter.Measure(new Size(100, 100));
+        presenter.Arrange(new Rect(0, 0, 100, 100));
 
         SetPrivateField(gallery, "_scrollPresenter", presenter);
         SetPrivateField(gallery, "_mainPresenter", host);
@@ -73,7 +77,14 @@ public class GalleryTests
 
     private static void SetPrivateField(object target, string fieldName, object? value)
     {
-        var field = target.GetType().GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic);
+        var type = target.GetType();
+        FieldInfo? field = null;
+        while (type != null && field == null)
+        {
+            field = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic);
+            type = type.BaseType;
+        }
+
         Assert.NotNull(field);
         field!.SetValue(target, value);
     }

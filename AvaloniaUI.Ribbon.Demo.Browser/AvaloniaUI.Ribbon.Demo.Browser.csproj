@@ -1,16 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
     <PropertyGroup>
-        <TargetFramework>net9.0-browser</TargetFramework>
+        <TargetFramework>net10.0-browser</TargetFramework>
         <OutputType>Exe</OutputType>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DebuggerSupport>true</DebuggerSupport>
         <UserSecretsId>72830c61-1c61-42bc-8556-ec268f1d7c2f</UserSecretsId>
         <DebuggerSupport>true</DebuggerSupport>
         <WasmDebugLevel>5</WasmDebugLevel>
+        <ShouldIncludeNativeSkiaSharp>false</ShouldIncludeNativeSkiaSharp>
+        <ShouldIncludeNativeHarfBuzzSharp>false</ShouldIncludeNativeHarfBuzzSharp>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Browser" Version="11.3.0" />
+        <PackageReference Include="Avalonia.Browser" Version="12.0.3" />
     </ItemGroup>
 
     <ItemGroup>

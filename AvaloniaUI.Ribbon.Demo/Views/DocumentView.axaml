@@ -106,8 +106,8 @@
                 <ComboBox
                     Width="200"
                     DisplayMemberBinding="{Binding Value}"
-                    ItemsSource="{Binding Source={extensions1:Enumeration {x:Type SystemDecorations}}}"
-                    SelectedValue="{Binding SystemDecorations, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=TwoWay}"
+                    ItemsSource="{Binding Source={extensions1:Enumeration {x:Type WindowDecorations}}}"
+                    SelectedValue="{Binding WindowDecorations, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=TwoWay}"
                     SelectedValueBinding="{Binding Value}" />
             </StackPanel>
             <!--  CheckBox x:Name="LightsOnCheckBox" Content="Lights" IsChecked="True"/  -->

@@ -26,7 +26,7 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
     [ObservableProperty] private Orientation _ribbonOrientation = Orientation.Horizontal;
 
-    [ObservableProperty] private SystemDecorations _selectedDecoration;
+    [ObservableProperty] private WindowDecorations _selectedDecoration;
 
     [ObservableProperty] private bool _showContextualGroup1 = true;
 

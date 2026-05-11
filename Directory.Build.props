@@ -1,5 +1,6 @@
 <Project>
     <PropertyGroup>
         <Nullable>enable</Nullable>
+        <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
     </PropertyGroup>
 </Project>

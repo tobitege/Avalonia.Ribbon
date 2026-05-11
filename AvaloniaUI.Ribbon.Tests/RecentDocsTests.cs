@@ -52,6 +52,10 @@ public class RecentDocsTests
             LastParameter = parameter;
         }
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add { }
+            remove { }
+        }
     }
 }
