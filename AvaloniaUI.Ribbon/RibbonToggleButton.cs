@@ -1,8 +1,10 @@
 using System;
 using Avalonia;
+using Avalonia.Automation.Peers;
 using Avalonia.Input;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using AvaloniaUI.Ribbon.Automation;
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Helpers;
 using AvaloniaUI.Ribbon.Models;
@@ -94,5 +96,10 @@ public class RibbonToggleButton : ToggleButton, IRibbonControl, ICanAddToQuickAc
     {
         get => GetValue(ShortcutKeysProperty);
         set => SetValue(ShortcutKeysProperty, value);
+    }
+
+    protected override AutomationPeer OnCreateAutomationPeer()
+    {
+        return new RibbonToggleButtonAutomationPeer(this);
     }
 }

@@ -1,8 +1,10 @@
 using System;
 using Avalonia;
+using Avalonia.Automation.Peers;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Controls.Templates;
+using AvaloniaUI.Ribbon.Automation;
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Helpers;
 using AvaloniaUI.Ribbon.Models;
@@ -94,5 +96,10 @@ public class RibbonButton : Button, IRibbonInputControl, IRibbonCommand, ICanAdd
     {
         get => GetValue(ShortcutKeysProperty);
         set => SetValue(ShortcutKeysProperty, value);
+    }
+
+    protected override AutomationPeer OnCreateAutomationPeer()
+    {
+        return new RibbonButtonAutomationPeer(this);
     }
 }

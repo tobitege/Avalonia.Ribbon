@@ -1,7 +1,9 @@
 using System;
 using System.Windows.Input;
 using Avalonia;
+using Avalonia.Automation.Peers;
 using Avalonia.Controls;
+using AvaloniaUI.Ribbon.Automation;
 using AvaloniaUI.Ribbon.Contracts;
 
 namespace AvaloniaUI.Ribbon;
@@ -33,4 +35,8 @@ public class RibbonSplitButton : RibbonDropDownButton, IRibbonCommand
         set => SetValue(CommandParameterProperty, value);
     }
 
+    protected override AutomationPeer OnCreateAutomationPeer()
+    {
+        return new RibbonSplitButtonAutomationPeer(this);
+    }
 }

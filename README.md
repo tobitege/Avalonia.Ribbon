@@ -373,6 +373,11 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-06-07)
+
+- Add UI Automation peers for `RibbonButton`, `RibbonToggleButton`, `RibbonDropDownButton`, and `RibbonSplitButton` so UIA clients receive stable names, automation IDs, help text, invoke/toggle providers, and expand/collapse state.
+- Add regression coverage for ribbon UIA metadata fallbacks, explicit `AutomationProperties`, and automation provider behavior.
+
 ### Update (2026-05-11)
 
 - Update the library, desktop package, demos, and tests for Avalonia 12:

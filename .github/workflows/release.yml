@@ -87,7 +87,7 @@ jobs:
 
   build-demos:
     needs: validate
-    runs-on: windows-latest
+    runs-on: windows-2025-vs2026
     permissions:
       contents: read
     strategy:

@@ -322,13 +322,6 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
         }
     }
 
-    // Destructor: Removes event handlers when the RibbonMenu is destroyed
-    ~RibbonMenu()
-    {
-        if (ItemsSource is INotifyCollectionChanged collectionChanged)
-            collectionChanged.CollectionChanged -= ItemsCollectionChanged;
-    }
-
     private sealed class RelayCommand : ICommand
     {
         private readonly Action<object?> _execute;

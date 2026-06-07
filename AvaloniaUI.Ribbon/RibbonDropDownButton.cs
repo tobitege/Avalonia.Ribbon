@@ -1,10 +1,12 @@
 using Avalonia;
+using Avalonia.Automation.Peers;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 
+using AvaloniaUI.Ribbon.Automation;
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Helpers;
 using AvaloniaUI.Ribbon.Models;
@@ -158,6 +160,11 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
             RegisterFlyoutEvents(_flyout);
             SyncFlyoutWithDropDownState(IsDropDownOpen);
         }
+    }
+
+    protected override AutomationPeer OnCreateAutomationPeer()
+    {
+        return new RibbonDropDownButtonAutomationPeer(this);
     }
 
     private void Flyout_Opened(object? sender, EventArgs e)
