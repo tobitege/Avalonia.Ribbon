@@ -44,7 +44,7 @@
         </None>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="12.0.3" />
+        <PackageReference Include="Avalonia" Version="12.1.0" />
         <PackageReference Include="System.Text.Json" Version="10.0.7" />
         <PackageReference Include="System.Reactive" Version="6.1.0" />
         <PackageReference Include="Xaml.Behaviors.Interactions" Version="12.0.0" />

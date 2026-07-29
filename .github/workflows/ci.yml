@@ -17,9 +17,9 @@ jobs:
   build-libraries:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
@@ -30,16 +30,16 @@ jobs:
         run: dotnet build AvaloniaUI.Ribbon.Desktop/AvaloniaUI.Ribbon.Desktop.csproj -c Release
 
   build-demos:
-    runs-on: windows-2025-vs2026
+    runs-on: windows-latest
     strategy:
       matrix:
         include:
           - rid: win-x64
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 

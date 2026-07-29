@@ -373,6 +373,12 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-07-29)
+
+- Fix collapsed-ribbon popup placement: clicking a tab while the ribbon is collapsed (`IsCollapsed="True"`) now shows the ribbon bar popup directly below the tab row. The popup previously used `Placement="LeftEdgeAlignedBottom"`, which mispositions popups under Avalonia 12 (rendered offset by its own size, effectively invisible); it now uses `Placement="Bottom"` in both the core and desktop horizontal templates.
+- Bump Avalonia packages from 12.0.3 to 12.1.0 across libraries, demos, and tests.
+- Update GitHub workflow actions to current majors (`checkout` v7, `setup-dotnet` v6, `upload-artifact` v7, `download-artifact` v8, `action-gh-release` v3).
+
 ### Update (2026-06-07)
 
 - Add UI Automation peers for `RibbonButton`, `RibbonToggleButton`, `RibbonDropDownButton`, and `RibbonSplitButton` so UIA clients receive stable names, automation IDs, help text, invoke/toggle providers, and expand/collapse state.

@@ -124,7 +124,7 @@
                                 x:Name="PART_CollapsedContentPopup"
                                 Width="{Binding Path=Bounds.Width, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                 IsOpen="{Binding IsCollapsedPopupOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
-                                Placement="LeftEdgeAlignedBottom"
+                                Placement="Bottom"
                                 PlacementTarget="{Binding ElementName=SeparatorRectangle}"
                                 VerticalOffset="-1">
                                 <ContentControl
