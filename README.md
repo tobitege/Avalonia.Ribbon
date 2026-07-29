@@ -373,6 +373,10 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-07-29.2)
+
+- Fix auto-height `RibbonButton` controls with `Size="Large"` so icons stay top-aligned across one- and multi-line labels and the complete button surface responds to hover and click.
+
 ### Update (2026-07-29)
 
 - Fix collapsed-ribbon popup placement: clicking a tab while the ribbon is collapsed (`IsCollapsed="True"`) now shows the ribbon bar popup directly below the tab row. The popup previously used `Placement="LeftEdgeAlignedBottom"`, which mispositions popups under Avalonia 12 (rendered offset by its own size, effectively invisible); it now uses `Placement="Bottom"` in both the core and desktop horizontal templates.

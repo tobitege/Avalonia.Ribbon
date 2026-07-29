@@ -1,4 +1,4 @@
-<Styles
+﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:AvaloniaUI.Ribbon.Converters;assembly=AvaloniaUI.Ribbon"
@@ -175,7 +175,6 @@
 									<RibbonGroupWrapPanel
                                         x:Name="PART_ItemsPanel"
                                         HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
                                         DisplayMode="{Binding DisplayMode, RelativeSource={RelativeSource TemplatedParent}}" />
 								</ItemsPanelTemplate>
 							</ItemsPresenter.ItemsPanel>
@@ -207,6 +206,7 @@
 	<Style Selector="local|Ribbon[Orientation=Horizontal] local|RibbonGroupBox /template/ local|RibbonGroupWrapPanel#PART_ItemsPanel">
 		<Setter Property="Orientation" Value="Vertical" />
 		<Setter Property="SmallLineCount" Value="3" />
+		<Setter Property="VerticalAlignment" Value="Top" />
 	</Style>
 	<Style Selector="local|Ribbon[Orientation=Horizontal][GroupOverflowBehavior=WrapThenShrink] local|RibbonGroupBox /template/ local|RibbonGroupWrapPanel#PART_ItemsPanel">
 		<Setter Property="SmallLineCount" Value="{Binding $parent[local:Ribbon].MaxGroupRows}" />

@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Add Resources Here -->
@@ -83,8 +83,9 @@
             <Setter Property="Template">
                 <ControlTemplate>
                     <DataValidationErrors>
-                        <Border Classes="RibbonButtonBackgroundBorder" Padding="{TemplateBinding Padding}"
-                                CornerRadius="{DynamicResource ControlCornerRadius}">
+                        <Border Classes="RibbonButtonBackgroundBorder" Background="Transparent"
+                                BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}" CornerRadius="{DynamicResource ControlCornerRadius}">
                             <DockPanel VerticalAlignment="Stretch">
                                 <ContentPresenter Content="{TemplateBinding LargeIcon}" DockPanel.Dock="Top"
                                                   Width="32"
