@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -14,6 +15,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Models;
 
@@ -32,13 +34,9 @@ public class Ribbon : TabControl, IRibbon
     static Ribbon()
     {
         TabsProperty.Changed.AddClassHandler<Ribbon>((ribbon, args) =>
-        {
-            if (ribbon.Tabs.Count > 0)
-                ribbon.SelectedIndex = 1;
-            else
-                ribbon.SelectedIndex = 0;
-            ribbon.RefreshTabs();
-        });
+            ribbon.OnTabsPropertyChanged(
+                args.OldValue as ObservableCollection<Control>,
+                args.NewValue as ObservableCollection<Control>));
 
         OrientationProperty.OverrideDefaultValue<Ribbon>(Orientation.Horizontal);
 
@@ -51,6 +49,9 @@ public class Ribbon : TabControl, IRibbon
 
             sender.UpdatePresenterLocation(args.NewValue.Value);
         });
+
+        MenuProperty.Changed.AddClassHandler<Ribbon>((ribbon, args) =>
+            ribbon.OnMenuPropertyChanged(args.OldValue as IRibbonMenu, args.NewValue as IRibbonMenu));
 
         KeyTip.ShowChildKeyTipKeysProperty.Changed.AddClassHandler<Ribbon>((sender, args) =>
         {
@@ -69,6 +70,10 @@ public class Ribbon : TabControl, IRibbon
     {
         ContextualTabGroups = new ObservableCollection<RibbonContextualTabGroup>();
         QuickAccessItems = new QuickAccessItemsCollection();
+        Qat = new RibbonQat(this);
+        ConfigToolBar = new RibbonToolBar();
+        _tabs.CollectionChanged += TabsCollectionChanged;
+        AddHandler(Button.ClickEvent, OnRibbonItemClick, RoutingStrategies.Bubble, handledEventsToo: true);
     }
 
     protected override Type StyleKeyOverride => typeof(Ribbon);
@@ -119,6 +124,9 @@ public class Ribbon : TabControl, IRibbon
     public static readonly StyledProperty<RibbonQatLocation> QuickAccessLocationProperty =
         AvaloniaProperty.Register<Ribbon, RibbonQatLocation>(nameof(QuickAccessLocation),
             RibbonQatLocation.Above);
+
+    public static readonly StyledProperty<RibbonVisualStyle> VisualStyleProperty =
+        AvaloniaProperty.Register<Ribbon, RibbonVisualStyle>(nameof(VisualStyle), RibbonVisualStyle.Default);
 
     public static readonly StyledProperty<int> MaxGroupRowsProperty =
         AvaloniaProperty.Register<Ribbon, int>(nameof(MaxGroupRows), 1,
@@ -175,6 +183,10 @@ public class Ribbon : TabControl, IRibbon
 
     private ObservableCollection<ICanAddToQuickAccess> _quickAccessItems = new QuickAccessItemsCollection();
 
+    private int _updateDepth;
+
+    private bool _refreshPending;
+
     #endregion Fields
 
     #region Properties
@@ -184,6 +196,16 @@ public class Ribbon : TabControl, IRibbon
         add => AddHandler(MenuClosedEvent, value);
         remove => RemoveHandler(MenuClosedEvent, value);
     }
+
+    public event EventHandler<RibbonEventArgs>? RibbonEvent;
+
+    public IRibbonMenu? ApplicationMenu
+    {
+        get => Menu;
+        set => Menu = value;
+    }
+
+    public RibbonToolBar ConfigToolBar { get; }
 
     public IBrush HeaderBackground
     {
@@ -207,6 +229,12 @@ public class Ribbon : TabControl, IRibbon
     {
         get => GetValue(IsCollapsedProperty);
         set => SetValue(IsCollapsedProperty, value);
+    }
+
+    public bool Minimized
+    {
+        get => IsCollapsed;
+        set => SetCurrentValue(IsCollapsedProperty, value);
     }
 
     public bool IsCollapsedPopupOpen
@@ -245,6 +273,20 @@ public class Ribbon : TabControl, IRibbon
         set => SetValue(QuickAccessLocationProperty, value);
     }
 
+    public RibbonQat Qat { get; }
+
+    public int SelectedTabIndex
+    {
+        get => SelectedIndex;
+        set => SetCurrentValue(SelectedIndexProperty, value);
+    }
+
+    public RibbonVisualStyle VisualStyle
+    {
+        get => GetValue(VisualStyleProperty);
+        set => SetValue(VisualStyleProperty, value);
+    }
+
     public int MaxGroupRows
     {
         get => GetValue(MaxGroupRowsProperty);
@@ -279,6 +321,38 @@ public class Ribbon : TabControl, IRibbon
 
     #region Methods
 
+    public void BeginUpdate()
+    {
+        _updateDepth++;
+    }
+
+    public void EndUpdate()
+    {
+        if (_updateDepth == 0)
+            throw new InvalidOperationException("EndUpdate requires a matching BeginUpdate call.");
+
+        _updateDepth--;
+        if (_updateDepth == 0 && _refreshPending)
+        {
+            _refreshPending = false;
+            RefreshTabs();
+            RefreshSelectedGroups();
+        }
+    }
+
+    public Control? GetItemByName(string name)
+    {
+        return new RibbonItemLookup(this).GetItem<Control>(name);
+    }
+
+    public RibbonEventArgs RaiseRibbonEvent(Control item, RibbonEventType eventType)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        var args = new RibbonEventArgs(item, eventType);
+        RibbonEvent?.Invoke(this, args);
+        return args;
+    }
+
     public void ActivateKeyTips(IRibbon ribbon, IKeyTipHandler prev)
     {
         foreach (var t in Items.OfType<RibbonTab>())
@@ -302,6 +376,75 @@ public class Ribbon : TabControl, IRibbon
             RoutedEvent = MenuClosedEvent,
             Source = this
         });
+    }
+
+    private void OnRibbonItemClick(object? sender, RoutedEventArgs args)
+    {
+        if (FindEventItem(args.Source as Control) is { } item)
+            args.Handled = RaiseRibbonEvent(item, RibbonEventType.Click).Handled;
+    }
+
+    private Control? FindEventItem(Control? source)
+    {
+        if (source is null)
+            return null;
+
+        foreach (var candidate in source.GetSelfAndVisualAncestors().OfType<Control>())
+        {
+            if (!string.IsNullOrWhiteSpace(candidate.Name) &&
+                ReferenceEquals(GetItemByName(candidate.Name), candidate))
+            {
+                return candidate;
+            }
+        }
+
+        return null;
+    }
+
+    private void OnMenuPropertyChanged(IRibbonMenu? oldMenu, IRibbonMenu? newMenu)
+    {
+        if (oldMenu is RibbonMenu oldRibbonMenu)
+            oldRibbonMenu.ItemInvoked -= OnApplicationMenuItemInvoked;
+        if (newMenu is RibbonMenu newRibbonMenu)
+            newRibbonMenu.ItemInvoked += OnApplicationMenuItemInvoked;
+    }
+
+    private void OnApplicationMenuItemInvoked(object? sender, RibbonMenuItem item)
+    {
+        RaiseRibbonEvent(item, RibbonEventType.Click);
+    }
+
+    private void OnTabsPropertyChanged(
+        ObservableCollection<Control>? oldTabs,
+        ObservableCollection<Control>? newTabs)
+    {
+        if (oldTabs is not null)
+            oldTabs.CollectionChanged -= TabsCollectionChanged;
+        if (newTabs is not null)
+            newTabs.CollectionChanged += TabsCollectionChanged;
+
+        SelectedIndex = newTabs is { Count: > 0 } ? Math.Min(1, newTabs.Count - 1) : 0;
+        RequestRefresh();
+    }
+
+    private void TabsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+    {
+        if (SelectedIndex < 0 && Tabs.Count > 0)
+            SelectedIndex = 0;
+
+        RequestRefresh();
+    }
+
+    private void RequestRefresh()
+    {
+        if (_updateDepth > 0)
+        {
+            _refreshPending = true;
+            return;
+        }
+
+        RefreshTabs();
+        RefreshSelectedGroups();
     }
 
     public void CycleTabs(bool forward)

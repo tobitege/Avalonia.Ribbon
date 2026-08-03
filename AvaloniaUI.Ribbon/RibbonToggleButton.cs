@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Avalonia;
 using Avalonia.Automation.Peers;
 using Avalonia.Input;
@@ -66,6 +66,18 @@ public class RibbonToggleButton : ToggleButton, IRibbonControl, ICanAddToQuickAc
     {
         get => GetValue(CanAddToQuickAccessProperty);
         set => SetValue(CanAddToQuickAccessProperty, value);
+    }
+
+    public bool CanBeAddedToQat
+    {
+        get => CanAddToQuickAccess;
+        set => CanAddToQuickAccess = value;
+    }
+
+    public bool Pressed
+    {
+        get => IsChecked == true;
+        set => IsChecked = value;
     }
 
     public IControlTemplate QuickAccessTemplate

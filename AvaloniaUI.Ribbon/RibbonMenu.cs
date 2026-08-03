@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
@@ -13,6 +13,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.VisualTree;
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Models;
@@ -47,6 +48,15 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     // Content Property for the RibbonMenu
     public static readonly StyledProperty<object?> ContentProperty =
         ContentControl.ContentProperty.AddOwner<RibbonMenu>();
+
+    public static readonly StyledProperty<object?> LargeImageProperty =
+        AvaloniaProperty.Register<RibbonMenu, object?>(nameof(LargeImage));
+
+    public static readonly StyledProperty<object?> SmallImageProperty =
+        AvaloniaProperty.Register<RibbonMenu, object?>(nameof(SmallImage));
+
+    public static readonly StyledProperty<IBrush?> AccentBrushProperty =
+        AvaloniaProperty.Register<RibbonMenu, IBrush?>(nameof(AccentBrush));
 
     // AvaloniaProperty for the IsMenuOpen state
     public static readonly StyledProperty<bool> IsMenuOpenProperty =
@@ -113,6 +123,26 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
         set => SetValue(ContentProperty, value);
     }
 
+    public object? LargeImage
+    {
+        get => GetValue(LargeImageProperty);
+        set => SetValue(LargeImageProperty, value);
+    }
+
+    public object? SmallImage
+    {
+        get => GetValue(SmallImageProperty);
+        set => SetValue(SmallImageProperty, value);
+    }
+
+    public IBrush? AccentBrush
+    {
+        get => GetValue(AccentBrushProperty);
+        set => SetValue(AccentBrushProperty, value);
+    }
+
+    public ItemCollection LeftPaneItems => Items;
+
     // Public getter and setter for SelectedItemContent
     public object? SelectedItemContent
     {
@@ -137,6 +167,8 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     public ICommand RecentDocumentClickCommand { get; }
 
     public event EventHandler<RibbonRecentDocument>? RecentDocumentInvoked;
+
+    public event EventHandler<RibbonMenuItem>? ItemInvoked;
 
     // Constructor: Called when the template is applied
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -247,6 +279,7 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
         if (item == null) return;
 
         SelectedItemContent = item.Content;
+        ItemInvoked?.Invoke(this, item);
     }
 
     private void ExecuteRecentDocumentCommand(object? parameter)

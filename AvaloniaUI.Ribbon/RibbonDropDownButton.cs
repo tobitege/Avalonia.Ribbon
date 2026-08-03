@@ -1,4 +1,4 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Automation.Peers;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -80,6 +80,12 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
         set => SetValue(CanAddToQuickAccessProperty, value);
     }
 
+    public bool CanBeAddedToQat
+    {
+        get => CanAddToQuickAccess;
+        set => CanAddToQuickAccess = value;
+    }
+
     public object? Content
     {
         get => GetValue(ContentProperty);
@@ -96,6 +102,12 @@ public class RibbonDropDownButton : ItemsControl, IRibbonControl, ICanAddToQuick
     {
         get => GetValue(IsDropDownOpenProperty);
         set => SetValue(IsDropDownOpenProperty, value);
+    }
+
+    public bool DroppedDown
+    {
+        get => IsDropDownOpen;
+        set => IsDropDownOpen = value;
     }
 
     public object? LargeIcon

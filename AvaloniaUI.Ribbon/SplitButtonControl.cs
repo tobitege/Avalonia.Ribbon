@@ -1,4 +1,4 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Controls.Templates;
@@ -29,6 +29,12 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
         set => SetValue(IsDropDownOpenProperty, value);
     }
 
+    public bool DroppedDown
+    {
+        get => IsDropDownOpen;
+        set => IsDropDownOpen = value;
+    }
+
     public object? LargeIcon
     {
         get => GetValue(LargeIconProperty);
@@ -51,6 +57,12 @@ public class SplitButtonControl : SplitButton, IRibbonControl, ICanAddToQuickAcc
     {
         get => GetValue(CanAddToQuickAccessProperty);
         set => SetValue(CanAddToQuickAccessProperty, value);
+    }
+
+    public bool CanBeAddedToQat
+    {
+        get => CanAddToQuickAccess;
+        set => CanAddToQuickAccess = value;
     }
 
     public IControlTemplate QuickAccessTemplate

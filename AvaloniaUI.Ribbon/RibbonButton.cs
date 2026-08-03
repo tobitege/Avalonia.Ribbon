@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Avalonia;
 using Avalonia.Automation.Peers;
 using Avalonia.Controls;
@@ -66,6 +66,12 @@ public class RibbonButton : Button, IRibbonInputControl, IRibbonCommand, ICanAdd
     {
         get => GetValue(CanAddToQuickAccessProperty);
         set => SetValue(CanAddToQuickAccessProperty, value);
+    }
+
+    public bool CanBeAddedToQat
+    {
+        get => CanAddToQuickAccess;
+        set => CanAddToQuickAccess = value;
     }
 
     public IControlTemplate QuickAccessTemplate

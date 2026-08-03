@@ -1,4 +1,4 @@
-<Styles
+﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
@@ -22,10 +22,14 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        Content="{TemplateBinding Content}"
                         FontSize="12.5"
                         Foreground="{TemplateBinding Foreground}"
-                        IsChecked="{Binding IsMenuOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}" />
+                        IsChecked="{Binding IsMenuOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <ContentPresenter Content="{TemplateBinding SmallImage}" />
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+                        </StackPanel>
+                    </ToggleButton>
                     <Popup
                         x:Name="MenuPopup"
                         Width="{Binding $parent[Ribbon].Bounds.Width}"
@@ -73,6 +77,10 @@
                                                 </Panel>
                                             </Panel>
                                         </ToggleButton>
+                                        <ContentPresenter
+                                            HorizontalAlignment="Center"
+                                            Content="{TemplateBinding LargeImage}"
+                                            DockPanel.Dock="Top" />
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
