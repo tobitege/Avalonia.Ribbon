@@ -114,6 +114,9 @@ public class Ribbon : TabControl, IRibbon
     public static readonly StyledProperty<IRibbonMenu?> MenuProperty =
         AvaloniaProperty.Register<Ribbon, IRibbonMenu?>(nameof(Menu));
 
+    public static readonly StyledProperty<bool> ShowMenuProperty =
+        AvaloniaProperty.Register<Ribbon, bool>(nameof(ShowMenu), true);
+
     public static readonly StyledProperty<Orientation> OrientationProperty =
         StackPanel.OrientationProperty.AddOwner<Ribbon>();
 
@@ -253,6 +256,12 @@ public class Ribbon : TabControl, IRibbon
     {
         get => GetValue(MenuProperty);
         set => SetValue(MenuProperty, value);
+    }
+
+    public bool ShowMenu
+    {
+        get => GetValue(ShowMenuProperty);
+        set => SetValue(ShowMenuProperty, value);
     }
 
     public Orientation Orientation

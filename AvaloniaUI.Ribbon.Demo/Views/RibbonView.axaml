@@ -1,4 +1,4 @@
-<Ribbon
+<windows:DesktopRibbon
     x:Class="AvaloniaUI.Ribbon.Demo.Views.RibbonView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,17 +6,31 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:AvaloniaUI.Ribbon.Models;assembly=AvaloniaUI.Ribbon"
     xmlns:viewModels="clr-namespace:AvaloniaUI.Ribbon.Demo.ViewModels"
+    xmlns:windows="clr-namespace:AvaloniaUI.Ribbon.Desktop;assembly=AvaloniaUI.Ribbon.Desktop"
     d:DesignWidth="1200"
     Background="Transparent"
     Focusable="True"
     GroupOverflowBehavior="{Binding RibbonGroupOverflowBehavior}"
     MaxGroupRows="{Binding RibbonMaxGroupRows}"
     Orientation="{Binding RibbonOrientation}"
+    ShowMenu="{Binding ShowFileMenu, Mode=TwoWay}"
     mc:Ignorable="d">
 	<Design.DataContext>
 		<viewModels:MainViewModel />
 	</Design.DataContext>
-	<Ribbon.Resources>
+	<windows:DesktopRibbon.QuickAccessToolbar>
+		<windows:QuickAccessToolbar
+            PersistenceKey="BrowserRibbonView"
+            ShowItems="{Binding ShowQatItems, Mode=TwoWay}"
+            ShowOverflowButton="{Binding ShowQatOverflowButton, Mode=TwoWay}">
+			<windows:QuickAccessToolbar.RecommendedItems>
+				<windows:QuickAccessRecommendation Item="{Binding #RibbonSplitButton1}" />
+				<windows:QuickAccessRecommendation Item="{Binding #RibbonSplitButton2}" />
+				<windows:QuickAccessRecommendation Item="{Binding #RibbonSplitButton3}" />
+			</windows:QuickAccessToolbar.RecommendedItems>
+		</windows:QuickAccessToolbar>
+	</windows:DesktopRibbon.QuickAccessToolbar>
+	<windows:DesktopRibbon.Resources>
 		<Panel
             x:Key="Icon1"
             Width="14"
@@ -286,7 +300,7 @@
                 BorderBrush="{Binding $parent[TemplatedControl].Foreground}"
                 BorderThickness="1,1,1,0" />
 		</Panel>
-	</Ribbon.Resources>
+	</windows:DesktopRibbon.Resources>
 	<Ribbon.Styles>
 		<Style Selector="Ribbon /template/ ContentControl#PART_GroupsPresenterHolder">
 			<Setter Property="Margin" Value="5,0" />
@@ -1397,7 +1411,7 @@
 			</RibbonTab>
 		</RibbonContextualTabGroup>
 	</Ribbon.Tabs>
-</Ribbon>
+</windows:DesktopRibbon>
 
 
 

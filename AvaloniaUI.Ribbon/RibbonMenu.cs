@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Chrome;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
@@ -58,6 +56,14 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     public static readonly StyledProperty<IBrush?> AccentBrushProperty =
         AvaloniaProperty.Register<RibbonMenu, IBrush?>(nameof(AccentBrush));
 
+    public static readonly StyledProperty<bool> ShowDropDownArrowProperty =
+        AvaloniaProperty.Register<RibbonMenu, bool>(nameof(ShowDropDownArrow), true);
+
+    public static readonly StyledProperty<Thickness> DropDownArrowMarginProperty =
+        AvaloniaProperty.Register<RibbonMenu, Thickness>(
+            nameof(DropDownArrowMargin),
+            new Thickness(0, 0, 4, 0));
+
     // AvaloniaProperty for the IsMenuOpen state
     public static readonly StyledProperty<bool> IsMenuOpenProperty =
         AvaloniaProperty.Register<RibbonMenu, bool>(nameof(IsMenuOpen));
@@ -82,10 +88,19 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
 
     private ObservableCollection<RibbonRecentDocument> _recentDocuments = new();
 
+    private Popup? _menuPopup;
+
+    private Control? _contentButton;
+
+    private Border? _menuRootBorder;
+
     static RibbonMenu()
     {
-        // Class handler for IsMenuOpenProperty when it changes
-        IsMenuOpenProperty.Changed.AddClassHandler<RibbonMenu>((sender, e) => { });
+        IsMenuOpenProperty.Changed.AddClassHandler<RibbonMenu>((sender, e) =>
+        {
+            if (e.GetNewValue<bool>())
+                sender.UpdatePopupLayout();
+        });
 
         // Class handler for ItemsSourceProperty when it changes
         ItemsSourceProperty.Changed.AddClassHandler<RibbonMenu>((x, e) => x.ItemsChanged(e));
@@ -141,6 +156,18 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
         set => SetValue(AccentBrushProperty, value);
     }
 
+    public bool ShowDropDownArrow
+    {
+        get => GetValue(ShowDropDownArrowProperty);
+        set => SetValue(ShowDropDownArrowProperty, value);
+    }
+
+    public Thickness DropDownArrowMargin
+    {
+        get => GetValue(DropDownArrowMarginProperty);
+        set => SetValue(DropDownArrowMarginProperty, value);
+    }
+
     public ItemCollection LeftPaneItems => Items;
 
     // Public getter and setter for SelectedItemContent
@@ -175,18 +202,22 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     {
         base.OnApplyTemplate(e);
 
-        // Fetch the Popup named "MenuPopup" from the template
-        var menuPopup = e.NameScope.Find<Popup>("MenuPopup");
-        if (menuPopup != null)
+        _menuPopup = e.NameScope.Find<Popup>("MenuPopup");
+        _contentButton = e.NameScope.Find<Control>("ContentButton");
+        _menuRootBorder = e.NameScope.Find<Border>("MenuRootBorder");
+        if (_menuPopup != null)
         {
-            // Add event handlers for Popup events
-            menuPopup.Closed -= PopupOnClosed;
-            menuPopup.Closed += PopupOnClosed;
-            menuPopup.Opened -= Popup_Opened;
-            menuPopup.Opened += Popup_Opened;
-        }
+            _menuPopup.Closed -= PopupOnClosed;
+            _menuPopup.Closed += PopupOnClosed;
+            _menuPopup.Opened -= Popup_Opened;
+            _menuPopup.Opened += Popup_Opened;
 
-        Console.WriteLine($"{menuPopup}, Menu popup is found.");
+            if (_contentButton != null)
+            {
+                _menuPopup.PlacementTarget = _contentButton;
+                _menuPopup.OverlayInputPassThroughElement = _contentButton;
+            }
+        }
 
         // Update grouped items and reset item hover events
         UpdateGroupedItems();
@@ -199,44 +230,63 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     /// </summary>
     private void Popup_Opened(object? sender, EventArgs e)
     {
+        UpdatePopupLayout();
+    }
+
+    private void UpdatePopupLayout()
+    {
+        if (_menuPopup == null)
+            return;
+
         var topLevel = TopLevel.GetTopLevel(this);
-        if (topLevel == null) return;
+        if (topLevel == null)
+            return;
 
-        var menuPopup = sender as Popup;
-        if (menuPopup == null) return;
+        var clientWidth = topLevel.ClientSize.Width;
+        var clientHeight = topLevel.ClientSize.Height;
+        if (clientWidth <= 0 || clientHeight <= 0)
+            return;
 
-        var descendants = topLevel.GetVisualDescendants();
-        var titleBar = descendants.OfType<Control>().FirstOrDefault(x => x.Name == "PART_TitleBar");
-        var ribbon = descendants.FirstOrDefault(x => x is Ribbon) as Ribbon;
-        if (ribbon == null) return;
+        var ribbon = this.FindAncestorOfType<Ribbon>(true);
+        var placementTarget = _contentButton ?? this;
+        _menuPopup.PlacementTarget = placementTarget;
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        var targetTopLeft = placementTarget.TranslatePoint(new Point(0, 0), topLevel);
+        var targetLeft = targetTopLeft?.X ?? 0;
+        var targetTop = targetTopLeft?.Y ?? 0;
+
+        double width;
+        double left;
+        if (ribbon != null && ribbon.Orientation == Orientation.Horizontal && ribbon.Bounds.Width > 0)
         {
-            menuPopup.Height = topLevel.Bounds.Height - titleBar?.Bounds.Height ?? 0;
-            menuPopup.Placement = PlacementMode.LeftEdgeAlignedTop;
-            if (ribbon.Orientation == Orientation.Horizontal)
-            {
-                menuPopup.Width = ribbon.Bounds.Width;
-                menuPopup.HorizontalOffset = -1 * menuPopup.PlacementTarget?.Bounds.Width ?? 0;
-            }
-            else
-            {
-                menuPopup.Width = topLevel.Bounds.Width;
-                menuPopup.HorizontalOffset = -40;
-            }
-
-            if (titleBar != null)
-            {
-            }
+            width = Math.Min(ribbon.Bounds.Width, clientWidth);
+            left = ribbon.TranslatePoint(new Point(0, 0), topLevel)?.X ?? 0;
         }
         else
         {
-            menuPopup.Height = topLevel.ClientSize.Height;
-            menuPopup.Width = topLevel.ClientSize.Width;
+            width = clientWidth;
+            left = 0;
         }
 
-        // Set the horizontal offset
-        //menuPopup.HorizontalOffset = -1 * menuPopup.PlacementTarget?.Bounds.Width ?? 0;
+        var height = Math.Min(clientHeight - targetTop, clientHeight);
+        if (width <= 0 || height <= 0)
+            return;
+
+        // Cover the client area from the File button row downward.
+        // LeftEdgeAlignedTop places the popup beside the button and pushes it off-screen at the left edge.
+        _menuPopup.Placement = PlacementMode.BottomEdgeAlignedLeft;
+        _menuPopup.HorizontalOffset = left - targetLeft;
+        _menuPopup.VerticalOffset = -(placementTarget.Bounds.Height);
+        _menuPopup.Width = width;
+        _menuPopup.Height = height;
+
+        if (_menuRootBorder != null)
+        {
+            _menuRootBorder.Width = width;
+            _menuRootBorder.Height = height;
+            _menuRootBorder.MaxWidth = width;
+            _menuRootBorder.MaxHeight = height;
+        }
     }
 
     /// <summary>

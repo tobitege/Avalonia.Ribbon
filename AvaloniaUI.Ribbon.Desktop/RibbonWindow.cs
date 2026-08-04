@@ -36,6 +36,9 @@ public class RibbonWindow : Window
     public static readonly StyledProperty<IBrush> TitleBarForegroundProperty =
         AvaloniaProperty.Register<RibbonWindow, IBrush>(nameof(TitleBarForeground));
 
+    public static readonly StyledProperty<bool> ShowTitleBarIconProperty =
+        AvaloniaProperty.Register<RibbonWindow, bool>(nameof(ShowTitleBarIcon), true);
+
     private const double ResizeBorderThickness = 6;
     private bool _titlebarSecondClick;
 
@@ -79,10 +82,7 @@ public class RibbonWindow : Window
             .Subscribe(x =>
             {
                 if (!x)
-                {
-                    WindowDecorations = WindowDecorations.Full;
                     TransparencyLevelHint = new List<WindowTransparencyLevel> { WindowTransparencyLevel.Blur };
-                }
             });
         RefreshRibbon(null, Ribbon);
         RefreshQat(null, QuickAccessToolbar);
@@ -127,6 +127,12 @@ public class RibbonWindow : Window
         set => SetValue(TitleBarForegroundProperty, value);
     }
 
+    public bool ShowTitleBarIcon
+    {
+        get => GetValue(ShowTitleBarIconProperty);
+        set => SetValue(ShowTitleBarIconProperty, value);
+    }
+
     protected override Type StyleKeyOverride => typeof(RibbonWindow);
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -158,6 +164,30 @@ public class RibbonWindow : Window
                     secondClickTimer.Start();
                 }
             };
+
+            var minimizeButton = e.NameScope.Find<Button>("PART_MinimizeButton");
+            if (minimizeButton != null)
+                minimizeButton.Click += (_, _) => window.WindowState = WindowState.Minimized;
+
+            var maximizeButton = e.NameScope.Find<Button>("PART_MaximizeButton");
+            if (maximizeButton != null)
+                maximizeButton.Click += (_, _) =>
+                    window.WindowState = window.WindowState == WindowState.Maximized
+                        ? WindowState.Normal
+                        : WindowState.Maximized;
+
+            var closeButton = e.NameScope.Find<Button>("PART_CloseButton");
+            if (closeButton != null)
+                closeButton.Click += (_, _) => window.Close();
+
+            SetupSide("Left", StandardCursorType.LeftSide, WindowEdge.West, ref e);
+            SetupSide("Right", StandardCursorType.RightSide, WindowEdge.East, ref e);
+            SetupSide("Top", StandardCursorType.TopSide, WindowEdge.North, ref e);
+            SetupSide("Bottom", StandardCursorType.BottomSide, WindowEdge.South, ref e);
+            SetupSide("TopLeft", StandardCursorType.TopLeftCorner, WindowEdge.NorthWest, ref e);
+            SetupSide("TopRight", StandardCursorType.TopRightCorner, WindowEdge.NorthEast, ref e);
+            SetupSide("BottomLeft", StandardCursorType.BottomLeftCorner, WindowEdge.SouthWest, ref e);
+            SetupSide("BottomRight", StandardCursorType.BottomRightCorner, WindowEdge.SouthEast, ref e);
 
             /*try
             {

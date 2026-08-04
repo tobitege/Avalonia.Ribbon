@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
@@ -29,6 +30,16 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         element.SetValue(IsCheckedProperty, value);
     }
 
+    public static string? GetPersistenceId(AvaloniaObject element)
+    {
+        return element.GetValue(PersistenceIdProperty);
+    }
+
+    public static void SetPersistenceId(AvaloniaObject element, string? value)
+    {
+        element.SetValue(PersistenceIdProperty, value);
+    }
+
     public bool AddItem(ICanAddToQuickAccess? item)
     {
         var contains = ContainsItem(item, out _);
@@ -40,8 +51,10 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
         if (item.CanAddToQuickAccess)
         {
+            RegisterAvailableItem(item);
             itemsSource.Add(new QuickAccessItem { Item = item });
             ItemAdded?.Invoke(this, item);
+            SaveState();
             return true;
         }
 
@@ -109,7 +122,10 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
         var removed = itemsSource.Remove(match);
         if (removed)
+        {
             ItemRemoved?.Invoke(this, item);
+            SaveState();
+        }
 
         return removed;
     }
@@ -123,7 +139,12 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
         foreach (var item in items.Distinct())
             if (item != null && item.CanAddToQuickAccess)
+            {
+                RegisterAvailableItem(item);
                 itemsSource.Add(new QuickAccessItem { Item = item });
+            }
+
+        SaveState();
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -136,14 +157,15 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         _moreButton = more;
         _moreButton.IsVisible = ShowOverflowButton;
 
-        var moreCmdItem = new MenuItem
-        {
-            //Header =  new DynamicResourceExtension()., //"More commands...",
-            IsEnabled = false //[!IsEnabledProperty] = this.GetObservable(RibbonProperty).Select(x => x != null).ToBinding(),
-        };
+        var moreCmdItem = new MenuItem();
         moreCmdItem.Classes.Add(FIXED_ITEM_CLASS);
         moreCmdItem[!HeaderedSelectingItemsControl.HeaderProperty] =
             moreCmdItem.GetResourceObservable("AvaloniaRibbon.MoreQATCommands").ToBinding();
+        moreCmdItem[!MenuItem.CommandProperty] = this[!MoreCommandsCommandProperty];
+        moreCmdItem[!MenuItem.CommandParameterProperty] = this[!MoreCommandsCommandParameterProperty];
+        moreCmdItem[!IsVisibleProperty] = this.GetObservable(MoreCommandsCommandProperty)
+            .Select(command => command != null)
+            .ToBinding();
 
         var morCtx = more.ContextMenu;
 
@@ -178,6 +200,8 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
                 morCtx.Open(more);
             else if (more.IsChecked == false) morCtx.Close();
         };
+
+        RestoreState();
     }
 
     #region Fields
@@ -185,10 +209,34 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
     public static readonly AttachedProperty<bool> IsCheckedProperty =
         AvaloniaProperty.RegisterAttached<QuickAccessToolbar, MenuItem, bool>("IsChecked");
 
+    public static readonly AttachedProperty<string?> PersistenceIdProperty =
+        AvaloniaProperty.RegisterAttached<QuickAccessToolbar, AvaloniaObject, string?>("PersistenceId");
+
     public static readonly DirectProperty<QuickAccessToolbar, bool> ShowOverflowButtonProperty =
         AvaloniaProperty.RegisterDirect<QuickAccessToolbar, bool>(nameof(ShowOverflowButton),
             o => o.ShowOverflowButton,
             (o, v) => o.ShowOverflowButton = v);
+
+    public static readonly StyledProperty<bool> ShowItemsProperty =
+        AvaloniaProperty.Register<QuickAccessToolbar, bool>(nameof(ShowItems), true);
+
+    public static readonly StyledProperty<ICommand?> MoreCommandsCommandProperty =
+        AvaloniaProperty.Register<QuickAccessToolbar, ICommand?>(nameof(MoreCommandsCommand));
+
+    public static readonly StyledProperty<object?> MoreCommandsCommandParameterProperty =
+        AvaloniaProperty.Register<QuickAccessToolbar, object?>(nameof(MoreCommandsCommandParameter));
+
+    public static readonly StyledProperty<IQuickAccessToolbarPersistenceProvider?> PersistenceProviderProperty =
+        AvaloniaProperty.Register<QuickAccessToolbar, IQuickAccessToolbarPersistenceProvider?>(
+            nameof(PersistenceProvider));
+
+    public static readonly StyledProperty<string?> PersistenceKeyProperty =
+        AvaloniaProperty.Register<QuickAccessToolbar, string?>(nameof(PersistenceKey));
+
+    public static readonly DirectProperty<QuickAccessToolbar, ObservableCollection<ICanAddToQuickAccess>>
+        AvailableItemsProperty =
+            AvaloniaProperty.RegisterDirect<QuickAccessToolbar, ObservableCollection<ICanAddToQuickAccess>>(
+                nameof(AvailableItems), o => o.AvailableItems, (o, v) => o.AvailableItems = v);
 
     public static readonly DirectProperty<QuickAccessToolbar, ObservableCollection<QuickAccessRecommendation>>
         RecommendedItemsProperty =
@@ -204,9 +252,15 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
     private ToggleButton? _moreButton;
 
+    private ObservableCollection<ICanAddToQuickAccess> _availableItems = new();
+
     private ObservableCollection<QuickAccessRecommendation> _recommendedItems = new();
 
     private bool _showOverflowButton = true;
+
+    private bool _isRestoringState;
+
+    private bool _persistenceInitialized;
 
     #endregion Fields
 
@@ -216,6 +270,11 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
     {
         ShowOverflowButtonProperty.Changed.AddClassHandler<QuickAccessToolbar>((sender, e) =>
             sender.UpdateOverflowButtonVisibility());
+
+        PersistenceProviderProperty.Changed.AddClassHandler<QuickAccessToolbar>((sender, e) =>
+            sender.RestoreState());
+        PersistenceKeyProperty.Changed.AddClassHandler<QuickAccessToolbar>((sender, e) =>
+            sender.RestoreState());
 
         RibbonProperty.Changed.AddClassHandler<QuickAccessToolbar>((sender, e) =>
         {
@@ -250,10 +309,46 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         set => SetAndRaise(RecommendedItemsProperty, ref _recommendedItems, value);
     }
 
+    public ObservableCollection<ICanAddToQuickAccess> AvailableItems
+    {
+        get => _availableItems;
+        set => SetAndRaise(AvailableItemsProperty, ref _availableItems, value);
+    }
+
     public bool ShowOverflowButton
     {
         get => _showOverflowButton;
         set => SetAndRaise(ShowOverflowButtonProperty, ref _showOverflowButton, value);
+    }
+
+    public bool ShowItems
+    {
+        get => GetValue(ShowItemsProperty);
+        set => SetValue(ShowItemsProperty, value);
+    }
+
+    public ICommand? MoreCommandsCommand
+    {
+        get => GetValue(MoreCommandsCommandProperty);
+        set => SetValue(MoreCommandsCommandProperty, value);
+    }
+
+    public object? MoreCommandsCommandParameter
+    {
+        get => GetValue(MoreCommandsCommandParameterProperty);
+        set => SetValue(MoreCommandsCommandParameterProperty, value);
+    }
+
+    public IQuickAccessToolbarPersistenceProvider? PersistenceProvider
+    {
+        get => GetValue(PersistenceProviderProperty);
+        set => SetValue(PersistenceProviderProperty, value);
+    }
+
+    public string? PersistenceKey
+    {
+        get => GetValue(PersistenceKeyProperty);
+        set => SetValue(PersistenceKeyProperty, value);
     }
 
     public DesktopRibbon? Ribbon
@@ -270,6 +365,73 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
     {
         if (_moreButton != null)
             _moreButton.IsVisible = ShowOverflowButton;
+    }
+
+    public bool RestoreState()
+    {
+        if (PersistenceProvider == null || string.IsNullOrWhiteSpace(PersistenceKey))
+            return false;
+
+        var itemIds = PersistenceProvider.Load(PersistenceKey);
+        _persistenceInitialized = true;
+        if (itemIds == null)
+        {
+            SaveState();
+            return false;
+        }
+
+        var availableItems = AvailableItems
+            .Concat(RecommendedItems.Select(recommendation => recommendation.Item))
+            .Where(item => item != null)
+            .Distinct()
+            .Select(item => new { Id = GetItemPersistenceId(item), Item = item })
+            .Where(registration => !string.IsNullOrWhiteSpace(registration.Id))
+            .ToDictionary(registration => registration.Id, registration => registration.Item);
+
+        _isRestoringState = true;
+        try
+        {
+            foreach (var item in Items.OfType<QuickAccessItem>().Select(container => container.Item).ToArray())
+                RemoveItem(item);
+
+            foreach (var itemId in itemIds)
+                if (availableItems.TryGetValue(itemId, out var item))
+                    AddItem(item);
+        }
+        finally
+        {
+            _isRestoringState = false;
+        }
+
+        return true;
+    }
+
+    public void SaveState()
+    {
+        if (_isRestoringState || !_persistenceInitialized || PersistenceProvider == null ||
+            string.IsNullOrWhiteSpace(PersistenceKey))
+            return;
+
+        var itemIds = Items
+            .OfType<QuickAccessItem>()
+            .Select(container => GetItemPersistenceId(container.Item))
+            .Where(itemId => !string.IsNullOrWhiteSpace(itemId))
+            .ToArray();
+
+        PersistenceProvider.Save(PersistenceKey, itemIds);
+    }
+
+    private void RegisterAvailableItem(ICanAddToQuickAccess item)
+    {
+        if (!AvailableItems.Contains(item))
+            AvailableItems.Add(item);
+    }
+
+    private static string GetItemPersistenceId(ICanAddToQuickAccess item)
+    {
+        return item is AvaloniaObject avaloniaObject
+            ? GetPersistenceId(avaloniaObject) ?? string.Empty
+            : string.Empty;
     }
 
     /*protected override void ItemsChanged(AvaloniaPropertyChangedEventArgs e)

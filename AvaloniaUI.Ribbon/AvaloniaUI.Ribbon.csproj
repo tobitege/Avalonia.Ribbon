@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>AvaloniaUI.Ribbon</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <Version>2026.7.29.2</Version>
+        <Version>2026.8.4</Version>
         <Authors>Splitwirez, Alban Mazerolles, Rubal Walia, Sachith Liyanagama, tobitege</Authors>
         <PackageId>AvaloniaControls.Ribbon.Flowery</PackageId>
         <PackageProjectUrl>https://github.com/tobitege/Avalonia.Ribbon</PackageProjectUrl>

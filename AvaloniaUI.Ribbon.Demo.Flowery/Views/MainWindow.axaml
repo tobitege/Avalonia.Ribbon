@@ -7,6 +7,7 @@
     xmlns:viewModels="clr-namespace:AvaloniaUI.Ribbon.Demo.Flowery.ViewModels"
     xmlns:views="clr-namespace:AvaloniaUI.Ribbon.Demo.Flowery.Views"
     Title="AvaloniaUI.Ribbon.Demo.Flowery"
+    Width="986"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Icon="/Assets/avalonia-logo.ico"
@@ -367,7 +368,7 @@
 		</VisualBrush>
 	</RibbonWindow.TitleBarBackground>
 	<RibbonWindow.QuickAccessToolbar>
-		<QuickAccessToolbar>
+		<QuickAccessToolbar PersistenceKey="MainWindow">
 			<QuickAccessToolbar.RecommendedItems>
 				<QuickAccessRecommendation Item="{Binding #RibbonSplitButton1}" />
 				<QuickAccessRecommendation Item="{Binding #RibbonSplitButton2}" />
@@ -437,7 +438,13 @@
 				</StackPanel>
 			</DesktopRibbon.HelpPaneContent>
 			<DesktopRibbon.Menu>
-				<RibbonMenu Width="50" KeyTip.KeyTipKeys="F">
+				<RibbonMenu KeyTip.KeyTipKeys="F">
+					<RibbonMenu.SmallImage>
+						<Image
+                            Width="16"
+                            Height="16"
+                            Source="/Assets/avalonia-logo.ico" />
+					</RibbonMenu.SmallImage>
 					<RibbonMenuItem
                         Group="File"
                         Header="New"
@@ -496,6 +503,7 @@
                             KeyTip.KeyTipKeys="S">
 							<SplitButtonControl
                                 x:Name="RibbonSplitButton1"
+                                QuickAccessToolbar.PersistenceId="split-button-large"
                                 Content="Large"
                                 Icon="{DynamicResource Icon1}"
                                 LargeIcon="{DynamicResource Icon1Large}"
@@ -523,6 +531,7 @@
 							</SplitButtonControl>
 							<SplitButtonControl
                                 x:Name="RibbonSplitButton2"
+                                QuickAccessToolbar.PersistenceId="split-button-medium"
                                 Content="Medium"
                                 Icon="{DynamicResource Icon2}"
                                 LargeIcon="{DynamicResource Icon2Large}"
@@ -550,6 +559,7 @@
 							</SplitButtonControl>
 							<SplitButtonControl
                                 x:Name="RibbonSplitButton3"
+                                QuickAccessToolbar.PersistenceId="split-button-small"
                                 Icon="{DynamicResource Icon2}"
                                 LargeIcon="{DynamicResource Icon2Large}"
                                 MaxSize="Small"

@@ -3,9 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
     <Style Selector="local|RibbonMenu">
-        <Setter Property="Background" Value="{DynamicResource ThemeControlMidBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}" />
+        <Setter Property="AccentBrush" Value="{DynamicResource ThemeAccentBrush3}" />
+        <Setter Property="Background"
+                Value="{Binding AccentBrush, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="White" />
         <Setter Property="Height" Value="30" />
         <Setter Property="Content" Value="{DynamicResource AvaloniaRibbon.File}" />
         <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}" />
@@ -14,6 +17,7 @@
                 <Panel>
                     <ToggleButton
                         x:Name="ContentButton"
+                        Margin="6,3"
                         Padding="{TemplateBinding Padding}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -22,25 +26,39 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
+                        ClickMode="Press"
+                        CornerRadius="4"
                         FontSize="12.5"
                         Foreground="{TemplateBinding Foreground}"
                         IsChecked="{Binding IsMenuOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}">
                         <StackPanel Orientation="Horizontal" Spacing="6">
-                            <ContentPresenter Content="{TemplateBinding SmallImage}" />
-                            <ContentPresenter Content="{TemplateBinding Content}" />
+                            <ContentPresenter VerticalAlignment="Center" Content="{TemplateBinding SmallImage}" />
+                            <ContentPresenter VerticalAlignment="Center" Content="{TemplateBinding Content}" />
+                            <Path
+                                Width="7"
+                                Height="4"
+                                Margin="{TemplateBinding DropDownArrowMargin}"
+                                VerticalAlignment="Center"
+                                Data="M 0 0 L 7 0 L 3.5 4 Z"
+                                Fill="{Binding $parent[ToggleButton].Foreground}"
+                                IsVisible="{TemplateBinding ShowDropDownArrow}"
+                                Stretch="Uniform" />
                         </StackPanel>
                     </ToggleButton>
                     <Popup
                         x:Name="MenuPopup"
-                        Width="{Binding $parent[Ribbon].Bounds.Width}"
                         IsLightDismissEnabled="True"
                         IsOpen="{Binding IsMenuOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
+                        Placement="BottomEdgeAlignedLeft"
                         PlacementTarget="{Binding #ContentButton}">
                         <Border
                             x:Name="MenuRootBorder"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
                             Background="{DynamicResource MenuFlyoutPresenterBackground}"
                             BorderBrush="{DynamicResource MenuFlyoutPresenterBorderBrush}"
                             BorderThickness="{DynamicResource MenuFlyoutPresenterBorderThemeThickness}"
+                            ClipToBounds="True"
                             CornerRadius="{DynamicResource OverlayCornerRadius}"
                             TextBlock.Foreground="{DynamicResource ThemeForegroundBrush}">
                             <DockPanel LastChildFill="True">
@@ -166,10 +184,19 @@
         <Setter Property="Padding" Value="4" />
     </Style>
     <Style
-        Selector="local|Ribbon local|RibbonMenu /template/ ToggleButton#ContentButton:not(:pointerover):not(:pressed):not(:checked)">
-        <Setter Property="Foreground" Value="{Binding $parent[Ribbon].Foreground}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="Transparent" />
+        Selector="local|RibbonMenu /template/ ToggleButton#ContentButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style
+        Selector="local|RibbonMenu /template/ ToggleButton#ContentButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style
+        Selector="local|RibbonMenu /template/ ToggleButton#ContentButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}" />
+        <Setter Property="Foreground" Value="White" />
     </Style>
     <Style
         Selector="local|Ribbon local|RibbonMenu /template/ ToggleButton#BackButton:not(:pointerover):not(:pressed):not(:checked)">

@@ -98,18 +98,38 @@
                 <TextBlock Text="LAST ACTION: " />
                 <TextBlock Text="{Binding LastActionText}" />
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+            <StackPanel
+                x:Name="DesktopChromeOptionsPanel"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
                 <TextBlock
                     VerticalAlignment="Center"
                     FontSize="13"
                     Text="System Decorations Mode : " />
                 <ComboBox
+                    x:Name="DecorationModeComboBox"
                     Width="200"
                     DisplayMemberBinding="{Binding Value}"
                     ItemsSource="{Binding Source={extensions1:Enumeration {x:Type WindowDecorations}}}"
-                    SelectedValue="{Binding WindowDecorations, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=TwoWay}"
+                    SelectionChanged="OnDecorationModeSelectionChanged"
+                    SelectedValue="{Binding WindowDecorations, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=OneWay}"
                     SelectedValueBinding="{Binding Value}" />
             </StackPanel>
+            <CheckBox
+                x:Name="ShowTitleBarIconCheckBox"
+                Content="Show title bar icon"
+                IsChecked="{Binding ShowTitleBarIcon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=TwoWay}" />
+            <CheckBox
+                Content="Show File menu"
+                IsChecked="{Binding ShowFileMenu, Mode=TwoWay}" />
+            <CheckBox
+                x:Name="ShowQatItemsCheckBox"
+                Content="Show Quick Access Toolbar items"
+                IsChecked="{Binding ShowQatItems, Mode=TwoWay}" />
+            <CheckBox
+                x:Name="ShowQatOverflowCheckBox"
+                Content="Show Quick Access Toolbar menu button"
+                IsChecked="{Binding ShowQatOverflowButton, Mode=TwoWay}" />
             <!--  CheckBox x:Name="LightsOnCheckBox" Content="Lights" IsChecked="True"/  -->
             <CheckBox Content="Show Contextual tab group 1" IsChecked="{Binding ShowContextualGroup1}" />
             <CheckBox Content="Show Contextual tab group 2" IsChecked="{Binding ShowContextualGroup2}" />

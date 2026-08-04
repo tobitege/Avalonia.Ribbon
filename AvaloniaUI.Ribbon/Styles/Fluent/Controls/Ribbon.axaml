@@ -7,6 +7,9 @@
     <Styles.Resources>
         <converters:BoundsPointToAdjustedPointConverter x:Key="BoundsPointToAdjustedPointConverter" />
     </Styles.Resources>
+    <Style Selector="local|Ribbon[ShowMenu=False] /template/ ContentPresenter#PART_MenuPresenter">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
     <Design.PreviewWith>
         <Panel Width="200">
             <Ribbon VerticalAlignment="Top">

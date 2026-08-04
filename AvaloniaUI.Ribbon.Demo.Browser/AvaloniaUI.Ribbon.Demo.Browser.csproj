@@ -7,8 +7,6 @@
         <UserSecretsId>72830c61-1c61-42bc-8556-ec268f1d7c2f</UserSecretsId>
         <DebuggerSupport>true</DebuggerSupport>
         <WasmDebugLevel>5</WasmDebugLevel>
-        <ShouldIncludeNativeSkiaSharp>false</ShouldIncludeNativeSkiaSharp>
-        <ShouldIncludeNativeHarfBuzzSharp>false</ShouldIncludeNativeHarfBuzzSharp>
     </PropertyGroup>
 
     <ItemGroup>

@@ -373,6 +373,13 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-08-04)
+
+- Bump package and app versions to `2026.8.4`.
+- Expand Quick Access Toolbar configuration with independently controllable command items and menu button, a configurable `MoreCommandsCommand`, and persistent pinned commands through `IQuickAccessToolbarPersistenceProvider`, `PersistenceKey`, and stable item `PersistenceId` values.
+- Make the ribbon File menu optional and customizable through `Content`, `SmallImage`, `LargeImage`, and `AccentBrush`. Its drop-down arrow can be hidden with `ShowDropDownArrow`, while `DropDownArrowMargin` controls its spacing.
+- Improve `RibbonWindow` title-bar integration: the window icon can be toggled independently, custom minimize/maximize/close buttons are available when system decorations are disabled, and custom-chrome windows remain resizable without overlapping native title-bar controls.
+
 ### Update (2026-07-29.2)
 
 - Fix auto-height `RibbonButton` controls with `Size="Large"` so icons stay top-aligned across one- and multi-line labels and the complete button surface responds to hover and click.

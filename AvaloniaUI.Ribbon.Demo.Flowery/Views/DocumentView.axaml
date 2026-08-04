@@ -121,12 +121,26 @@
                     FontSize="13"
                     Text="System Decorations Mode : " />
                 <ComboBox
+                    x:Name="DecorationModeComboBox"
                     Width="200"
                     DisplayMemberBinding="{Binding Value}"
                     ItemsSource="{Binding Source={extensions1:Enumeration {x:Type WindowDecorations}}}"
-                    SelectedValue="{Binding WindowDecorations, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=TwoWay}"
+                    SelectionChanged="OnDecorationModeSelectionChanged"
+                    SelectedValue="{Binding WindowDecorations, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=OneWay}"
                     SelectedValueBinding="{Binding Value}" />
             </StackPanel>
+            <CheckBox
+                Content="Show title bar icon"
+                IsChecked="{Binding ShowTitleBarIcon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=TwoWay}" />
+            <CheckBox
+                Content="Show File menu"
+                IsChecked="{Binding Ribbon.ShowMenu, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=TwoWay}" />
+            <CheckBox
+                Content="Show Quick Access Toolbar items"
+                IsChecked="{Binding QuickAccessToolbar.ShowItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=TwoWay}" />
+            <CheckBox
+                Content="Show Quick Access Toolbar menu button"
+                IsChecked="{Binding QuickAccessToolbar.ShowOverflowButton, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=RibbonWindow}, Mode=TwoWay}" />
             <!--  CheckBox x:Name="LightsOnCheckBox" Content="Lights" IsChecked="True"/  -->
             <CheckBox Content="Show Contextual tab group 1" IsChecked="{Binding ShowContextualGroup1}" />
             <CheckBox Content="Show Contextual tab group 2" IsChecked="{Binding ShowContextualGroup2}" />

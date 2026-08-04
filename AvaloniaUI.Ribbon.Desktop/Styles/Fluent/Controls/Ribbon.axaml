@@ -7,6 +7,9 @@
     <Styles.Resources>
         <converters:BoundsPointToAdjustedPointConverter x:Key="BoundsPointToAdjustedPointConverter" />
     </Styles.Resources>
+    <Style Selector="windows|DesktopRibbon[ShowMenu=False] /template/ ContentPresenter#PART_MenuPresenter">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
     <Design.PreviewWith>
         <Panel Width="200">
             <windows:DesktopRibbon VerticalAlignment="Top">
@@ -42,6 +45,7 @@
                     <DockPanel Background="Transparent">
                         <ContentPresenter
                             x:Name="PART_QuickAccessToolbarHostAbove"
+                            HorizontalAlignment="Left"
                             DockPanel.Dock="Top" />
                         <!--  Margin="0,34,0,0"  -->
                         <DockPanel.Resources>
@@ -286,6 +290,7 @@
                         <DockPanel Grid.Column="1">
                             <ContentPresenter
                                 x:Name="PART_QuickAccessToolbarHostAbove"
+                                HorizontalAlignment="Left"
                                 DockPanel.Dock="Top" />
                             <Border
                                 VerticalAlignment="Stretch"

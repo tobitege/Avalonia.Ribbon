@@ -4,23 +4,48 @@
     xmlns:local="clr-namespace:AvaloniaUI.Ribbon.Desktop;assembly=AvaloniaUI.Ribbon.Desktop"
     xmlns:windows="clr-namespace:AvaloniaUI.Ribbon.Desktop;assembly=AvaloniaUI.Ribbon.Desktop"
     x:DataType="QuickAccessToolbar">
+    <Styles.Resources>
+        <!-- Office-style QAT states on colored title bars: low-alpha white overlays
+             (cf. Krypton M365 RibbonQATMini4/5), no accent fill. -->
+        <SolidColorBrush x:Key="QuickAccessMoreButtonHoverBrush" Color="#26FFFFFF" />
+        <SolidColorBrush x:Key="QuickAccessMoreButtonPressedBrush" Color="#40FFFFFF" />
+    </Styles.Resources>
     <Style Selector="local|QuickAccessToolbar">
         <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
         <Setter Property="Height" Value="30" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Template">
             <ControlTemplate>
-                <DockPanel>
+                <!--  Stack left-to-right so the overflow button sits after items, not at the far right of a stretched host.  -->
+                <StackPanel Orientation="Horizontal">
+                    <ItemsControl
+                        x:Name="PART_ItemsHost"
+                        VerticalAlignment="Stretch"
+                        ItemsSource="{TemplateBinding ItemsSource}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
                     <ToggleButton
                         x:Name="PART_MoreButton"
+                        Width="24"
+                        Margin="2,3"
+                        Padding="0"
                         VerticalAlignment="Stretch"
-                        DockPanel.Dock="Right">
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        BorderThickness="0"
+                        CornerRadius="4">
                         <ToggleButton.ContextMenu>
-                            <ContextMenu Placement="Bottom">
+                            <ContextMenu Placement="BottomEdgeAlignedLeft">
                                 <ContextMenu.Template>
                                     <ControlTemplate>
                                         <Border
+                                            MinWidth="240"
                                             MinHeight="{TemplateBinding MinHeight}"
                                             MaxWidth="{TemplateBinding MaxWidth}"
                                             Padding="{TemplateBinding Padding}"
@@ -31,13 +56,15 @@
                                             CornerRadius="{DynamicResource OverlayCornerRadius}">
                                             <DockPanel>
                                                 <Border
-                                                    Height="30"
-                                                    Padding="15,0"
+                                                    MinHeight="32"
+                                                    Padding="12,0"
+                                                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
                                                     DockPanel.Dock="Top">
                                                     <TextBlock
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="DemiBold"
+                                                        FontSize="12"
+                                                        FontWeight="SemiBold"
                                                         Text="{DynamicResource AvaloniaRibbon.CustomizeQAT}" />
                                                 </Border>
                                                 <ScrollViewer Classes="menuscroller">
@@ -61,6 +88,7 @@
                                                 Value="{Binding IsChecked}" />
                                     </Style>
                                     <Style Selector="MenuItem">
+                                        <Setter Property="Padding" Value="12,7" />
                                         <Setter Property="Template"
                                                 Value="{DynamicResource CheckableMenuItemControlTemplate}" />
                                     </Style>
@@ -96,27 +124,38 @@
                                 StrokeThickness="1" />
                         </StackPanel>
                     </ToggleButton>
-                    <ItemsControl VerticalAlignment="Stretch" ItemsSource="{TemplateBinding ItemsSource}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </DockPanel>
+                </StackPanel>
             </ControlTemplate>
         </Setter>
     </Style>
-    <Style Selector="local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:not(:pointerover):not(:pressed)">
+    <Style Selector="local|QuickAccessToolbar[ShowItems=False] /template/ ItemsControl#PART_ItemsHost">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
     <Style
-        Selector="windows|RibbonWindow local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:not(:pointerover):not(:pressed):not(:checked)">
+        Selector="local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource QuickAccessMoreButtonHoverBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style
+        Selector="local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource QuickAccessMoreButtonPressedBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style
+        Selector="local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource QuickAccessMoreButtonPressedBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style
+        Selector="windows|RibbonWindow local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton">
         <Setter Property="Foreground" Value="{Binding $parent[RibbonWindow].TitleBarForeground}" />
     </Style>
     <Style
-        Selector="windows|RibbonWindow[IsActive=False] local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:not(:pointerover):not(:pressed):not(:checked) &gt; StackPanel">
+        Selector="windows|RibbonWindow[IsActive=False] local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:not(:pointerover):not(:pressed):not(:checked) StackPanel">
         <Setter Property="Opacity" Value="0.5" />
     </Style>
 

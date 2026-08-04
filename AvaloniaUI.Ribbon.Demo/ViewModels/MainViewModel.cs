@@ -33,6 +33,12 @@ public partial class MainViewModel : ViewModelBase
 
     [ObservableProperty] private bool _showContextualGroup3;
 
+    [ObservableProperty] private bool _showFileMenu = true;
+
+    [ObservableProperty] private bool _showQatItems = true;
+
+    [ObservableProperty] private bool _showQatOverflowButton = true;
+
     [ObservableProperty] private bool _switchOrientation = true;
 
     [ObservableProperty] private bool _enableRibbonGroupWrap = true;

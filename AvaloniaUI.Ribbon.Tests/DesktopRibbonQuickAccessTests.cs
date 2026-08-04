@@ -60,8 +60,60 @@ public class DesktopRibbonQuickAccessTests
         Assert.Empty(toolbar.Items.OfType<QuickAccessItem>());
     }
 
+    [Fact]
+    public void QuickAccessToolbar_RestoresAndPersistsItemsById()
+    {
+        var first = CreateQuickAccessButton("First");
+        var second = CreateQuickAccessButton("Second");
+        QuickAccessToolbar.SetPersistenceId((Avalonia.AvaloniaObject)first, "first");
+        QuickAccessToolbar.SetPersistenceId((Avalonia.AvaloniaObject)second, "second");
+
+        var provider = new TestPersistenceProvider(new[] { "second", "first" });
+        var toolbar = new QuickAccessToolbar
+        {
+            PersistenceKey = "main",
+            PersistenceProvider = provider
+        };
+        toolbar.AvailableItems.Add(first);
+        toolbar.AvailableItems.Add(second);
+
+        Assert.True(toolbar.RestoreState());
+        Assert.Equal(new[] { second, first },
+            toolbar.Items.OfType<QuickAccessItem>().Select(item => item.Item));
+
+        toolbar.RemoveItem(second);
+
+        Assert.Equal("main", provider.SavedKey);
+        Assert.Equal(new[] { "first" }, provider.SavedItemIds);
+    }
+
     private static ICanAddToQuickAccess CreateQuickAccessButton(string content)
     {
         return new RibbonButton { Content = content };
+    }
+
+    private sealed class TestPersistenceProvider : IQuickAccessToolbarPersistenceProvider
+    {
+        private readonly IReadOnlyList<string>? _loadedItemIds;
+
+        public TestPersistenceProvider(IReadOnlyList<string>? loadedItemIds)
+        {
+            _loadedItemIds = loadedItemIds;
+        }
+
+        public string? SavedKey { get; private set; }
+
+        public IReadOnlyList<string>? SavedItemIds { get; private set; }
+
+        public IReadOnlyList<string>? Load(string key)
+        {
+            return _loadedItemIds;
+        }
+
+        public void Save(string key, IReadOnlyList<string> itemIds)
+        {
+            SavedKey = key;
+            SavedItemIds = itemIds;
+        }
     }
 }

@@ -367,7 +367,10 @@
 		</VisualBrush>
 	</RibbonWindow.TitleBarBackground>
 	<RibbonWindow.QuickAccessToolbar>
-		<QuickAccessToolbar>
+		<QuickAccessToolbar
+            PersistenceKey="MainWindow"
+            ShowItems="{Binding ShowQatItems, Mode=TwoWay}"
+            ShowOverflowButton="{Binding ShowQatOverflowButton, Mode=TwoWay}">
 			<QuickAccessToolbar.RecommendedItems>
 				<QuickAccessRecommendation Item="{Binding #RibbonSplitButton1}" />
 				<QuickAccessRecommendation Item="{Binding #RibbonSplitButton2}" />
@@ -384,7 +387,8 @@
             Focusable="True"
             GroupOverflowBehavior="{Binding RibbonGroupOverflowBehavior}"
             MaxGroupRows="{Binding RibbonMaxGroupRows}"
-            Orientation="{Binding RibbonOrientation}">
+            Orientation="{Binding RibbonOrientation}"
+            ShowMenu="{Binding ShowFileMenu, Mode=TwoWay}">
 			<DesktopRibbon.Resources />
 			<DesktopRibbon.Styles>
 				<Style Selector="DesktopRibbon /template/ ContentControl#PART_GroupsPresenterHolder">
@@ -437,7 +441,13 @@
 				</StackPanel>
 			</DesktopRibbon.HelpPaneContent>
 			<DesktopRibbon.Menu>
-				<RibbonMenu Width="50" KeyTip.KeyTipKeys="F">
+				<RibbonMenu KeyTip.KeyTipKeys="F">
+					<RibbonMenu.SmallImage>
+						<Image
+                            Width="16"
+                            Height="16"
+                            Source="/Assets/avalonia-logo.ico" />
+					</RibbonMenu.SmallImage>
 					<RibbonMenuItem
                         Group="File"
                         Header="New"
@@ -500,6 +510,7 @@
                                 Icon="{DynamicResource Icon1}"
                                 LargeIcon="{DynamicResource Icon1Large}"
                                 QuickAccessIcon="{DynamicResource Icon1QuickAccess}"
+                                QuickAccessToolbar.PersistenceId="split-button-large"
                                 Size="Large">
 								<SplitButtonControl.Flyout>
 									<MenuFlyout Placement="Bottom">
@@ -527,6 +538,7 @@
                                 Icon="{DynamicResource Icon2}"
                                 LargeIcon="{DynamicResource Icon2Large}"
                                 QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
+                                QuickAccessToolbar.PersistenceId="split-button-medium"
                                 Size="Medium">
 								<SplitButtonControl.Flyout>
 									<MenuFlyout Placement="Bottom">
@@ -555,6 +567,7 @@
                                 MaxSize="Small"
                                 MinSize="Small"
                                 QuickAccessIcon="{DynamicResource Icon2QuickAccess}"
+                                QuickAccessToolbar.PersistenceId="split-button-small"
                                 Size="Small"
                                 ToolTip.Tip="Small">
 								<SplitButtonControl.Flyout>

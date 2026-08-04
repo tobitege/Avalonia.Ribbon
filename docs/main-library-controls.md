@@ -146,6 +146,21 @@ Customization:
 - Visual + template behavior: `AvaloniaUI.Ribbon/Styles/Fluent/Controls/Ribbon.axaml`
 - Overflow behavior is implemented by `RibbonGroupsStackPanel`.
 
+### Desktop Quick Access Toolbar customization
+
+`QuickAccessToolbar.RecommendedItems` defines the short list shown directly in the customization menu.
+`QuickAccessToolbar.AvailableItems` registers the complete set of commands that can be resolved when
+persisted state is restored or presented by an application-specific configuration dialog.
+
+Set `QuickAccessToolbar.PersistenceId` on every persistable ribbon command. Assign an
+`IQuickAccessToolbarPersistenceProvider` and a `PersistenceKey` to load and save the ordered selection.
+`JsonQuickAccessToolbarPersistenceProvider` is the built-in file-based provider. Applications can supply
+another provider for their settings system.
+
+`MoreCommandsCommand` and `MoreCommandsCommandParameter` connect the "More commands..." menu item to an
+application-specific dialog. The menu item is hidden while no command is assigned. The library
+does not impose a dialog implementation.
+
 ## RibbonTab
 
 Source: `AvaloniaUI.Ribbon/RibbonTab.cs`
@@ -521,6 +536,12 @@ Key properties:
 | --- | --- | --- |
 | `IsMenuOpen` | `bool` | `false` |
 | `Content` | `object` | inherited |
+| `SmallImage` | `object` | `null` |
+| `LargeImage` | `object` | `null` |
+| `AccentBrush` | `IBrush` | theme accent brush |
+| `ShowDropDownArrow` | `bool` | `true` |
+| `DropDownArrowMargin` | `Thickness` | `0,0,4,0` |
+| `ShowMenu` | `bool` | `true` |
 | `SelectedItemContent` | `object` | `null` |
 | `SelectedSubItems` | `object` | `null` |
 | `TopDockedGroupedItems` | grouped collection | computed |
