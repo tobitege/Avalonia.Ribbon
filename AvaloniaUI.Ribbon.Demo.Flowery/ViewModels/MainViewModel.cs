@@ -1,8 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
 using Flowery.Controls;
 
@@ -86,6 +88,13 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
         Console.WriteLine("OnClickCommand invoked: " + paramString);
         LastActionText = paramString;
+    }
+
+    [RelayCommand]
+    private void Exit()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            desktop.Shutdown();
     }
 
     /// <summary>

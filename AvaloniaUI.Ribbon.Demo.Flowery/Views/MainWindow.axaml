@@ -1,4 +1,4 @@
-<RibbonWindow
+﻿<RibbonWindow
     x:Class="AvaloniaUI.Ribbon.Demo.Flowery.Views.MainWindow"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -483,7 +483,10 @@
                                 Fill="Purple" />
 						</RibbonMenuItem.Icon>
 					</RibbonMenuItem>
-					<RibbonMenuItem Header="Exit" IsBottomDocked="True">
+					<RibbonMenuItem
+						Command="{Binding ExitCommand}"
+						Header="Exit"
+						IsBottomDocked="True">
 						<RibbonMenuItem.Icon>
 							<Rectangle
                                 Width="32"

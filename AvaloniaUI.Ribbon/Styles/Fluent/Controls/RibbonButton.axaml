@@ -5,6 +5,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://AvaloniaUI.Ribbon/SizeResources.axaml" />
     </ResourceDictionary.MergedDictionaries>
+    <x:Double x:Key="QuickAccessButtonMinWidth">45</x:Double>
+    <x:Double x:Key="QuickAccessButtonHeight">34</x:Double>
     <!-- Designer Preview -->
     <Design.PreviewWith>
         <Grid Height="90">
@@ -59,7 +61,7 @@
             <ControlTemplate>
                 <Button Classes="quickAccessButton" Command="{Binding Command}"
                         CommandParameter="{Binding CommandParameter}" ToolTip.Tip="{Binding ToolTip.Tip}"
-                        KeyTip.KeyTipKeys="{Binding KeyTip.Tip}" MinWidth="45" Height="34" Focusable="False">
+                        KeyTip.KeyTipKeys="{Binding KeyTip.Tip}">
                     <ContentPresenter Content="{Binding QuickAccessIcon}" Width="16" Height="16" />
                 </Button>
             </ControlTemplate>

@@ -26,6 +26,10 @@ public class RibbonShellTests
             "DirectHelp",
             Assert.IsType<RibbonButton>(shell.RibbonControl.ConfigToolBar.Items[0]).Name);
         Assert.Equal(7, shell.ApplicationMenu.LeftPaneItems.Count);
+        var exit = shell.ApplicationMenu.LeftPaneItems
+            .OfType<RibbonMenuItem>()
+            .Single(item => item.Name == RibbonShellItemNames.Exit);
+        Assert.True(exit.IsBottomDocked);
         var stableNames = shell.Lookup.EnumerateItems()
             .Select(item => item.Name)
             .Where(name => !string.IsNullOrWhiteSpace(name))

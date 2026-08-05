@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using Avalonia;
+using Avalonia.Automation.Peers;
+using Avalonia.Automation.Provider;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Shapes;
 using Avalonia.Headless;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Media;
 using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using AvaloniaUI.Ribbon.Desktop;
+using AvaloniaUI.Ribbon.Models;
+using ShapePath = Avalonia.Controls.Shapes.Path;
 
 namespace AvaloniaUI.Ribbon.Tests;
 
@@ -44,6 +51,355 @@ public class RibbonIntegrationRegressionTests
                 control => control.Name == "PART_ItemsPresenter");
             Assert.Contains(desktopRibbon.GetVisualDescendants().OfType<Control>(),
                 control => control.Name == "PART_ItemsPresenter");
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonMenu_ReopensAgainstCurrentWindowAfterWindowMoves()
+    {
+        EnsureStyles();
+        var menu = new RibbonMenu();
+        var ribbon = CreateRibbon(new Ribbon { Menu = menu });
+        var window = new Window
+        {
+            Position = new PixelPoint(80, 90),
+            Width = 700,
+            Height = 320,
+            Content = ribbon
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            var popup = menu.GetVisualDescendants().OfType<Popup>().Single();
+            var contentButton = menu.GetVisualDescendants()
+                .OfType<ToggleButton>()
+                .Single(control => control.Name == "ContentButton");
+
+            menu.IsMenuOpen = true;
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.False(popup.ShouldUseOverlayLayer);
+            Assert.Same(contentButton, popup.PlacementTarget);
+            Assert.Same(window, TopLevel.GetTopLevel(popup.Child));
+
+            menu.IsMenuOpen = false;
+            Dispatcher.UIThread.RunJobs();
+            var movedPosition = new PixelPoint(420, 310);
+            window.Position = movedPosition;
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.Equal(movedPosition, window.Position);
+
+            menu.IsMenuOpen = true;
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.False(popup.ShouldUseOverlayLayer);
+            Assert.Same(contentButton, popup.PlacementTarget);
+            Assert.Same(window, TopLevel.GetTopLevel(popup.Child));
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonMenu_BackButtonUsesOpenMenuForegroundAndInsetGlyph()
+    {
+        EnsureStyles();
+        var expectedForeground = Brushes.Magenta;
+        var menu = new RibbonMenu { Foreground = expectedForeground };
+        var ribbon = CreateRibbon(new Ribbon { Menu = menu });
+        var window = new Window
+        {
+            Width = 700,
+            Height = 320,
+            Content = ribbon
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            var popup = menu.GetVisualDescendants().OfType<Popup>().Single();
+
+            menu.IsMenuOpen = true;
+            Dispatcher.UIThread.RunJobs();
+
+            var menuRoot = Assert.IsType<Border>(popup.Child);
+            var backButton = menuRoot.GetVisualDescendants()
+                .OfType<ToggleButton>()
+                .Single(control => control.Name == "BackButton");
+            var circle = backButton.GetVisualDescendants().OfType<Ellipse>().Single();
+            var line = backButton.GetVisualDescendants().OfType<Rectangle>().Single();
+            var arrow = backButton.GetVisualDescendants().OfType<ShapePath>().Single();
+            var glyph = Assert.IsType<Panel>(arrow.Parent);
+
+            Assert.Same(expectedForeground, circle.Stroke);
+            Assert.Same(expectedForeground, line.Fill);
+            Assert.Same(expectedForeground, arrow.Stroke);
+            Assert.Equal(new Thickness(2, 0, 0, 0), glyph.Margin);
+            Assert.Equal(Brushes.Transparent, backButton.Background);
+            Assert.Equal(Brushes.Transparent, backButton.BorderBrush);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonMenu_HeaderPresentersOnlyReserveNonNullContent()
+    {
+        EnsureStyles();
+        var menu = new RibbonMenu
+        {
+            Content = null,
+            SmallImage = new Border { Width = 16, Height = 16 }
+        };
+        var ribbon = CreateRibbon(new Ribbon { Menu = menu });
+        var window = new Window
+        {
+            Width = 700,
+            Height = 320,
+            Content = ribbon
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            var smallImagePresenter = menu.GetVisualDescendants()
+                .OfType<ContentPresenter>()
+                .Single(control => control.Name == "SmallImagePresenter");
+            var menuContentPresenter = menu.GetVisualDescendants()
+                .OfType<ContentPresenter>()
+                .Single(control => control.Name == "MenuContentPresenter");
+
+            Assert.True(smallImagePresenter.IsVisible);
+            Assert.False(menuContentPresenter.IsVisible);
+
+            menu.Content = "File";
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.True(smallImagePresenter.IsVisible);
+            Assert.True(menuContentPresenter.IsVisible);
+
+            menu.SmallImage = null;
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.False(smallImagePresenter.IsVisible);
+            Assert.True(menuContentPresenter.IsVisible);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonMenu_FontSizeFlowsToAllMenuTextSources()
+    {
+        EnsureStyles();
+        const double expectedFontSize = 19;
+        var menu = new RibbonMenu { FontSize = expectedFontSize };
+        menu.Items.Add(new RibbonMenuItem { Header = "Open" });
+        menu.RecentDocuments.Add(new RibbonRecentDocument { Title = "Document" });
+        var ribbon = CreateRibbon(new Ribbon { Menu = menu });
+        var window = new Window
+        {
+            Width = 700,
+            Height = 320,
+            Content = ribbon
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            var popup = menu.GetVisualDescendants().OfType<Popup>().Single();
+            var contentButton = menu.GetVisualDescendants()
+                .OfType<ToggleButton>()
+                .Single(control => control.Name == "ContentButton");
+
+            menu.IsMenuOpen = true;
+            Dispatcher.UIThread.RunJobs();
+
+            var menuRoot = Assert.IsType<Border>(popup.Child);
+            var menuItemButton = menuRoot.GetVisualDescendants()
+                .OfType<Button>()
+                .Single(control => control.Name == "PART_ContentButton");
+            var recentSection = menuRoot.GetVisualDescendants()
+                .OfType<ItemsControl>()
+                .Single(control => control.Name == "RecentDocumentsSection");
+            var recentButton = recentSection.GetVisualDescendants().OfType<Button>().Single();
+            var recentHeading = recentSection.GetVisualDescendants()
+                .OfType<TextBlock>()
+                .Single(control => control.Text == "Recent");
+
+            Assert.Equal(expectedFontSize, contentButton.FontSize);
+            Assert.Equal(expectedFontSize, menuItemButton.FontSize);
+            Assert.Equal(expectedFontSize, recentButton.FontSize);
+            Assert.Equal(expectedFontSize, recentHeading.FontSize);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonMenuItem_TemplateButtonExecutesCommand()
+    {
+        EnsureStyles();
+        var executionCount = 0;
+        var command = new CallbackCommand(() => executionCount++);
+        var menuItem = new RibbonMenuItem
+        {
+            Header = "Exit",
+            Command = command
+        };
+        var window = new Window
+        {
+            Width = 300,
+            Height = 120,
+            Content = menuItem
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            var contentButton = menuItem.GetVisualDescendants()
+                .OfType<Button>()
+                .Single(control => control.Name == "PART_ContentButton");
+            var peer = ControlAutomationPeer.CreatePeerForElement(contentButton);
+            var invokeProvider = Assert.IsAssignableFrom<IInvokeProvider>(peer.GetProvider<IInvokeProvider>());
+
+            Assert.Same(command, contentButton.Command);
+            invokeProvider.Invoke();
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.Equal(1, executionCount);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonMenu_RecentDocumentsSectionTracksCollectionState()
+    {
+        EnsureStyles();
+        var menu = new RibbonMenu();
+        var ribbon = CreateRibbon(new Ribbon { Menu = menu });
+        var window = new Window
+        {
+            Width = 700,
+            Height = 320,
+            Content = ribbon
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            var popup = menu.GetVisualDescendants().OfType<Popup>().Single();
+
+            menu.IsMenuOpen = true;
+            Dispatcher.UIThread.RunJobs();
+
+            var menuRoot = Assert.IsType<Border>(popup.Child);
+            var section = menuRoot.GetVisualDescendants()
+                .OfType<ItemsControl>()
+                .Single(control => control.Name == "RecentDocumentsSection");
+
+            Assert.Empty(menu.RecentDocuments);
+            Assert.False(section.IsVisible);
+
+            menu.RecentDocuments.Add(new RibbonRecentDocument { Title = "Document" });
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.True(section.IsVisible);
+            var heading = section.GetVisualDescendants()
+                .OfType<TextBlock>()
+                .Single(control => control.Text == "Recent");
+            var separator = section.GetVisualDescendants().OfType<Separator>().Single();
+            var headingPosition = heading.TranslatePoint(default, section);
+            var separatorPosition = separator.TranslatePoint(default, section);
+
+            Assert.Equal(FontWeight.Normal, heading.FontWeight);
+            Assert.NotNull(headingPosition);
+            Assert.NotNull(separatorPosition);
+            Assert.True(separatorPosition.Value.Y < headingPosition.Value.Y);
+
+            menu.RecentDocuments.Clear();
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.False(section.IsVisible);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonMenu_ToggleOpensWithBottomDockedItemAddedAfterInitialEmptyTemplate()
+    {
+        EnsureStyles();
+        var menu = new RibbonMenu
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top
+        };
+        var window = new Window
+        {
+            Width = 700,
+            Height = 320,
+            Content = menu
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.Empty(menu.BottomDockedGroupedItems);
+            var exitItem = new RibbonMenuItem
+            {
+                Header = "Exit",
+                IsBottomDocked = true
+            };
+            menu.Items.Add(exitItem);
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.Contains(exitItem, menu.BottomDockedGroupedItems.SelectMany(group => group));
+            var popup = menu.GetVisualDescendants().OfType<Popup>().Single();
+            var contentButton = menu.GetVisualDescendants()
+                .OfType<ToggleButton>()
+                .Single(control => control.Name == "ContentButton");
+            var clickCount = 0;
+            contentButton.Click += (_, _) => clickCount++;
+            var peer = ControlAutomationPeer.CreatePeerForElement(contentButton);
+            var toggleProvider = Assert.IsAssignableFrom<IToggleProvider>(peer.GetProvider<IToggleProvider>());
+
+            toggleProvider.Toggle();
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.Equal(1, clickCount);
+            Assert.True(menu.IsMenuOpen);
+            Assert.True(popup.IsOpen);
+            Assert.False(popup.ShouldUseOverlayLayer);
+            var menuRoot = Assert.IsType<Border>(popup.Child);
+            Assert.Contains(exitItem, menuRoot.GetVisualDescendants().OfType<RibbonMenuItem>());
         }
         finally
         {
@@ -147,6 +503,8 @@ public class RibbonIntegrationRegressionTests
             Tabs = new ObservableCollection<Control> { tab }
         };
         var toolbar = new QuickAccessToolbar();
+        toolbar.Resources["QuickAccessButtonMinWidth"] = 32d;
+        toolbar.Resources["QuickAccessButtonHeight"] = 28d;
         var window = new Window
         {
             Width = 600,
@@ -171,6 +529,32 @@ public class RibbonIntegrationRegressionTests
             Assert.Contains(toolbar.GetVisualDescendants().OfType<Border>(),
                 border => border.Width == 1 &&
                           border.BorderBrush?.ToString() == toolbar.Foreground?.ToString());
+            var quickAccessButtons = toolbar.GetVisualDescendants()
+                .OfType<Button>()
+                .Where(control => control.Classes.Contains("quickAccessButton"))
+                .ToArray();
+            Assert.Equal(2, quickAccessButtons.Length);
+            Assert.All(quickAccessButtons, control =>
+            {
+                Assert.Equal(32d, control.MinWidth);
+                Assert.Equal(28d, control.Height);
+                Assert.Equal(new Thickness(0), control.Padding);
+                Assert.Equal(new Thickness(0), control.BorderThickness);
+                Assert.Equal(Brushes.Transparent, control.Background);
+                Assert.Equal(Brushes.Transparent, control.BorderBrush);
+            });
+
+            var quickAccessItems = toolbar.GetVisualDescendants().OfType<QuickAccessItem>().ToArray();
+            var buttonSeparator = quickAccessItems.Single(item => ReferenceEquals(item.Item, button))
+                .GetVisualDescendants()
+                .OfType<Border>()
+                .Single(control => control.Name == "PART_Separator");
+            var toggleSeparator = quickAccessItems.Single(item => ReferenceEquals(item.Item, toggle))
+                .GetVisualDescendants()
+                .OfType<Border>()
+                .Single(control => control.Name == "PART_Separator");
+            Assert.True(buttonSeparator.IsVisible);
+            Assert.False(toggleSeparator.IsVisible);
 
             var moreButton = toolbar.GetVisualDescendants()
                 .OfType<ToggleButton>()
@@ -235,5 +619,18 @@ public class RibbonIntegrationRegressionTests
             Source = new Uri("avares://AvaloniaUI.Ribbon.Desktop/Styles/Fluent/AvaloniaRibbon.axaml")
         });
         _styledApplication = application;
+    }
+
+    private sealed class CallbackCommand(Action execute) : ICommand
+    {
+        public event EventHandler? CanExecuteChanged
+        {
+            add { }
+            remove { }
+        }
+
+        public bool CanExecute(object? parameter) => true;
+
+        public void Execute(object? parameter) => execute();
     }
 }

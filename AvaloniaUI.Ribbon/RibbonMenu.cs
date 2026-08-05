@@ -109,6 +109,7 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     public RibbonMenu()
     {
         RecentDocumentClickCommand = new RelayCommand(ExecuteRecentDocumentCommand);
+        Items.CollectionChanged += ItemsCollectionChanged;
     }
 
     // Public getter and setter for TopDockedGroupedItems
@@ -380,6 +381,7 @@ public sealed class RibbonMenu : ItemsControl, IRibbonMenu
     // Handles collection changes for the items
     private void ItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        UpdateGroupedItems();
         ResetItemHoverEvents();
     }
 
