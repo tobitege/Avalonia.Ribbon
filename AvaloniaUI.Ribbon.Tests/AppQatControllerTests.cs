@@ -121,6 +121,22 @@ public class AppQatControllerTests
     }
 
     [Fact]
+    public void IdOnlyItem_RoundTripsWithoutControlName()
+    {
+        const string itemId = "462C5AF2-165A-450E-BB06-23FA02923D3C";
+        var store = new InMemoryRibbonSettingsStore();
+        var first = CreateIdOnlyFixture(store, itemId);
+        first.Ribbon.Qat.Items.Add(first.Item);
+        first.Controller.Save();
+
+        var restarted = CreateIdOnlyFixture(store, itemId);
+        restarted.Controller.Load();
+
+        Assert.Equal(itemId, store.Read(Address("Qat")));
+        Assert.Same(restarted.Item, Assert.Single(restarted.Ribbon.Qat.Items));
+    }
+
+    [Fact]
     public void OptedOutItem_CannotBeAddedByQatCustomization()
     {
         var toolbar = new QuickAccessToolbar();
@@ -182,5 +198,26 @@ public class AppQatControllerTests
         return new RibbonSettingsAddress("tenant", "RibbonBar", "user", section, "app");
     }
 
+    private static IdOnlyFixture CreateIdOnlyFixture(IRibbonSettingsStore store, string itemId)
+    {
+        var ribbon = new Ribbon();
+        var tab = RibbonBuilder.InsertOrAddTab(ribbon, "Home", "Home");
+        var group = RibbonBuilder.InsertOrAddGroup(tab, "Edit", "Edit");
+        var item = new RibbonButton();
+        RibbonItem.SetId(item, itemId);
+        group.Items.Add(item);
+        var controller = new AppQatController(
+            ribbon,
+            store,
+            static () => "tenant",
+            static () => "user",
+            "app",
+            new RibbonQatOwnership(static () => null),
+            Array.Empty<string>());
+        return new IdOnlyFixture(ribbon, item, controller);
+    }
+
     private sealed record Fixture(Ribbon Ribbon, AppQatController Controller);
+
+    private sealed record IdOnlyFixture(Ribbon Ribbon, RibbonButton Item, AppQatController Controller);
 }

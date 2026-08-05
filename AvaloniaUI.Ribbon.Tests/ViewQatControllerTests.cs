@@ -90,16 +90,38 @@ public class ViewQatControllerTests
     [Fact]
     public void QuickStartDefinition_AppendsGeneratedItemOnce()
     {
+        const string itemId = "462C5AF2-165A-450E-BB06-23FA02923D3C";
         var store = new InMemoryRibbonSettingsStore();
         var item = new RibbonButton();
         var fixture = CreateFixture(store, item);
-        var definition = new RibbonItemDefinition("Function", "Function", QuickStart: true);
+        var definition = new RibbonItemDefinition(itemId, "Function", QuickStart: true);
 
         fixture.Controller.AddGeneratedItem(item, definition);
         fixture.Controller.AddGeneratedItem(item, definition);
 
-        Assert.Equal("Function", item.Name);
+        Assert.Null(item.Name);
+        Assert.Equal(itemId, RibbonItem.GetId(item));
         Assert.Single(fixture.Ribbon.Qat.Items, candidate => ReferenceEquals(candidate, item));
+    }
+
+    [Fact]
+    public void IdOnlyViewItem_RoundTripsWithoutControlName()
+    {
+        const string itemId = "462C5AF2-165A-450E-BB06-23FA02923D3C";
+        var store = new InMemoryRibbonSettingsStore();
+        var firstItem = new RibbonButton();
+        RibbonItem.SetId(firstItem, itemId);
+        var first = CreateFixture(store, firstItem);
+        first.Ribbon.Qat.Items.Add(firstItem);
+        first.Controller.Save("View");
+
+        var restartedItem = new RibbonButton();
+        RibbonItem.SetId(restartedItem, itemId);
+        var restarted = CreateFixture(store, restartedItem);
+        restarted.Controller.Load("View");
+
+        Assert.Equal(itemId, store.Read(Address("View")));
+        Assert.Same(restartedItem, Assert.Single(restarted.Ribbon.Qat.Items));
     }
 
     private static Fixture CreateFixture(InMemoryRibbonSettingsStore store, params RibbonButton[] viewItems)

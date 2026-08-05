@@ -58,6 +58,21 @@ public class RibbonFeatureFoundationTests
     }
 
     [Fact]
+    public void Lookup_FindsIdOnlyItemWithNonNameIdentifier()
+    {
+        const string itemId = "462C5AF2-165A-450E-BB06-23FA02923D3C";
+        var ribbon = new Ribbon();
+        var tab = RibbonBuilder.InsertOrAddTab(ribbon, "Home", "Home");
+        var group = RibbonBuilder.InsertOrAddGroup(tab, "Edit", "Edit");
+        var item = new RibbonButton();
+        RibbonItem.SetId(item, itemId);
+        group.Items.Add(item);
+
+        Assert.Null(item.Name);
+        Assert.Same(item, ribbon.GetItemByName(itemId));
+    }
+
+    [Fact]
     public void Ribbon_ExposesRequiredStateThroughSingleCanonicalValues()
     {
         var ribbon = new Ribbon();

@@ -1,4 +1,4 @@
-<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<Styles.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -35,6 +35,7 @@
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/KeyTip.axaml" />
 	<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/RibbonContextualTabGroup.axaml" />
 
+    <StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/Controls/Ribbon.axaml" />
     <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Fluent/Controls/Ribbon.axaml" />
     <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Fluent/Controls/RibbonWindow.axaml" />
     <StyleInclude Source="avares://AvaloniaUI.Ribbon.Desktop/Styles/Fluent/Controls/QuickAccessToolbar.axaml" />

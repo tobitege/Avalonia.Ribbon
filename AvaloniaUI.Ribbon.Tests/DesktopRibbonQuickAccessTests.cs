@@ -1,4 +1,5 @@
-using System.Linq;
+﻿using System.Linq;
+using Avalonia.Automation;
 using Avalonia.Controls;
 using AvaloniaUI.Ribbon.Contracts;
 using AvaloniaUI.Ribbon.Desktop;
@@ -65,8 +66,11 @@ public class DesktopRibbonQuickAccessTests
     {
         var first = CreateQuickAccessButton("First");
         var second = CreateQuickAccessButton("Second");
-        QuickAccessToolbar.SetPersistenceId((Avalonia.AvaloniaObject)first, "first");
+        RibbonItem.SetId((Avalonia.AvaloniaObject)first, "first");
         QuickAccessToolbar.SetPersistenceId((Avalonia.AvaloniaObject)second, "second");
+
+        Assert.Same(RibbonItem.IdProperty, QuickAccessToolbar.PersistenceIdProperty);
+        Assert.Equal("second", RibbonItem.GetId((Avalonia.AvaloniaObject)second));
 
         var provider = new TestPersistenceProvider(new[] { "second", "first" });
         var toolbar = new QuickAccessToolbar
@@ -85,6 +89,23 @@ public class DesktopRibbonQuickAccessTests
 
         Assert.Equal("main", provider.SavedKey);
         Assert.Equal(new[] { "first" }, provider.SavedItemIds);
+    }
+
+    [Fact]
+    public void QuickAccessRecommendation_UsesReadableLabelInsteadOfControlTypeName()
+    {
+        var controlContent = new TextBlock { Text = "Measured content" };
+        var item = new RibbonButton { Content = controlContent };
+        AutomationProperties.SetName(item, "Automation label");
+        var recommendation = new QuickAccessRecommendation { Item = item };
+
+        Assert.Equal("Automation label", recommendation.DisplayLabel);
+
+        ToolTip.SetTip(item, "Tooltip label");
+        Assert.Equal("Tooltip label", recommendation.DisplayLabel);
+
+        recommendation.Label = "Explicit label";
+        Assert.Equal("Explicit label", recommendation.DisplayLabel);
     }
 
     private static ICanAddToQuickAccess CreateQuickAccessButton(string content)

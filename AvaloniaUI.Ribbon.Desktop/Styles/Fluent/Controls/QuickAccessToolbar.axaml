@@ -5,14 +5,11 @@
     xmlns:windows="clr-namespace:AvaloniaUI.Ribbon.Desktop;assembly=AvaloniaUI.Ribbon.Desktop"
     x:DataType="QuickAccessToolbar">
     <Styles.Resources>
-        <!-- Office-style QAT states on colored title bars: low-alpha white overlays
-             (cf. Krypton M365 RibbonQATMini4/5), no accent fill. -->
-        <SolidColorBrush x:Key="QuickAccessMoreButtonHoverBrush" Color="#26FFFFFF" />
-        <SolidColorBrush x:Key="QuickAccessMoreButtonPressedBrush" Color="#40FFFFFF" />
+        <x:Double x:Key="QuickAccessToolbarHeight">30</x:Double>
     </Styles.Resources>
     <Style Selector="local|QuickAccessToolbar">
-        <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-        <Setter Property="Height" Value="30" />
+        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+        <Setter Property="Height" Value="{DynamicResource QuickAccessToolbarHeight}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0" />
@@ -95,7 +92,7 @@
                                 </ContextMenu.Styles>
                                 <ContextMenu.DataTemplates>
                                     <DataTemplate DataType="{x:Type QuickAccessRecommendation}">
-                                        <TextBlock Text="{Binding Item.Content}" />
+                                        <TextBlock Text="{Binding DisplayLabel}" />
                                     </DataTemplate>
                                 </ContextMenu.DataTemplates>
                             </ContextMenu>
@@ -137,18 +134,33 @@
     </Style>
     <Style
         Selector="local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource QuickAccessMoreButtonHoverBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
         <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
     <Style
         Selector="local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource QuickAccessMoreButtonPressedBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListMediumBrush}" />
         <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
     <Style
         Selector="local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:checked /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource QuickAccessMoreButtonPressedBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListMediumBrush}" />
         <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style Selector="windows|RibbonWindow local|QuickAccessToolbar">
+        <Setter Property="Foreground" Value="{Binding $parent[RibbonWindow].TitleBarForeground}" />
+    </Style>
+    <Style
+        Selector="windows|RibbonWindow local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#26FFFFFF" />
+    </Style>
+    <Style
+        Selector="windows|RibbonWindow local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#40FFFFFF" />
+    </Style>
+    <Style
+        Selector="windows|RibbonWindow local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#40FFFFFF" />
     </Style>
     <Style
         Selector="windows|RibbonWindow local|QuickAccessToolbar /template/ ToggleButton#PART_MoreButton">
@@ -170,7 +182,7 @@
                     <TemplatedControl
                         Grid.Column="0"
                         DataContext="{TemplateBinding Item}"
-                        Foreground="{Binding $parent[RibbonWindow].TitleBarForeground}"
+                        Foreground="{TemplateBinding Foreground}"
                         Template="{Binding Item.QuickAccessTemplate, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                         <TemplatedControl.ContextMenu>
                             <ContextMenu>
@@ -187,7 +199,7 @@
                         Padding="0"
                         HorizontalAlignment="Center"
                         Background="Transparent"
-                        BorderBrush="{Binding $parent[RibbonWindow].TitleBarForeground}"
+                        BorderBrush="{TemplateBinding Foreground}"
                         BorderThickness="1"
                         Opacity="0.5" />
                 </Grid>

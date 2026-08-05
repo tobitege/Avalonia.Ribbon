@@ -25,7 +25,7 @@ public sealed class RibbonItemLookup
     public static RibbonGroupBox? FindGroup(RibbonTab tab, string name)
     {
         ArgumentNullException.ThrowIfNull(tab);
-        return tab.Groups.FirstOrDefault(group => HasName(group, name));
+        return tab.Groups.FirstOrDefault(group => HasIdentity(group, name));
     }
 
     public static T? FindItem<T>(RibbonGroupBox group, string name) where T : Control
@@ -35,7 +35,7 @@ public sealed class RibbonItemLookup
         return EnumerateOwnedControls(group)
             .Skip(1)
             .OfType<T>()
-            .FirstOrDefault(item => HasName(item, name));
+            .FirstOrDefault(item => HasIdentity(item, name));
     }
 
     public T? GetItem<T>(string name) where T : Control
@@ -43,7 +43,7 @@ public sealed class RibbonItemLookup
         if (string.IsNullOrWhiteSpace(name))
             return null;
 
-        return EnumerateItems().OfType<T>().FirstOrDefault(item => HasName(item, name));
+        return EnumerateItems().OfType<T>().FirstOrDefault(item => HasIdentity(item, name));
     }
 
     public bool SetItemState(string name, bool? visible, bool? enabled)
@@ -209,9 +209,9 @@ public sealed class RibbonItemLookup
         return -1;
     }
 
-    private static bool HasName(Control control, string name)
+    private static bool HasIdentity(Control control, string identity)
     {
-        return !string.IsNullOrWhiteSpace(name) && string.Equals(control.Name, name, StringComparison.Ordinal);
+        return RibbonItem.HasIdentity(control, identity);
     }
 }
 
@@ -221,6 +221,6 @@ public static class RibbonCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(controls);
         return !string.IsNullOrWhiteSpace(name) &&
-               controls.Any(control => string.Equals(control.Name, name, StringComparison.Ordinal));
+               controls.Any(control => RibbonItem.HasIdentity(control, name));
     }
 }

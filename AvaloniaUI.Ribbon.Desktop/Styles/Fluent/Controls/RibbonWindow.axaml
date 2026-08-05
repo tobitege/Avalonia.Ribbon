@@ -121,30 +121,7 @@
                                     x:Name="PART_RibbonPresenter"
                                     VerticalAlignment="Top"
                                     DockPanel.Dock="Top"
-                                    Content="{TemplateBinding Ribbon}">
-                                    <Interaction.Behaviors>
-                                        <DataTriggerBehavior
-                                            Binding="{Binding Ribbon.Orientation, RelativeSource={RelativeSource TemplatedParent}}"
-                                            ComparisonCondition="Equal" Value="{x:Static Orientation.Horizontal}">
-                                            <ChangePropertyAction TargetObject="{Binding #PART_RibbonPresenter}"
-                                                                  PropertyName="DockPanel.Dock"
-                                                                  Value="{x:Static Dock.Top}" />
-                                            <ChangePropertyAction TargetObject="{Binding #PART_RibbonPresenter}"
-                                                                  PropertyName="VerticalAlignment"
-                                                                  Value="{x:Static VerticalAlignment.Top}" />
-                                        </DataTriggerBehavior>
-                                        <DataTriggerBehavior
-                                            Binding="{Binding Ribbon.Orientation, RelativeSource={RelativeSource TemplatedParent}}"
-                                            ComparisonCondition="Equal" Value="{x:Static Orientation.Vertical}">
-                                            <ChangePropertyAction TargetObject="{Binding #PART_RibbonPresenter}"
-                                                                  PropertyName="DockPanel.Dock"
-                                                                  Value="{x:Static Dock.Left}" />
-                                            <ChangePropertyAction TargetObject="{Binding #PART_RibbonPresenter}"
-                                                                  PropertyName="VerticalAlignment"
-                                                                  Value="{x:Static VerticalAlignment.Stretch}" />
-                                        </DataTriggerBehavior>
-                                    </Interaction.Behaviors>
-                                </ContentPresenter>
+                                    Content="{TemplateBinding Ribbon}" />
                                 <ContentPresenter
                                     Name="PART_ContentPresenter"
                                     Margin="{TemplateBinding Padding}"
@@ -195,6 +172,15 @@
                 </Panel>
             </ControlTemplate>
         </Setter>
+    </Style>
+
+    <Style Selector="windows|RibbonWindow[Orientation=Horizontal] /template/ ContentPresenter#PART_RibbonPresenter">
+        <Setter Property="DockPanel.Dock" Value="Top" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+    <Style Selector="windows|RibbonWindow[Orientation=Vertical] /template/ ContentPresenter#PART_RibbonPresenter">
+        <Setter Property="DockPanel.Dock" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
     </Style>
 
     <Style Selector="windows|RibbonWindow[WindowDecorations=Full] /template/ Border#PART_TitleBar">

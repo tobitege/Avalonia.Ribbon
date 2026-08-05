@@ -75,7 +75,7 @@ public sealed class AppQatController
 
         var names = _ribbon.Qat.Items
             .Where(item => !_ownership.IsViewOwned(item))
-            .Select(GetItemName)
+            .Select(GetItemIdentity)
             .Where(name => !string.IsNullOrWhiteSpace(name));
         var qatValue = string.Join(';', names);
         _settings.Write(qatAddress, qatValue.Length == 0 ? " " : qatValue);
@@ -134,8 +134,8 @@ public sealed class AppQatController
         return new RibbonSettingsAddress(tenant, Area, user, section, _applicationId);
     }
 
-    private static string? GetItemName(ICanAddToQuickAccess item)
+    private static string? GetItemIdentity(ICanAddToQuickAccess item)
     {
-        return (item as Control)?.Name;
+        return item is Control control ? RibbonItem.GetIdentity(control) : null;
     }
 }

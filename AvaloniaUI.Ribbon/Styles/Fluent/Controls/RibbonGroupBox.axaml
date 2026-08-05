@@ -74,42 +74,15 @@
 				<DockPanel Background="{TemplateBinding Background}" LastChildFill="True">
 					<Border
                         x:Name="VerticalSeparator"
+                        IsVisible="True"
                         Height="{StaticResource LargeControlHeight}"
                         Margin="4,0"
                         BorderBrush="{DynamicResource SystemControlHighlightAltBaseLowBrush}"
                         BorderThickness="0.5"
-                        DockPanel.Dock="Right">
-						<Interaction.Behaviors>
-							<DataTriggerBehavior
-                                Binding="{Binding $parent[Ribbon].Orientation}"
-                                ComparisonCondition="Equal"
-                                Value="{x:Static Orientation.Vertical}">
-								<ChangePropertyAction
-                                    PropertyName="IsVisible"
-                                    TargetObject="VerticalSeparator"
-                                    Value="{x:False}" />
-								<ChangePropertyAction
-                                    PropertyName="IsVisible"
-                                    TargetObject="HorizontalSeparator"
-                                    Value="{x:True}" />
-							</DataTriggerBehavior>
-							<DataTriggerBehavior
-                                Binding="{Binding $parent[Ribbon].Orientation}"
-                                ComparisonCondition="Equal"
-                                Value="{x:Static Orientation.Horizontal}">
-								<ChangePropertyAction
-                                    PropertyName="IsVisible"
-                                    TargetObject="VerticalSeparator"
-                                    Value="{x:True}" />
-								<ChangePropertyAction
-                                    PropertyName="IsVisible"
-                                    TargetObject="HorizontalSeparator"
-                                    Value="{x:False}" />
-							</DataTriggerBehavior>
-						</Interaction.Behaviors>
-					</Border>
+                        DockPanel.Dock="Right" />
 					<Border
                         x:Name="HorizontalSeparator"
+                        IsVisible="False"
                         Margin="10,4"
                         HorizontalAlignment="Stretch"
                         BorderBrush="{DynamicResource SystemControlHighlightAltBaseLowBrush}"
@@ -188,6 +161,18 @@
 		<Setter Property="HorizontalAlignment" Value="Right" />
 		<Setter Property="VerticalAlignment" Value="Stretch" />
 		<Setter Property="Margin" Value="0,4" />
+	</Style>
+	<Style Selector="local|Ribbon[Orientation=Horizontal] local|RibbonGroupBox /template/ Border#VerticalSeparator">
+		<Setter Property="IsVisible" Value="True" />
+	</Style>
+	<Style Selector="local|Ribbon[Orientation=Horizontal] local|RibbonGroupBox /template/ Border#HorizontalSeparator">
+		<Setter Property="IsVisible" Value="False" />
+	</Style>
+	<Style Selector="local|Ribbon[Orientation=Vertical] local|RibbonGroupBox /template/ Border#VerticalSeparator">
+		<Setter Property="IsVisible" Value="False" />
+	</Style>
+	<Style Selector="local|Ribbon[Orientation=Vertical] local|RibbonGroupBox /template/ Border#HorizontalSeparator">
+		<Setter Property="IsVisible" Value="True" />
 	</Style>
 	<Style Selector="local|Ribbon[Orientation=Vertical] local|RibbonGroupBox /template/ Rectangle#Separator">
 		<Setter Property="HorizontalAlignment" Value="Stretch" />

@@ -67,7 +67,7 @@ public sealed class ViewQatController
 
         var names = _ownership.EnumerateViewItems()
             .Where(item => _ribbon.Qat.Items.Contains(item))
-            .Select(GetItemName)
+            .Select(GetItemIdentity)
             .Where(name => !string.IsNullOrWhiteSpace(name));
         _settings.Write(address, string.Join(';', names));
     }
@@ -81,7 +81,7 @@ public sealed class ViewQatController
     public void Stash()
     {
         _stash = _ribbon.Qat.Items
-            .Select(item => new StashedItem(GetItemName(item), item))
+            .Select(item => new StashedItem(GetItemIdentity(item), item))
             .ToArray();
     }
 
@@ -122,10 +122,11 @@ public sealed class ViewQatController
         if (item is not Control control)
             throw new ArgumentException("Generated QAT items must be controls.", nameof(item));
 
-        if (string.IsNullOrWhiteSpace(control.Name))
-            control.Name = definition.Name;
-        else if (!string.Equals(control.Name, definition.Name, StringComparison.Ordinal))
-            throw new ArgumentException("The item definition name must match the generated control name.", nameof(definition));
+        var identity = RibbonItem.GetIdentity(control);
+        if (string.IsNullOrWhiteSpace(identity))
+            RibbonItem.SetId(control, definition.Name);
+        else if (!string.Equals(identity, definition.Name, StringComparison.Ordinal))
+            throw new ArgumentException("The item definition name must match the generated control identity.", nameof(definition));
 
         if (definition.QuickStart && item.CanAddToQuickAccess && !_ribbon.Qat.Items.Contains(item))
             _ribbon.Qat.Items.Add(item);
@@ -135,8 +136,8 @@ public sealed class ViewQatController
     {
         foreach (var item in _ribbon.Qat.Items.ToArray())
         {
-            var name = GetItemName(item);
-            var resolved = string.IsNullOrWhiteSpace(name) ? null : _ribbon.GetItemByName(name);
+            var identity = GetItemIdentity(item);
+            var resolved = string.IsNullOrWhiteSpace(identity) ? null : _ribbon.GetItemByName(identity);
             if (ReferenceEquals(resolved, item))
                 continue;
 
@@ -148,10 +149,10 @@ public sealed class ViewQatController
 
     private ICanAddToQuickAccess? ResolveStashedItem(StashedItem entry)
     {
-        if (string.IsNullOrWhiteSpace(entry.Name))
+        if (string.IsNullOrWhiteSpace(entry.Identity))
             return entry.Item;
 
-        return _ribbon.GetItemByName(entry.Name) as ICanAddToQuickAccess;
+        return _ribbon.GetItemByName(entry.Identity) as ICanAddToQuickAccess;
     }
 
     private bool TryCreateAddress(string? viewName, out RibbonSettingsAddress address)
@@ -173,10 +174,10 @@ public sealed class ViewQatController
         return true;
     }
 
-    private static string? GetItemName(ICanAddToQuickAccess item)
+    private static string? GetItemIdentity(ICanAddToQuickAccess item)
     {
-        return (item as Control)?.Name;
+        return item is Control control ? RibbonItem.GetIdentity(control) : null;
     }
 
-    private sealed record StashedItem(string? Name, ICanAddToQuickAccess Item);
+    private sealed record StashedItem(string? Identity, ICanAddToQuickAccess Item);
 }

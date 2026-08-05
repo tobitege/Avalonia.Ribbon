@@ -152,10 +152,16 @@ Customization:
 `QuickAccessToolbar.AvailableItems` registers the complete set of commands that can be resolved when
 persisted state is restored or presented by an application-specific configuration dialog.
 
-Set `QuickAccessToolbar.PersistenceId` on every persistable ribbon command. Assign an
+Set the core `RibbonItem.Id` attached property on every persistable ribbon command. It accepts stable
+identifiers that are not valid control names, including GUIDs. `QuickAccessToolbar.PersistenceId` remains
+an alias of the same property for existing desktop markup. Assign an
 `IQuickAccessToolbarPersistenceProvider` and a `PersistenceKey` to load and save the ordered selection.
 `JsonQuickAccessToolbarPersistenceProvider` is the built-in file-based provider. Applications can supply
 another provider for their settings system.
+
+Set `QuickAccessRecommendation.Label` when a recommendation needs an explicit caption. Without one, the
+toolbar resolves a caption from the command tooltip, string content, automation name, or stable ID. Override
+the `QuickAccessToolbarHeight` resource to adapt the default height of 30 to an application density.
 
 `MoreCommandsCommand` and `MoreCommandsCommandParameter` connect the "More commands..." menu item to an
 application-specific dialog. The menu item is hidden while no command is assigned. The library

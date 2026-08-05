@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,6 +9,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using AvaloniaUI.Ribbon;
 using AvaloniaUI.Ribbon.Contracts;
 
 namespace AvaloniaUI.Ribbon.Desktop;
@@ -32,12 +33,12 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
 
     public static string? GetPersistenceId(AvaloniaObject element)
     {
-        return element.GetValue(PersistenceIdProperty);
+        return RibbonItem.GetId(element);
     }
 
     public static void SetPersistenceId(AvaloniaObject element, string? value)
     {
-        element.SetValue(PersistenceIdProperty, value);
+        RibbonItem.SetId(element, value);
     }
 
     public bool AddItem(ICanAddToQuickAccess? item)
@@ -210,7 +211,7 @@ public class QuickAccessToolbar : ItemsControl, INotifyPropertyChanged //, IKeyT
         AvaloniaProperty.RegisterAttached<QuickAccessToolbar, MenuItem, bool>("IsChecked");
 
     public static readonly AttachedProperty<string?> PersistenceIdProperty =
-        AvaloniaProperty.RegisterAttached<QuickAccessToolbar, AvaloniaObject, string?>("PersistenceId");
+        RibbonItem.IdProperty;
 
     public static readonly DirectProperty<QuickAccessToolbar, bool> ShowOverflowButtonProperty =
         AvaloniaProperty.RegisterDirect<QuickAccessToolbar, bool>(nameof(ShowOverflowButton),
