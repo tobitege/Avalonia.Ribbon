@@ -375,13 +375,16 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ### Update (2026-08-05)
 
-- Bump package and app versions to `2026.8.5`.
+- Bump package and app versions to `2026.8.5.2`.
 - Replace library-template `ChangePropertyAction` usage with static orientation selectors, avoiding assembly-wide type scans during `RibbonWindow` startup and removing the unused behavior dependencies from the library packages.
 - Include the core `Ribbon` control template in the desktop style collection so `Ribbon` and `DesktopRibbon` render correctly in the same application.
 - Fix `RibbonButton` and `RibbonToggleButton` Quick Access templates so their `QuickAccessIcon` values render, and provide readable recommendation captions instead of control type names.
 - Make Quick Access foregrounds, separators, and hover/pressed states readable both inside a `RibbonWindow` title bar and in ordinary ribbon hosts.
 - Expose the `QuickAccessToolbarHeight` resource so applications can adapt the default height to their UI density.
 - Add the core `RibbonItem.Id` attached property for GUID-safe lookup and App/View QAT persistence; `QuickAccessToolbar.PersistenceId` remains an alias of the same property.
+- Keep the File menu anchored to the window's current position and allow dynamically added bottom-docked entries to open normally.
+- Make File menu spacing, back-button colors, recent-document visibility, and text sizing consistent with the active theme.
+- Make Quick Access button dimensions overridable, use flat button styling, hide the final separator, and wire the Flowery Exit command.
 
 ### Update (2026-08-04)
 
