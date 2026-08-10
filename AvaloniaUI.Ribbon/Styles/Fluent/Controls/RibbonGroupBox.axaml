@@ -225,53 +225,10 @@
 		<Setter Property="Background" Value="{DynamicResource ThemeControlMidBrush}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
 	</Style>
-	<Style Selector="local|RibbonGroupBox[IsCollapsedToPopup=True]">
+	<Style Selector="local|RibbonGroupBox[DisplayMode=Popup]">
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Border
-                    Width="30"
-                    Height="{StaticResource LargeControlHeight}"
-                    Margin="2"
-                    Padding="3"
-                    Background="{DynamicResource ThemeControlMidBrush}"
-                    BorderBrush="{DynamicResource ThemeBorderMidBrush}"
-                    BorderThickness="{DynamicResource ThemeBorderThickness}"
-                    CornerRadius="{DynamicResource ControlCornerRadius}">
-					<Grid>
-						<ToggleButton
-                            x:Name="PART_CollapsedPopupButton"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            IsChecked="False">
-							<Path
-                                Width="8"
-                                Height="6"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Data="M 0 0 L 4 4 L 8 0"
-                                Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                StrokeThickness="1" />
-						</ToggleButton>
-						<Popup
-                            IsLightDismissEnabled="True"
-                            IsOpen="{Binding IsChecked, ElementName=PART_CollapsedPopupButton, Mode=TwoWay}"
-                            Placement="Bottom"
-                            PlacementTarget="{Binding #PART_CollapsedPopupButton}">
-							<Border
-                                MinWidth="180"
-                                Padding="8"
-                                Background="{DynamicResource ThemeControlHighBrush}"
-                                BorderBrush="{DynamicResource ThemeBorderMidBrush}"
-                                BorderThickness="{DynamicResource ThemeBorderThickness}">
-								<StackPanel Spacing="4">
-									<TextBlock FontWeight="SemiBold" Text="{TemplateBinding Header}" />
-									<Separator />
-									<ItemsPresenter />
-								</StackPanel>
-							</Border>
-						</Popup>
-					</Grid>
-				</Border>
+				<Border Width="0" Height="0" IsHitTestVisible="False" />
 			</ControlTemplate>
 		</Setter>
 	</Style>

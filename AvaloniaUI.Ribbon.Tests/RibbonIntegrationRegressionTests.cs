@@ -59,6 +59,77 @@ public class RibbonIntegrationRegressionTests
     }
 
     [Fact]
+    public void DesktopRibbonOverflow_RendersAndOpensSharedPopupInRibbonWindow()
+    {
+        EnsureStyles();
+
+        var groups = Enumerable.Range(1, 4)
+            .Select(index =>
+            {
+                var group = new RibbonGroupBox
+                {
+                    Header = $"Group {index}",
+                    Width = 180,
+                    AllowCollapsedPopup = true
+                };
+                group.Items.Add(new RibbonButton { Content = $"Action {index}" });
+                return group;
+            })
+            .ToArray();
+        var tab = new RibbonTab { Header = "Home" };
+        foreach (var group in groups)
+            tab.Groups.Add(group);
+
+        var ribbon = new OverflowTestDesktopRibbon
+        {
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1,
+            SelectedIndex = 0,
+            Tabs = new ObservableCollection<Control> { tab }
+        };
+        var window = new RibbonWindow
+        {
+            Width = 320,
+            Height = 300,
+            Ribbon = ribbon
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+
+            var panel = ribbon.GetVisualDescendants()
+                .OfType<RibbonGroupsStackPanel>()
+                .Single(control => control.Children.Count > 0);
+            var overflowGroups = groups
+                .Where(group => group.DisplayMode == GroupDisplayMode.Popup)
+                .ToArray();
+            Assert.NotEmpty(overflowGroups);
+            Assert.Same(ribbon, panel.OverflowOwner);
+            Assert.True(ribbon.HasGroupOverflow);
+            var overflowButton = ribbon.GroupOverflowButton;
+            var overflowPopup = ribbon.GroupOverflowPopup;
+            Assert.NotNull(overflowButton);
+            Assert.NotNull(overflowPopup);
+            Assert.True(overflowButton.Bounds.Width > 0);
+
+            overflowButton.IsChecked = true;
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.True(overflowPopup.IsOpen);
+            Assert.NotNull(overflowPopup.Child);
+            var overflowItemsControl = ribbon.GroupOverflowGroups;
+            Assert.NotNull(overflowItemsControl);
+            Assert.Equal(overflowGroups.Length, overflowItemsControl.ItemCount);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
     public void RibbonMenu_ReopensAgainstCurrentWindowAfterWindowMoves()
     {
         EnsureStyles();
@@ -604,6 +675,23 @@ public class RibbonIntegrationRegressionTests
         ribbon.Tabs = new ObservableCollection<Control> { tab };
         ribbon.SelectedIndex = 0;
         return ribbon;
+    }
+
+    private sealed class OverflowTestDesktopRibbon : DesktopRibbon
+    {
+        public ToggleButton? GroupOverflowButton { get; private set; }
+
+        public Popup? GroupOverflowPopup { get; private set; }
+
+        public ItemsControl? GroupOverflowGroups { get; private set; }
+
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            GroupOverflowButton = e.NameScope.Find<ToggleButton>("PART_GroupOverflowButton");
+            GroupOverflowPopup = e.NameScope.Find<Popup>("PART_GroupOverflowPopup");
+            GroupOverflowGroups = e.NameScope.Find<ItemsControl>("PART_GroupOverflowGroups");
+        }
     }
 
     private static void EnsureStyles()

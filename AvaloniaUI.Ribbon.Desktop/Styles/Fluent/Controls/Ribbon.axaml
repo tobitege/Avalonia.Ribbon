@@ -1,7 +1,8 @@
-<Styles
+﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:AvaloniaUI.Ribbon.Converters;assembly=AvaloniaUI.Ribbon"
+    xmlns:ribbon="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon"
     xmlns:windows="clr-namespace:AvaloniaUI.Ribbon.Desktop;assembly=AvaloniaUI.Ribbon.Desktop"
     xmlns:system="clr-namespace:System;assembly=netstandard">
     <Styles.Resources>
@@ -148,50 +149,136 @@
                                 Content="{TemplateBinding SelectedContent}"
                                 ContentTemplate="{TemplateBinding SelectedContentTemplate}"
                                 IsVisible="False" />
-                            <ContentControl Name="PART_GroupsPresenterHolder" HorizontalAlignment="Stretch"
-                                            HorizontalContentAlignment="Stretch"
-                                            Background="{DynamicResource SystemControlForegroundChromeMediumBrush}">
-                                <ItemsControl
-                                    Name="PART_SelectedGroupsHost"
-                                    MinHeight="96"
-                                    MinWidth="100"
-                                    Width="{Binding $parent[windows:DesktopRibbon].Bounds.Width}"
+                            <Grid>
+                                <ContentControl
+                                    Name="PART_GroupsPresenterHolder"
                                     HorizontalAlignment="Stretch"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    ItemsSource="{TemplateBinding SelectedGroups}"
-                                    TextBlock.Foreground="{TemplateBinding Foreground}">
-                                    <ItemsControl.ContextMenu>
-                                        <ContextMenu x:Name="PART_ContentAreaContextMenu">
-                                            <ContextMenu.Styles>
-                                                <Style Selector="MenuItem">
-                                                    <Setter Property="Template"
-                                                            Value="{DynamicResource CheckableMenuItemControlTemplate}" />
-                                                </Style>
-                                            </ContextMenu.Styles>
-                                            <MenuItem x:Name="PART_PinLastHoveredControlToQuickAccess"
-                                                      Header="{DynamicResource AvaloniaRibbon.AddToQAT}" />
-                                            <MenuItem
-                                                x:Name="PART_CollapseRibbon"
-                                                windows:QuickAccessToolbar.IsChecked="{Binding IsCollapsed, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                                Header="{DynamicResource AvaloniaRibbon.MinimizeRibbon}" />
-                                        </ContextMenu>
-                                    </ItemsControl.ContextMenu>
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <RibbonGroupsStackPanel
-                                                x:Name="PART_ItemsPanel"
-                                                Width="{Binding $parent[ItemsControl].Bounds.Width}"
-                                                Margin="0"
-                                                Background="{TemplateBinding Background}"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Stretch"
-                                                GroupOverflowBehavior="{Binding $parent[windows:DesktopRibbon].GroupOverflowBehavior}"
-                                                MaxGroupRows="{Binding $parent[windows:DesktopRibbon].MaxGroupRows}"
-                                                Orientation="Horizontal" />
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                </ItemsControl>
-                            </ContentControl>
+                                    HorizontalContentAlignment="Stretch"
+                                    Background="{DynamicResource SystemControlForegroundChromeMediumBrush}">
+                                    <ItemsControl
+                                        Name="PART_SelectedGroupsHost"
+                                        MinHeight="96"
+                                        MinWidth="100"
+                                        Width="{Binding $parent[windows:DesktopRibbon].Bounds.Width}"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        ItemsSource="{TemplateBinding SelectedGroups}"
+                                        TextBlock.Foreground="{TemplateBinding Foreground}">
+                                        <ItemsControl.ContextMenu>
+                                            <ContextMenu x:Name="PART_ContentAreaContextMenu">
+                                                <ContextMenu.Styles>
+                                                    <Style Selector="MenuItem">
+                                                        <Setter Property="Template"
+                                                                Value="{DynamicResource CheckableMenuItemControlTemplate}" />
+                                                    </Style>
+                                                </ContextMenu.Styles>
+                                                <MenuItem x:Name="PART_PinLastHoveredControlToQuickAccess"
+                                                          Header="{DynamicResource AvaloniaRibbon.AddToQAT}" />
+                                                <MenuItem
+                                                    x:Name="PART_CollapseRibbon"
+                                                    windows:QuickAccessToolbar.IsChecked="{Binding IsCollapsed, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                                    Header="{DynamicResource AvaloniaRibbon.MinimizeRibbon}" />
+                                            </ContextMenu>
+                                        </ItemsControl.ContextMenu>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <RibbonGroupsStackPanel
+                                                    x:Name="PART_ItemsPanel"
+                                                    Width="{Binding $parent[ItemsControl].Bounds.Width}"
+                                                    Margin="0"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch"
+                                                    Background="{TemplateBinding Background}"
+                                                    GroupOverflowBehavior="{Binding $parent[windows:DesktopRibbon].GroupOverflowBehavior}"
+                                                    MaxGroupRows="{Binding $parent[windows:DesktopRibbon].MaxGroupRows}"
+                                                    Orientation="Horizontal"
+                                                    OverflowOwner="{Binding $parent[windows:DesktopRibbon]}" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </ContentControl>
+                                <Border
+                                    x:Name="PART_GroupOverflowHost"
+                                    Width="30"
+                                    Height="{StaticResource LargeControlHeight}"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Background="{DynamicResource ThemeControlMidBrush}"
+                                    BorderBrush="{DynamicResource ThemeBorderMidBrush}"
+                                    BorderThickness="{DynamicResource ThemeBorderThickness}"
+                                    CornerRadius="{DynamicResource ControlCornerRadius}"
+                                    IsHitTestVisible="{Binding $parent[windows:DesktopRibbon].HasGroupOverflow}"
+                                    Opacity="{Binding $parent[windows:DesktopRibbon].HasGroupOverflow}">
+                                    <Grid>
+                                        <ToggleButton
+                                            x:Name="PART_GroupOverflowButton"
+                                            Padding="0"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            Background="Transparent"
+                                            BorderBrush="Transparent"
+                                            IsEnabled="{Binding $parent[windows:DesktopRibbon].HasGroupOverflow}"
+                                            IsChecked="{Binding IsGroupOverflowOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
+                                            ToolTip.Tip="More groups">
+                                            <Path
+                                                Width="8"
+                                                Height="6"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Data="M 0 0 L 4 4 L 8 0"
+                                                Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                                StrokeThickness="1" />
+                                        </ToggleButton>
+                                        <Popup
+                                            x:Name="PART_GroupOverflowPopup"
+                                            IsLightDismissEnabled="True"
+                                            IsOpen="{Binding IsGroupOverflowOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
+                                            Placement="Bottom"
+                                            PlacementTarget="{Binding #PART_GroupOverflowButton}">
+                                            <Border
+                                                MinWidth="220"
+                                                MaxWidth="420"
+                                                Padding="8"
+                                                Background="{DynamicResource ThemeControlHighBrush}"
+                                                BorderBrush="{DynamicResource ThemeBorderMidBrush}"
+                                                BorderThickness="{DynamicResource ThemeBorderThickness}"
+                                                CornerRadius="{DynamicResource ControlCornerRadius}">
+                                                <ScrollViewer
+                                                    MaxHeight="600"
+                                                    HorizontalScrollBarVisibility="Disabled"
+                                                    VerticalScrollBarVisibility="Auto">
+                                                    <ItemsControl
+                                                        x:Name="PART_GroupOverflowGroups"
+                                                        ItemsSource="{Binding OverflowGroups, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Spacing="8" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate x:DataType="ribbon:RibbonGroupOverflowItem">
+                                                                <StackPanel Spacing="4">
+                                                                    <TextBlock
+                                                                        FontWeight="SemiBold"
+                                                                        Text="{Binding Header}" />
+                                                                    <Separator />
+                                                                    <ItemsControl ItemsSource="{Binding Items}">
+                                                                        <ItemsControl.ItemsPanel>
+                                                                            <ItemsPanelTemplate>
+                                                                                <StackPanel Spacing="2" />
+                                                                            </ItemsPanelTemplate>
+                                                                        </ItemsControl.ItemsPanel>
+                                                                    </ItemsControl>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </ScrollViewer>
+                                            </Border>
+                                        </Popup>
+                                    </Grid>
+                                </Border>
+                            </Grid>
                         </Panel>
                         <ContentPresenter
                             x:Name="PART_QuickAccessToolbarHostBelow"

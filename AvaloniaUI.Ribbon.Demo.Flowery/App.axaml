@@ -1,9 +1,10 @@
-<Application
+﻿<Application
     x:Class="AvaloniaUI.Ribbon.Demo.Flowery.App"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:daisy="clr-namespace:Flowery;assembly=Flowery.NET"
     xmlns:demo="clr-namespace:AvaloniaUI.Ribbon.Demo.Flowery"
+    xmlns:ribbon="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon"
     RequestedThemeVariant="Default">
 	<Application.DataTemplates>
 		<demo:ViewLocator />
@@ -29,6 +30,9 @@
 				<StyleInclude Source="avares://AvaloniaUI.Ribbon/Styles/Fluent/AvaloniaRibbon.axaml" />
 			</OnPlatform.Default>
 		</OnPlatform>
+		<Style Selector="ribbon|RibbonGroupBox">
+			<Setter Property="AllowCollapsedPopup" Value="True" />
+		</Style>
 		<!--
         <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Purple" SecondaryColor="Lime" />
         -->

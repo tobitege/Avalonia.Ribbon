@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
@@ -90,7 +90,9 @@ public class RibbonGroupLines : RibbonGroupContainer
 
     private int ResolveLineCount()
     {
-        var lineCount = DisplayMode == GroupDisplayMode.Small ? SmallLineCount : LargeLineCount;
+        var lineCount = DisplayMode is GroupDisplayMode.Small or GroupDisplayMode.Popup
+            ? SmallLineCount
+            : LargeLineCount;
         return Math.Max(1, lineCount);
     }
 

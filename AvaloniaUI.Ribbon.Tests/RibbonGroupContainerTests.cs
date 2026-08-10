@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -102,6 +102,27 @@ public class RibbonGroupContainerTests
 
         Assert.Equal(Orientation.Vertical, wrapPanel.Orientation);
         Assert.Equal(GroupDisplayMode.Small, lines.DisplayMode);
+        Assert.Equal(RibbonControlSize.Small, child.Size);
+    }
+
+    [Fact]
+    public void GroupWrapPanel_PopupDisplayModeUsesCompactItemSizing()
+    {
+        var wrapPanel = new RibbonGroupWrapPanel();
+        var lines = new RibbonGroupLines();
+        var child = new TestRibbonControl
+        {
+            MinSize = RibbonControlSize.Small,
+            MaxSize = RibbonControlSize.Large
+        };
+
+        lines.Children.Add(child);
+        wrapPanel.Children.Add(lines);
+
+        wrapPanel.DisplayMode = GroupDisplayMode.Popup;
+
+        Assert.Equal(Orientation.Vertical, wrapPanel.Orientation);
+        Assert.Equal(GroupDisplayMode.Popup, lines.DisplayMode);
         Assert.Equal(RibbonControlSize.Small, child.Size);
     }
 

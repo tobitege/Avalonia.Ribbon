@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Controls;
 using AvaloniaUI.Ribbon.Contracts;
@@ -86,6 +86,7 @@ public abstract class RibbonGroupContainer : Panel, IRibbonGroupContainer
         return displayMode switch
         {
             GroupDisplayMode.Small => MinimumSize,
+            GroupDisplayMode.Popup => MinimumSize,
             GroupDisplayMode.Medium => RibbonControlSize.Medium,
             _ => MaximumSize
         };

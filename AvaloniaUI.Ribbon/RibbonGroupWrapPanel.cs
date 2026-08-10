@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
@@ -123,7 +123,9 @@ public class RibbonGroupWrapPanel : WrapPanel
 
     private void ApplyDisplayMode(GroupDisplayMode displayMode)
     {
-        Orientation = displayMode == GroupDisplayMode.Small ? Orientation.Vertical : Orientation.Horizontal;
+        Orientation = displayMode is GroupDisplayMode.Small or GroupDisplayMode.Popup
+            ? Orientation.Vertical
+            : Orientation.Horizontal;
 
         for (var i = 0; i < Children.Count; i++)
         {
@@ -134,6 +136,7 @@ public class RibbonGroupWrapPanel : WrapPanel
                 control.Size = displayMode switch
                 {
                     GroupDisplayMode.Small => control.MinSize,
+                    GroupDisplayMode.Popup => control.MinSize,
                     GroupDisplayMode.Medium => ClampControlSize(RibbonControlSize.Medium, control.MinSize, control.MaxSize),
                     _ => control.MaxSize
                 };
@@ -156,7 +159,7 @@ public class RibbonGroupWrapPanel : WrapPanel
 
     private int ResolveLineCount()
     {
-        return DisplayMode == GroupDisplayMode.Small
+        return DisplayMode is GroupDisplayMode.Small or GroupDisplayMode.Popup
             ? Math.Max(1, SmallLineCount)
             : Math.Max(1, LargeLineCount);
     }

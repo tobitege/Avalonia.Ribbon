@@ -29,6 +29,9 @@ namespace AvaloniaUI.Ribbon;
 [TemplatePart("PART_PinLastHoveredControlToQuickAccess", typeof(MenuItem))]
 [TemplatePart("PART_ContentAreaContextMenu", typeof(ContextMenu))]
 [TemplatePart("PART_CollapseRibbon", typeof(MenuItem))]
+[TemplatePart("PART_GroupOverflowButton", typeof(ToggleButton))]
+[TemplatePart("PART_GroupOverflowPopup", typeof(Popup))]
+[TemplatePart("PART_GroupOverflowGroups", typeof(ItemsControl))]
 public class Ribbon : TabControl, IRibbon
 {
     static Ribbon()
@@ -135,12 +138,22 @@ public class Ribbon : TabControl, IRibbon
         AvaloniaProperty.Register<Ribbon, int>(nameof(MaxGroupRows), 1,
             coerce: (_, value) => Math.Max(1, value));
 
+    public static readonly StyledProperty<bool> IsGroupOverflowOpenProperty =
+        AvaloniaProperty.Register<Ribbon, bool>(nameof(IsGroupOverflowOpen));
+
     public static readonly RoutedEvent<RoutedEventArgs> RibbonKeyTipsOpenedEvent =
         RoutedEvent.Register<MenuBase, RoutedEventArgs>("RibbonKeyTipsOpened", RoutingStrategies.Bubble);
 
     public static readonly DirectProperty<Ribbon, ObservableCollection<RibbonGroupBox>> SelectedGroupsProperty =
         AvaloniaProperty.RegisterDirect<Ribbon, ObservableCollection<RibbonGroupBox>>(nameof(SelectedGroups),
             o => o.SelectedGroups, (o, v) => o.SelectedGroups = v);
+
+    public static readonly DirectProperty<Ribbon, ObservableCollection<RibbonGroupOverflowItem>> OverflowGroupsProperty =
+        AvaloniaProperty.RegisterDirect<Ribbon, ObservableCollection<RibbonGroupOverflowItem>>(
+            nameof(OverflowGroups), o => o.OverflowGroups);
+
+    public static readonly DirectProperty<Ribbon, bool> HasGroupOverflowProperty =
+        AvaloniaProperty.RegisterDirect<Ribbon, bool>(nameof(HasGroupOverflow), o => o.HasGroupOverflow);
 
     public static readonly DirectProperty<Ribbon, ObservableCollection<Control>> TabsProperty =
         AvaloniaProperty.RegisterDirect<Ribbon, ObservableCollection<Control>>(nameof(Tabs), o => o.Tabs,
@@ -179,6 +192,12 @@ public class Ribbon : TabControl, IRibbon
     protected ICanAddToQuickAccess? _rightClicked;
 
     private ObservableCollection<RibbonGroupBox> _selectedGroups = new();
+
+    private readonly ObservableCollection<RibbonGroupOverflowItem> _overflowGroups = new();
+
+    private RibbonGroupsStackPanel? _groupOverflowSource;
+
+    private bool _hasGroupOverflow;
 
     private ObservableCollection<Control> _tabs = new();
 
@@ -300,6 +319,20 @@ public class Ribbon : TabControl, IRibbon
     {
         get => GetValue(MaxGroupRowsProperty);
         set => SetValue(MaxGroupRowsProperty, value);
+    }
+
+    public bool IsGroupOverflowOpen
+    {
+        get => GetValue(IsGroupOverflowOpenProperty);
+        set => SetValue(IsGroupOverflowOpenProperty, value);
+    }
+
+    public ObservableCollection<RibbonGroupOverflowItem> OverflowGroups => _overflowGroups;
+
+    public bool HasGroupOverflow
+    {
+        get => _hasGroupOverflow;
+        private set => SetAndRaise(HasGroupOverflowProperty, ref _hasGroupOverflow, value);
     }
 
     public ObservableCollection<RibbonGroupBox> SelectedGroups
@@ -752,8 +785,64 @@ public class Ribbon : TabControl, IRibbon
             IsCollapsedPopupOpen = false;
     }
 
+    internal void SetGroupOverflow(
+        RibbonGroupsStackPanel source,
+        IReadOnlyList<RibbonGroupBox> groups)
+    {
+        var hasOverflow = groups.Count > 0;
+        var unchanged = HasGroupOverflow == hasOverflow && OverflowGroups.Count == groups.Count;
+        if (unchanged)
+        {
+            for (var i = 0; i < groups.Count; i++)
+            {
+                if (ReferenceEquals(OverflowGroups[i].Group, groups[i]))
+                    continue;
+
+                unchanged = false;
+                break;
+            }
+        }
+
+        _groupOverflowSource = source;
+        if (unchanged)
+            return;
+
+        IsGroupOverflowOpen = false;
+        OverflowGroups.Clear();
+        for (var i = 0; i < groups.Count; i++)
+            OverflowGroups.Add(new RibbonGroupOverflowItem(groups[i]));
+
+        HasGroupOverflow = hasOverflow;
+    }
+
+    internal void ClearGroupOverflow(RibbonGroupsStackPanel source)
+    {
+        if (!ReferenceEquals(_groupOverflowSource, source))
+            return;
+
+        ResetGroupOverflow();
+    }
+
+    internal void ReleaseGroupOverflowItems(RibbonGroupsStackPanel source)
+    {
+        if (!ReferenceEquals(_groupOverflowSource, source))
+            return;
+
+        IsGroupOverflowOpen = false;
+        OverflowGroups.Clear();
+    }
+
+    private void ResetGroupOverflow()
+    {
+        _groupOverflowSource = null;
+        IsGroupOverflowOpen = false;
+        OverflowGroups.Clear();
+        HasGroupOverflow = false;
+    }
+
     protected void RefreshSelectedGroups()
     {
+        ResetGroupOverflow();
         SelectedGroups.Clear();
         if (_prevSelectedTab != null)
         {

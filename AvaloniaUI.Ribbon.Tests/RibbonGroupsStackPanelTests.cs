@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
@@ -80,6 +80,192 @@ public class RibbonGroupsStackPanelTests
 
         Assert.True(GetRowCount(groups) <= 2);
         Assert.Contains(groups, group => group.DisplayMode == GroupDisplayMode.Small);
+    }
+
+    [Fact]
+    public void PopupOverflow_ReservesTheSharedButtonWidthInEveryRow()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 2
+        };
+
+        var groups = CreateGroups(panel, 5, smallWidth: 70, mediumWidth: 70, largeWidth: 70);
+        foreach (var group in groups)
+            group.AllowCollapsedPopup = true;
+
+        RunLayout(panel, 150);
+
+        var visibleGroups = groups
+            .Where(group => group.DisplayMode != GroupDisplayMode.Popup)
+            .ToArray();
+        Assert.Equal(2, visibleGroups.Length);
+        Assert.Equal(2, GetRowCount(visibleGroups));
+        Assert.All(visibleGroups, group => Assert.True(group.Bounds.Right <= 120.01));
+    }
+
+    [Fact]
+    public void InfiniteMeasureWidth_UsesFiniteBoundsForPopupCollapse()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1
+        };
+
+        var groups = CreateGroups(panel, 5);
+        foreach (var group in groups)
+            group.AllowCollapsedPopup = true;
+
+        RunLayout(panel, 350);
+
+        Assert.Equal(350, panel.Bounds.Width);
+        Assert.Contains(groups, group => group.IsCollapsedToPopup);
+
+        panel.InvalidateMeasure();
+        panel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+
+        Assert.Contains(groups, group => group.IsCollapsedToPopup);
+    }
+
+    [Fact]
+    public void InfiniteMeasureFollowedByResize_AppliesCurrentArrangeWidthImmediately()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1
+        };
+
+        var groups = CreateGroups(panel, 5);
+        foreach (var group in groups)
+            group.AllowCollapsedPopup = true;
+
+        RunLayout(panel, 1200);
+        Assert.DoesNotContain(groups, group => group.IsCollapsedToPopup);
+        Assert.All(groups, group => Assert.Equal(GroupDisplayMode.Large, group.DisplayMode));
+
+        RunInfiniteMeasureAndArrange(panel, 350);
+        Assert.Contains(groups, group => group.IsCollapsedToPopup);
+        Assert.True(groups.Max(group => group.Bounds.Right) <= 350 + 0.01);
+
+        RunInfiniteMeasureAndArrange(panel, 1200);
+        Assert.DoesNotContain(groups, group => group.IsCollapsedToPopup);
+        Assert.All(groups, group => Assert.Equal(GroupDisplayMode.Large, group.DisplayMode));
+    }
+
+    [Fact]
+    public void RepeatedInfiniteMeasureAtSameBounds_DoesNotToggleLayoutState()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1
+        };
+
+        var groups = CreateGroups(panel, 5);
+        foreach (var group in groups)
+            group.AllowCollapsedPopup = true;
+
+        RunLayout(panel, 350);
+        Assert.Contains(groups, group => group.IsCollapsedToPopup);
+
+        foreach (var group in groups)
+            group.ResetLayoutStateChangeCounts();
+
+        RunInfiniteMeasureAndArrange(panel, 350);
+
+        Assert.All(groups, group => Assert.Equal(0, group.DisplayModeChangeCount));
+        Assert.All(groups, group => Assert.Equal(0, group.CollapsedStateChangeCount));
+    }
+
+    [Fact]
+    public void OnePixelResizeCycles_ReturnToTheSameLayoutState()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1
+        };
+
+        var groups = CreateGroups(panel, 5);
+        foreach (var group in groups)
+            group.AllowCollapsedPopup = true;
+
+        RunLayout(panel, 350);
+        var stateAt350 = GetLayoutState(groups);
+
+        RunInfiniteMeasureAndArrange(panel, 351);
+        var stateAt351 = GetLayoutState(groups);
+
+        RunInfiniteMeasureAndArrange(panel, 350);
+        Assert.Equal(stateAt350, GetLayoutState(groups));
+
+        RunInfiniteMeasureAndArrange(panel, 351);
+        Assert.Equal(stateAt351, GetLayoutState(groups));
+
+        RunInfiniteMeasureAndArrange(panel, 350);
+        Assert.Equal(stateAt350, GetLayoutState(groups));
+    }
+
+    [Fact]
+    public void ResizeThreshold_IsIndependentOfPreviousWidth()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 2
+        };
+
+        var groups = CreateThresholdGroups();
+
+        foreach (var group in groups)
+            panel.Children.Add(group);
+
+        RunLayout(panel, 375);
+        var directStateAt375 = GetLayoutState(groups);
+
+        RunInfiniteMeasureAndArrange(panel, 376);
+        RunInfiniteMeasureAndArrange(panel, 375);
+
+        Assert.Equal(directStateAt375, GetLayoutState(groups));
+    }
+
+    [Fact]
+    public void IncreasingWidth_NeverCompactsAGroupAgain()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 2
+        };
+
+        var groups = CreateThresholdGroups();
+
+        foreach (var group in groups)
+            panel.Children.Add(group);
+
+        RunLayout(panel, 350);
+        var previousModes = groups.Select(group => GetDisplayModeRank(group.DisplayMode)).ToList();
+
+        for (var width = 351; width <= 650; width++)
+        {
+            RunInfiniteMeasureAndArrange(panel, width);
+
+            var currentModes = groups.Select(group => GetDisplayModeRank(group.DisplayMode)).ToList();
+            for (var i = 0; i < groups.Count; i++)
+                Assert.True(currentModes[i] >= previousModes[i]);
+
+            previousModes = currentModes;
+        }
     }
 
     [Fact]
@@ -193,6 +379,37 @@ public class RibbonGroupsStackPanelTests
         return groups;
     }
 
+    private static TestRibbonGroupBox CreateGroup(double smallWidth, double mediumWidth, double largeWidth)
+    {
+        return new TestRibbonGroupBox
+        {
+            DisplayMode = GroupDisplayMode.Large,
+            SmallDesiredSize = new Size(smallWidth, 96),
+            MediumDesiredSize = new Size(mediumWidth, 96),
+            LargeDesiredSize = new Size(largeWidth, 96)
+        };
+    }
+
+    private static List<TestRibbonGroupBox> CreateThresholdGroups()
+    {
+        return
+        [
+            CreateGroup(82, 130, 159),
+            CreateGroup(67, 107, 151),
+            CreateGroup(71, 92, 147),
+            CreateGroup(72, 94, 127),
+            CreateGroup(71, 114, 157)
+        ];
+    }
+
+    private static int GetDisplayModeRank(GroupDisplayMode mode) => mode switch
+    {
+        GroupDisplayMode.Small => 0,
+        GroupDisplayMode.Medium => 1,
+        GroupDisplayMode.Large => 2,
+        _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, null)
+    };
+
     private static int GetRowCount(IEnumerable<TestRibbonGroupBox> groups)
     {
         return groups
@@ -201,9 +418,26 @@ public class RibbonGroupsStackPanelTests
             .Count();
     }
 
+    private static IReadOnlyList<(GroupDisplayMode DisplayMode, bool IsCollapsedToPopup)> GetLayoutState(
+        IEnumerable<TestRibbonGroupBox> groups)
+    {
+        return groups
+            .Select(group => (group.DisplayMode, group.IsCollapsedToPopup))
+            .ToList();
+    }
+
     private static void RunLayout(RibbonGroupsStackPanel panel, double width)
     {
         panel.Measure(new Size(width, double.PositiveInfinity));
+
+        var height = Math.Max(1, panel.DesiredSize.Height);
+        panel.Arrange(new Rect(0, 0, width, height));
+    }
+
+    private static void RunInfiniteMeasureAndArrange(RibbonGroupsStackPanel panel, double width)
+    {
+        panel.InvalidateMeasure();
+        panel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
         var height = Math.Max(1, panel.DesiredSize.Height);
         panel.Arrange(new Rect(0, 0, width, height));
@@ -219,11 +453,31 @@ public class RibbonGroupsStackPanelTests
 
     private sealed class TestRibbonGroupBox : RibbonGroupBox
     {
+        public int DisplayModeChangeCount { get; private set; }
+
+        public int CollapsedStateChangeCount { get; private set; }
+
         public Size LargeDesiredSize { get; set; } = new(200, 96);
 
         public Size MediumDesiredSize { get; set; } = new(125, 96);
 
         public Size SmallDesiredSize { get; set; } = new(100, 96);
+
+        public void ResetLayoutStateChangeCounts()
+        {
+            DisplayModeChangeCount = 0;
+            CollapsedStateChangeCount = 0;
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == DisplayModeProperty)
+                DisplayModeChangeCount++;
+            else if (change.Property == IsCollapsedToPopupProperty)
+                CollapsedStateChangeCount++;
+        }
 
         protected override Size MeasureOverride(Size availableSize)
         {

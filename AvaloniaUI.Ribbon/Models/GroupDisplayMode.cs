@@ -6,6 +6,7 @@ public enum GroupDisplayMode
 
     Medium,
 
-    Small /*,
-    Flyout*/
+    Small,
+
+    Popup
 }

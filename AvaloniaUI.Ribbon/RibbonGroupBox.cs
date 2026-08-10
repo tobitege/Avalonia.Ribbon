@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
@@ -14,6 +14,12 @@ public class RibbonGroupBox : HeaderedItemsControl
         AffectsArrange<RibbonGroupBox>(DisplayModeProperty, IsCollapsedToPopupProperty);
         AffectsMeasure<RibbonGroupBox>(DisplayModeProperty, IsCollapsedToPopupProperty);
         AffectsRender<RibbonGroupBox>(DisplayModeProperty, IsCollapsedToPopupProperty);
+
+        DisplayModeProperty.Changed.AddClassHandler<RibbonGroupBox>((sender, args) =>
+        {
+            if (args.NewValue is GroupDisplayMode displayMode)
+                sender.SetPopupState(displayMode == GroupDisplayMode.Popup);
+        });
     }
 
     #region Static Properties
@@ -108,13 +114,12 @@ public class RibbonGroupBox : HeaderedItemsControl
 
     #region Methods
 
-    internal bool SetCollapsedToPopup(bool value)
+    private void SetPopupState(bool value)
     {
         if (IsCollapsedToPopup == value)
-            return false;
+            return;
 
         IsCollapsedToPopup = value;
-        return true;
     }
 
     #endregion
