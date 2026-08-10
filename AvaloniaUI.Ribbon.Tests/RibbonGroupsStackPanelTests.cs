@@ -107,6 +107,104 @@ public class RibbonGroupsStackPanelTests
     }
 
     [Fact]
+    public void PopupOverflow_DoesNotUseSmallModeForVisibleGroups()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1
+        };
+
+        var groups = CreateGroups(panel, 5);
+        foreach (var group in groups)
+            group.AllowCollapsedPopup = true;
+
+        RunLayout(panel, 300);
+
+        var visibleGroups = groups
+            .Where(group => group.DisplayMode != GroupDisplayMode.Popup)
+            .ToArray();
+
+        Assert.NotEmpty(visibleGroups);
+        Assert.Contains(groups, group => group.DisplayMode == GroupDisplayMode.Popup);
+        Assert.All(
+            visibleGroups,
+            group => Assert.NotEqual(GroupDisplayMode.Small, group.DisplayMode));
+    }
+
+    [Fact]
+    public void PopupOverflow_UsesMediumBeforeRemovingLastGroup()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1
+        };
+
+        var groups = CreateGroups(
+            panel,
+            count: 2,
+            smallWidth: 80,
+            mediumWidth: 120,
+            largeWidth: 140);
+        foreach (var group in groups)
+            group.AllowCollapsedPopup = true;
+
+        RunLayout(panel, 300);
+
+        Assert.DoesNotContain(groups, group => group.DisplayMode == GroupDisplayMode.Popup);
+        Assert.Contains(groups, group => group.DisplayMode == GroupDisplayMode.Medium);
+        Assert.All(groups, group => Assert.NotEqual(GroupDisplayMode.Small, group.DisplayMode));
+    }
+
+    [Fact]
+    public void PopupOverflow_KeepsLastGroupVisibleWhileItsActualRightEdgeHasBuffer()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1
+        };
+
+        var groups = Enumerable.Range(0, 4)
+            .Select(_ => new ConstraintSensitiveRibbonGroupBox
+            {
+                AllowCollapsedPopup = true
+            })
+            .ToArray();
+
+        foreach (var group in groups)
+            panel.Children.Add(group);
+
+        const double panelWidth = 450;
+        const double panelHeight = 96;
+        panel.Measure(new Size(panelWidth, panelHeight));
+        panel.Arrange(new Rect(0, 0, panelWidth, panelHeight));
+
+        Assert.DoesNotContain(groups, group => group.DisplayMode == GroupDisplayMode.Popup);
+
+        var lastGroupRight = groups.Max(group => group.Bounds.Right);
+        var freeSpaceBeforeOverflowSlot = panelWidth - 30 - lastGroupRight;
+        Assert.True(freeSpaceBeforeOverflowSlot > 10);
+
+        const double narrowerPanelWidth = 439;
+        panel.Measure(new Size(narrowerPanelWidth, panelHeight));
+        panel.Arrange(new Rect(0, 0, narrowerPanelWidth, panelHeight));
+
+        var overflowGroup = Assert.Single(
+            groups,
+            group => group.DisplayMode == GroupDisplayMode.Popup);
+        Assert.Same(groups[^1], overflowGroup);
+
+        var lastVisibleGroup = groups.Last(group => group.DisplayMode != GroupDisplayMode.Popup);
+        var remainingFreeSpace = narrowerPanelWidth - 30 - lastVisibleGroup.Bounds.Right;
+        Assert.True(remainingFreeSpace > 10);
+    }
+
+    [Fact]
     public void InfiniteMeasureWidth_UsesFiniteBoundsForPopupCollapse()
     {
         var panel = new RibbonGroupsStackPanel
@@ -128,6 +226,7 @@ public class RibbonGroupsStackPanelTests
         panel.InvalidateMeasure();
         panel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
+        Assert.Equal(panel.Bounds.Width, panel.DesiredSize.Width);
         Assert.Contains(groups, group => group.IsCollapsedToPopup);
     }
 
@@ -487,6 +586,15 @@ public class RibbonGroupsStackPanelTests
                 GroupDisplayMode.Small => SmallDesiredSize,
                 _ => LargeDesiredSize
             };
+        }
+    }
+
+    private sealed class ConstraintSensitiveRibbonGroupBox : RibbonGroupBox
+    {
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            var width = double.IsInfinity(availableSize.Height) ? 200 : 100;
+            return new Size(width, 96);
         }
     }
 }

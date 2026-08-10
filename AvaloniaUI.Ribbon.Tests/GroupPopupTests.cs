@@ -3,9 +3,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Headless;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -109,7 +113,21 @@ public class GroupPopupTests
             SelectedIndex = 0,
             Tabs = new ObservableCollection<Control> { tab }
         };
-        var window = new Window { Width = 320, Height = 240, Content = ribbon };
+        var overflowAccent = new SolidColorBrush(Color.FromRgb(17, 31, 47));
+        ribbon.Resources["ThemeAccentBrush2"] = overflowAccent;
+        var outsideButton = new Button
+        {
+            Width = 60,
+            Height = 30,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Bottom
+        };
+        var outsideClicks = 0;
+        outsideButton.Click += (_, _) => outsideClicks++;
+        var root = new Grid();
+        root.Children.Add(ribbon);
+        root.Children.Add(outsideButton);
+        var window = new Window { Width = 320, Height = 240, Content = root };
 
         try
         {
@@ -144,17 +162,41 @@ public class GroupPopupTests
             Assert.Equal(1, overflowHost.Opacity);
             Assert.True(toggleButton.IsEnabled);
             Assert.True(toggleButton.Bounds.Width > 0);
+            Assert.True(popup.IsLightDismissEnabled);
+            Assert.True(popup.OverlayDismissEventPassThrough);
+            var overflowGrid = Assert.IsType<Grid>(overflowHost.Parent);
+            Assert.Equal(overflowGrid.Bounds.Height, overflowHost.Bounds.Height);
+            Assert.Equal(overflowGrid.Bounds.Width, panel.Bounds.Width);
             Assert.False(popup.IsOpen);
 
+            var buttonPresenter = toggleButton.GetVisualDescendants()
+                .OfType<ContentPresenter>()
+                .Single(control => control.Name == "PART_ContentPresenter");
             toggleButton.IsChecked = true;
             Dispatcher.UIThread.RunJobs();
 
             Assert.True(popup.IsOpen);
+            Assert.True(toggleButton.IsChecked);
+            Assert.Equal(overflowAccent.Color, Assert.IsAssignableFrom<ISolidColorBrush>(buttonPresenter.Background).Color);
             Assert.NotNull(popup.Child);
             Assert.Same(window, TopLevel.GetTopLevel(popup.Child));
             Assert.Equal(
                 overflowGroups.Sum(group => group.Items.Count),
                 popup.Child.GetVisualDescendants().OfType<RibbonButton>().Count());
+
+            var outsidePoint = outsideButton.TranslatePoint(
+                new Point(outsideButton.Bounds.Width / 2, outsideButton.Bounds.Height / 2),
+                window);
+            Assert.NotNull(outsidePoint);
+            window.MouseMove(outsidePoint.Value);
+            window.MouseDown(outsidePoint.Value, MouseButton.Left);
+            window.MouseUp(outsidePoint.Value, MouseButton.Left);
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.Equal(1, outsideClicks);
+            Assert.False(popup.IsOpen);
+            Assert.False(ribbon.IsGroupOverflowOpen);
+            Assert.False(toggleButton.IsChecked);
 
             window.Width = 2000;
             Dispatcher.UIThread.RunJobs();

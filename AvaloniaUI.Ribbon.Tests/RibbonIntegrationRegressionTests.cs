@@ -10,6 +10,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Headless;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
@@ -87,11 +88,23 @@ public class RibbonIntegrationRegressionTests
             SelectedIndex = 0,
             Tabs = new ObservableCollection<Control> { tab }
         };
+        var overflowAccent = new SolidColorBrush(Color.FromRgb(17, 31, 47));
+        ribbon.Resources["ThemeAccentBrush2"] = overflowAccent;
+        var outsideButton = new Button
+        {
+            Width = 60,
+            Height = 30,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top
+        };
+        var outsideClicks = 0;
+        outsideButton.Click += (_, _) => outsideClicks++;
         var window = new RibbonWindow
         {
             Width = 320,
             Height = 300,
-            Ribbon = ribbon
+            Ribbon = ribbon,
+            Content = outsideButton
         };
 
         try
@@ -110,18 +123,44 @@ public class RibbonIntegrationRegressionTests
             Assert.True(ribbon.HasGroupOverflow);
             var overflowButton = ribbon.GroupOverflowButton;
             var overflowPopup = ribbon.GroupOverflowPopup;
+            var overflowHost = ribbon.GroupOverflowHost;
             Assert.NotNull(overflowButton);
             Assert.NotNull(overflowPopup);
+            Assert.NotNull(overflowHost);
             Assert.True(overflowButton.Bounds.Width > 0);
+            Assert.True(overflowPopup.IsLightDismissEnabled);
+            Assert.True(overflowPopup.OverlayDismissEventPassThrough);
+            var overflowGrid = Assert.IsType<Grid>(overflowHost.Parent);
+            Assert.Equal(overflowGrid.Bounds.Height, overflowHost.Bounds.Height);
+            Assert.Equal(overflowGrid.Bounds.Width, panel.Bounds.Width);
 
+            var buttonPresenter = overflowButton.GetVisualDescendants()
+                .OfType<ContentPresenter>()
+                .Single(control => control.Name == "PART_ContentPresenter");
             overflowButton.IsChecked = true;
             Dispatcher.UIThread.RunJobs();
 
             Assert.True(overflowPopup.IsOpen);
+            Assert.True(overflowButton.IsChecked);
+            Assert.Equal(overflowAccent.Color, Assert.IsAssignableFrom<ISolidColorBrush>(buttonPresenter.Background).Color);
             Assert.NotNull(overflowPopup.Child);
             var overflowItemsControl = ribbon.GroupOverflowGroups;
             Assert.NotNull(overflowItemsControl);
             Assert.Equal(overflowGroups.Length, overflowItemsControl.ItemCount);
+
+            var outsidePoint = outsideButton.TranslatePoint(
+                new Point(outsideButton.Bounds.Width / 2, outsideButton.Bounds.Height / 2),
+                window);
+            Assert.NotNull(outsidePoint);
+            window.MouseMove(outsidePoint.Value);
+            window.MouseDown(outsidePoint.Value, MouseButton.Left);
+            window.MouseUp(outsidePoint.Value, MouseButton.Left);
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.Equal(1, outsideClicks);
+            Assert.False(overflowPopup.IsOpen);
+            Assert.False(ribbon.IsGroupOverflowOpen);
+            Assert.False(overflowButton.IsChecked);
         }
         finally
         {
@@ -683,6 +722,8 @@ public class RibbonIntegrationRegressionTests
 
         public Popup? GroupOverflowPopup { get; private set; }
 
+        public Border? GroupOverflowHost { get; private set; }
+
         public ItemsControl? GroupOverflowGroups { get; private set; }
 
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -690,6 +731,7 @@ public class RibbonIntegrationRegressionTests
             base.OnApplyTemplate(e);
             GroupOverflowButton = e.NameScope.Find<ToggleButton>("PART_GroupOverflowButton");
             GroupOverflowPopup = e.NameScope.Find<Popup>("PART_GroupOverflowPopup");
+            GroupOverflowHost = e.NameScope.Find<Border>("PART_GroupOverflowHost");
             GroupOverflowGroups = e.NameScope.Find<ItemsControl>("PART_GroupOverflowGroups");
         }
     }

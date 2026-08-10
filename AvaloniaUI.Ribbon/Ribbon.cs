@@ -185,6 +185,10 @@ public class Ribbon : TabControl, IRibbon
 
     private Popup? _popup;
 
+    private ToggleButton? _groupOverflowButton;
+
+    private Popup? _groupOverflowPopup;
+
     private IInputElement? _prevFocusedElement;
 
     private RibbonTab? _prevSelectedTab;
@@ -610,6 +614,9 @@ public class Ribbon : TabControl, IRibbon
             _popup.Opened += OnCollapsedRibbon_Open;
         }
 
+        _groupOverflowButton = e.NameScope.Find<ToggleButton>("PART_GroupOverflowButton");
+        _groupOverflowPopup = e.NameScope.Find<Popup>("PART_GroupOverflowPopup");
+
         _groupsHost = e.NameScope.Find<ItemsControl>("PART_SelectedGroupsHost");
         _mainPresenter = e.NameScope.Find<ContentControl>("PART_GroupsPresenterHolder");
         _flyoutPresenter = e.NameScope.Find<ContentControl>("PART_PopupGroupsPresenterHolder");
@@ -783,6 +790,22 @@ public class Ribbon : TabControl, IRibbon
     {
         if (IsCollapsedPopupOpen && _groupsHost?.IsPointerOver != true)
             IsCollapsedPopupOpen = false;
+
+        if (!IsGroupOverflowOpen)
+            return;
+
+        if (e.Source is Visual source &&
+            (IsVisualWithin(source, _groupOverflowButton) || IsVisualWithin(source, _groupOverflowPopup?.Child)))
+            return;
+
+        IsGroupOverflowOpen = false;
+    }
+
+    private static bool IsVisualWithin(Visual source, Visual? container)
+    {
+        return container is not null &&
+               (ReferenceEquals(source, container) ||
+                source.GetVisualAncestors().Any(ancestor => ReferenceEquals(ancestor, container)));
     }
 
     internal void SetGroupOverflow(

@@ -376,14 +376,15 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 ### Update (2026-08-10)
 
 - Bump package and application versions to `2026.8.10`.
-- Use finite panel bounds when a parent supplies an infinite measure extent.
-- Apply the current arrange width immediately during window resizing.
-- Keep group compaction deterministic across one-pixel resize thresholds.
-- Avoid repeated display-mode and popup-state changes at an unchanged width.
-- Add a first-class `Popup` display mode for groups that do not fit in the available Ribbon width.
-- Show all overflowed groups behind one shared, themed button in `Ribbon` and `DesktopRibbon`.
-- Keep group order and restore popup items to the Ribbon when more width becomes available.
-- Reserve the shared button width on every configured group row.
+- Add the `Popup` group overflow mode for narrow Ribbon layouts.
+- `GroupOverflowBehavior="WrapThenShrink"` enables this mode for groups with `AllowCollapsedPopup="True"`.
+- The panel first changes visible groups from `Large` to `Medium`. It does not select `Small` while popup overflow is available.
+- When the last visible group no longer fits, the panel moves that group into one shared popup on the right.
+- The popup keeps the original group order. Groups return to the Ribbon when more width becomes available.
+- The shared button reserves its width on each group row and uses the full Ribbon height.
+- A click outside the popup closes it and continues to the application control below the pointer.
+- Hover, pressed, and open button states use Ribbon theme resources.
+- The layout uses finite host bounds and the current arrange width during resizing. This prevents flicker and unstable one-pixel layout changes.
 
 ### Update (2026-08-05)
 

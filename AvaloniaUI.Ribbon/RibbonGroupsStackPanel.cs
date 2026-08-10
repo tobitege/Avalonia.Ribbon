@@ -15,6 +15,7 @@ public class RibbonGroupsStackPanel : Panel
 {
     private const double Epsilon = 0.01;
     private const double OverflowButtonWidth = 30;
+    private const double OverflowContentBuffer = 10;
 
     private bool _isSizingControls;
     private bool _isSizingDirty = true;
@@ -208,7 +209,11 @@ public class RibbonGroupsStackPanel : Panel
         return rows.Where(row => row.Children.Count > 0).ToList();
     }
 
-    private static bool CanFitHorizontal(IReadOnlyList<RibbonGroupBox> groups, double availableWidth, int maxRows)
+    private static bool CanFitHorizontal(
+        IReadOnlyList<RibbonGroupBox> groups,
+        double availableWidth,
+        int maxRows,
+        Size groupConstraint)
     {
         if (groups.Count == 0 || double.IsInfinity(availableWidth))
             return true;
@@ -221,7 +226,7 @@ public class RibbonGroupsStackPanel : Panel
 
         for (var i = 0; i < groups.Count; i++)
         {
-            var width = MeasureGroupWidthForLayout(groups[i]);
+            var width = MeasureGroupWidthForLayout(groups[i], groupConstraint);
             if (width > availableWidth + Epsilon)
                 return false;
 
@@ -304,16 +309,16 @@ public class RibbonGroupsStackPanel : Panel
 
     private Size MeasureHorizontal(double availableWidth)
     {
-        var widthConstraint = GetFiniteExtent(availableWidth, Bounds.Width);
-        widthConstraint = GetVisibleGroupsWidth(widthConstraint);
-        var rows = BuildHorizontalRows(widthConstraint, GetHorizontalRowLimit());
+        var hostWidth = GetFiniteExtent(availableWidth, Bounds.Width);
+        var availableGroupsWidth = GetVisibleGroupsWidth(hostWidth);
+        var rows = BuildHorizontalRows(availableGroupsWidth, GetHorizontalRowLimit());
 
         if (rows.Count == 0)
-            return default;
+            return new Size(double.IsInfinity(hostWidth) ? 0 : hostWidth, 0);
 
-        var desiredWidth = rows.Max(row => row.Width);
-        if (!double.IsInfinity(widthConstraint))
-            desiredWidth = Math.Min(desiredWidth, widthConstraint);
+        var desiredWidth = double.IsInfinity(hostWidth)
+            ? rows.Max(row => row.Width)
+            : hostWidth;
 
         var desiredHeight = rows.Sum(row => row.Height);
         return new Size(desiredWidth, desiredHeight);
@@ -327,7 +332,12 @@ public class RibbonGroupsStackPanel : Panel
             return availableWidth;
         }
 
-        return Math.Max(0, availableWidth - OverflowButtonWidth);
+        return GetWidthBeforeOverflowSlot(availableWidth);
+    }
+
+    private static double GetWidthBeforeOverflowSlot(double availableWidth)
+    {
+        return Math.Max(0, availableWidth - OverflowButtonWidth - OverflowContentBuffer);
     }
 
     private Size MeasureVertical()
@@ -398,7 +408,10 @@ public class RibbonGroupsStackPanel : Panel
                     groups,
                     sizingExtent,
                     GetHorizontalRowLimit(),
-                    GroupOverflowBehavior == RibbonGroupOverflowBehavior.WrapThenShrink);
+                    GroupOverflowBehavior == RibbonGroupOverflowBehavior.WrapThenShrink,
+                    new Size(
+                        double.PositiveInfinity,
+                        GetFiniteExtent(availableSize.Height, Bounds.Height)));
             }
 
             _lastSizingOrientation = orientation;
@@ -426,7 +439,8 @@ public class RibbonGroupsStackPanel : Panel
         IReadOnlyList<RibbonGroupBox> groups,
         double availableWidth,
         int maxRows,
-        bool allowCollapsedPopupOverflow)
+        bool allowCollapsedPopupOverflow,
+        Size groupConstraint)
     {
         if (double.IsInfinity(availableWidth))
         {
@@ -439,18 +453,28 @@ public class RibbonGroupsStackPanel : Panel
         for (var i = 0; i < groups.Count; i++)
             SetDisplayMode(groups[i], GroupDisplayMode.Large);
 
-        while (!CanFitHorizontal(groups, availableWidth, maxRows))
+        var usePopupOverflow = allowCollapsedPopupOverflow &&
+                               groups.Any(group => group.AllowCollapsedPopup);
+        var allowSmallMode = !usePopupOverflow;
+        var sizingWidth = usePopupOverflow
+            ? GetWidthBeforeOverflowSlot(availableWidth)
+            : availableWidth;
+
+        while (!CanFitHorizontal(groups, sizingWidth, maxRows, groupConstraint))
         {
-            var candidate = FindWidestGroupThatCanDecrease(groups);
+            var candidate = FindWidestGroupThatCanDecrease(
+                groups,
+                groupConstraint,
+                allowSmallMode);
             if (candidate is null)
                 break;
 
-            var candidateNextMode = CanDecreaseDisplayMode(candidate.DisplayMode);
+            var candidateNextMode = CanDecreaseDisplayMode(candidate.DisplayMode, allowSmallMode);
             SetDisplayMode(candidate, candidateNextMode!.Value);
         }
 
-        if (allowCollapsedPopupOverflow && !CanFitHorizontal(groups, availableWidth, maxRows))
-            CollapseOverflowGroupsToPopup(groups, availableWidth, maxRows);
+        if (usePopupOverflow)
+            CollapseOverflowGroupsToPopup(groups, availableWidth, maxRows, groupConstraint);
     }
 
     private static void SizeControlsVertically(IReadOnlyList<RibbonGroupBox> groups, double availableHeight)
@@ -472,21 +496,26 @@ public class RibbonGroupsStackPanel : Panel
             if (candidate is null)
                 break;
 
-            var candidateNextMode = CanDecreaseDisplayMode(candidate.DisplayMode);
+            var candidateNextMode = CanDecreaseDisplayMode(candidate.DisplayMode, allowSmallMode: true);
             SetDisplayMode(candidate, candidateNextMode!.Value);
         }
     }
 
-    private static GroupDisplayMode? CanDecreaseDisplayMode(GroupDisplayMode displayMode) => displayMode switch
+    private static GroupDisplayMode? CanDecreaseDisplayMode(
+        GroupDisplayMode displayMode,
+        bool allowSmallMode) => displayMode switch
     {
         GroupDisplayMode.Large => GroupDisplayMode.Medium,
-        GroupDisplayMode.Medium => GroupDisplayMode.Small,
+        GroupDisplayMode.Medium => allowSmallMode ? GroupDisplayMode.Small : null,
         GroupDisplayMode.Small => null,
         GroupDisplayMode.Popup => null,
         _ => null
     };
 
-    private static RibbonGroupBox? FindWidestGroupThatCanDecrease(IReadOnlyList<RibbonGroupBox> groups)
+    private static RibbonGroupBox? FindWidestGroupThatCanDecrease(
+        IReadOnlyList<RibbonGroupBox> groups,
+        Size groupConstraint,
+        bool allowSmallMode)
     {
         RibbonGroupBox? candidate = null;
         var maxWidth = double.MinValue;
@@ -494,10 +523,10 @@ public class RibbonGroupsStackPanel : Panel
         for (var i = 0; i < groups.Count; i++)
         {
             var group = groups[i];
-            if (!CanDecreaseDisplayMode(group.DisplayMode).HasValue)
+            if (!CanDecreaseDisplayMode(group.DisplayMode, allowSmallMode).HasValue)
                 continue;
 
-            var width = MeasureGroupWidthForLayout(group);
+            var width = MeasureGroupWidthForLayout(group, groupConstraint);
             if (width > maxWidth)
             {
                 candidate = group;
@@ -516,7 +545,7 @@ public class RibbonGroupsStackPanel : Panel
         for (var i = 0; i < groups.Count; i++)
         {
             var group = groups[i];
-            if (!CanDecreaseDisplayMode(group.DisplayMode).HasValue)
+            if (!CanDecreaseDisplayMode(group.DisplayMode, allowSmallMode: true).HasValue)
                 continue;
 
             var height = MeasureGroupDesiredSize(group).Height;
@@ -530,36 +559,33 @@ public class RibbonGroupsStackPanel : Panel
         return candidate;
     }
 
-    private static void CollapseOverflowGroupsToPopup(IReadOnlyList<RibbonGroupBox> groups, double availableWidth, int maxRows)
+    private static void CollapseOverflowGroupsToPopup(
+        IReadOnlyList<RibbonGroupBox> groups,
+        double availableWidth,
+        int maxRows,
+        Size groupConstraint)
     {
-        var visibleGroupsWidth = Math.Max(0, availableWidth - OverflowButtonWidth);
+        var visibleGroupsWidth = GetWidthBeforeOverflowSlot(availableWidth);
 
-        while (!CanFitHorizontal(groups, visibleGroupsWidth, maxRows))
+        while (!CanFitHorizontal(groups, visibleGroupsWidth, maxRows, groupConstraint))
         {
             var candidate = groups.LastOrDefault(group =>
-                group.AllowCollapsedPopup &&
-                group.DisplayMode == GroupDisplayMode.Small);
+                group.DisplayMode != GroupDisplayMode.Popup);
 
-            if (candidate == null)
-            {
-                candidate = groups.LastOrDefault(group =>
-                    group.AllowCollapsedPopup &&
-                    group.DisplayMode != GroupDisplayMode.Popup);
-            }
-
-            if (candidate == null)
+            if (candidate == null || !candidate.AllowCollapsedPopup)
                 break;
 
             SetDisplayMode(candidate, GroupDisplayMode.Popup);
         }
     }
 
-    private static double MeasureGroupWidthForLayout(RibbonGroupBox group)
+    private static double MeasureGroupWidthForLayout(RibbonGroupBox group, Size groupConstraint)
     {
         if (group.DisplayMode == GroupDisplayMode.Popup)
             return 0;
 
-        return MeasureGroupDesiredSize(group).Width;
+        group.Measure(groupConstraint);
+        return group.DesiredSize.Width;
     }
 
     private static double GetLayoutWidth(Control child)

@@ -200,9 +200,8 @@
                                 <Border
                                     x:Name="PART_GroupOverflowHost"
                                     Width="30"
-                                    Height="{StaticResource LargeControlHeight}"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
+                                    VerticalAlignment="Stretch"
                                     Background="{DynamicResource ThemeControlMidBrush}"
                                     BorderBrush="{DynamicResource ThemeBorderMidBrush}"
                                     BorderThickness="{DynamicResource ThemeBorderThickness}"
@@ -217,6 +216,7 @@
                                             VerticalAlignment="Stretch"
                                             Background="Transparent"
                                             BorderBrush="Transparent"
+                                            Classes="RibbonGroupOverflowButton"
                                             IsEnabled="{Binding $parent[windows:DesktopRibbon].HasGroupOverflow}"
                                             IsChecked="{Binding IsGroupOverflowOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
                                             ToolTip.Tip="More groups">
@@ -233,6 +233,7 @@
                                             x:Name="PART_GroupOverflowPopup"
                                             IsLightDismissEnabled="True"
                                             IsOpen="{Binding IsGroupOverflowOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
+                                            OverlayDismissEventPassThrough="True"
                                             Placement="Bottom"
                                             PlacementTarget="{Binding #PART_GroupOverflowButton}">
                                             <Border
@@ -639,5 +640,31 @@
                 Value="{Binding TitleBarBackground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type windows:RibbonWindow}}}" />
         <Setter Property="HeaderForeground"
                 Value="{Binding TitleBarForeground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type windows:RibbonWindow}}}" />
+    </Style>
+    <Style
+        Selector="windows|DesktopRibbon /template/ ToggleButton.RibbonGroupOverflowButton /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style
+        Selector="windows|DesktopRibbon /template/ ToggleButton.RibbonGroupOverflowButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeControlHighlightMidBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
+    </Style>
+    <Style
+        Selector="windows|DesktopRibbon /template/ ToggleButton.RibbonGroupOverflowButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccentBrush2}" />
+    </Style>
+    <Style
+        Selector="windows|DesktopRibbon /template/ ToggleButton.RibbonGroupOverflowButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccentBrush2}" />
+    </Style>
+    <Style Selector="windows|DesktopRibbon /template/ ToggleButton.RibbonGroupOverflowButton:checked">
+        <Setter Property="Foreground" Value="{DynamicResource ToggleButtonForegroundPressed}" />
+    </Style>
+    <Style Selector="windows|DesktopRibbon /template/ ToggleButton.RibbonGroupOverflowButton:pressed">
+        <Setter Property="Foreground" Value="{DynamicResource ToggleButtonForegroundPressed}" />
     </Style>
 </Styles>

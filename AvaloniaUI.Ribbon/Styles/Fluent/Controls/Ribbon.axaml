@@ -191,9 +191,8 @@
                                 <Border
                                     x:Name="PART_GroupOverflowHost"
                                     Width="30"
-                                    Height="{StaticResource LargeControlHeight}"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
+                                    VerticalAlignment="Stretch"
                                     Background="{DynamicResource ThemeControlMidBrush}"
                                     BorderBrush="{DynamicResource ThemeBorderMidBrush}"
                                     BorderThickness="{DynamicResource ThemeBorderThickness}"
@@ -208,6 +207,7 @@
                                             VerticalAlignment="Stretch"
                                             Background="Transparent"
                                             BorderBrush="Transparent"
+                                            Classes="RibbonGroupOverflowButton"
                                             IsEnabled="{Binding $parent[local:Ribbon].HasGroupOverflow}"
                                             IsChecked="{Binding IsGroupOverflowOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
                                             ToolTip.Tip="More groups">
@@ -224,6 +224,7 @@
                                             x:Name="PART_GroupOverflowPopup"
                                             IsLightDismissEnabled="True"
                                             IsOpen="{Binding IsGroupOverflowOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
+                                            OverlayDismissEventPassThrough="True"
                                             Placement="Bottom"
                                             PlacementTarget="{Binding #PART_GroupOverflowButton}">
                                             <Border
@@ -599,5 +600,31 @@
     </Style>
     <Style Selector="local|Ribbon /template/ Popup ListBox.RibbonMenuPlacesList ListBoxItem">
         <Setter Property="Padding" Value="10" />
+    </Style>
+    <Style
+        Selector="local|Ribbon /template/ ToggleButton.RibbonGroupOverflowButton /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style
+        Selector="local|Ribbon /template/ ToggleButton.RibbonGroupOverflowButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeControlHighlightMidBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
+    </Style>
+    <Style
+        Selector="local|Ribbon /template/ ToggleButton.RibbonGroupOverflowButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccentBrush2}" />
+    </Style>
+    <Style
+        Selector="local|Ribbon /template/ ToggleButton.RibbonGroupOverflowButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush2}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeAccentBrush2}" />
+    </Style>
+    <Style Selector="local|Ribbon /template/ ToggleButton.RibbonGroupOverflowButton:checked">
+        <Setter Property="Foreground" Value="{DynamicResource ToggleButtonForegroundPressed}" />
+    </Style>
+    <Style Selector="local|Ribbon /template/ ToggleButton.RibbonGroupOverflowButton:pressed">
+        <Setter Property="Foreground" Value="{DynamicResource ToggleButtonForegroundPressed}" />
     </Style>
 </Styles>
