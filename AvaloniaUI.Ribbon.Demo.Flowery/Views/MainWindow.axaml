@@ -438,7 +438,9 @@
 				</StackPanel>
 			</DesktopRibbon.HelpPaneContent>
 			<DesktopRibbon.Menu>
-				<RibbonMenu KeyTip.KeyTipKeys="F">
+				<RibbonMenu
+                    DisplayMode="{Binding RibbonMenuDisplayMode}"
+                    KeyTip.KeyTipKeys="F">
 					<RibbonMenu.SmallImage>
 						<Image
                             Width="16"

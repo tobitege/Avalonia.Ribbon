@@ -470,6 +470,7 @@ public class RibbonIntegrationRegressionTests
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top
         };
+        Assert.Equal(RibbonMenuDisplayMode.FullClient, menu.DisplayMode);
         var window = new Window
         {
             Width = 700,
@@ -509,7 +510,161 @@ public class RibbonIntegrationRegressionTests
             Assert.True(popup.IsOpen);
             Assert.False(popup.ShouldUseOverlayLayer);
             var menuRoot = Assert.IsType<Border>(popup.Child);
+            var contentButtonTop = contentButton.TranslatePoint(default, window)?.Y;
+            Assert.NotNull(contentButtonTop);
+            Assert.Equal(window.ClientSize.Width, popup.Width);
+            Assert.Equal(window.ClientSize.Height - contentButtonTop.Value, popup.Height);
+            Assert.Equal(popup.Width, menuRoot.Width);
+            Assert.Equal(popup.Height, menuRoot.Height);
             Assert.Contains(exitItem, menuRoot.GetVisualDescendants().OfType<RibbonMenuItem>());
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonMenu_SwitchToCompactDisplayModeUsesContentSizedPopup()
+    {
+        EnsureStyles();
+        const double hiddenContentWidth = 320;
+        var openItem = new RibbonMenuItem { Header = "Open" };
+        var exitItem = new RibbonMenuItem
+        {
+            Header = "Exit",
+            IsBottomDocked = true
+        };
+        var menu = new RibbonMenu
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            LargeImage = new Border { Width = hiddenContentWidth, Height = 80 },
+            SelectedItemContent = new Border { Width = hiddenContentWidth, Height = 160 }
+        };
+        menu.Items.Add(openItem);
+        menu.Items.Add(exitItem);
+        var window = new Window
+        {
+            Width = 700,
+            Height = 320,
+            Content = menu
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            var popup = menu.GetVisualDescendants().OfType<Popup>().Single();
+            var contentButton = menu.GetVisualDescendants()
+                .OfType<ToggleButton>()
+                .Single(control => control.Name == "ContentButton");
+
+            menu.IsMenuOpen = true;
+            Dispatcher.UIThread.RunJobs();
+            Assert.Equal(window.ClientSize.Width, popup.Width);
+
+            menu.DisplayMode = RibbonMenuDisplayMode.Compact;
+            Dispatcher.UIThread.RunJobs();
+
+            var menuRoot = Assert.IsType<Border>(popup.Child);
+            var backButton = menuRoot.GetVisualDescendants()
+                .OfType<ToggleButton>()
+                .Single(control => control.Name == "BackButton");
+            var largeImagePresenter = menuRoot.GetVisualDescendants()
+                .OfType<ContentPresenter>()
+                .Single(control => control.Name == "LargeImagePresenter");
+            var selectedContentPresenter = menuRoot.GetVisualDescendants()
+                .OfType<ContentPresenter>()
+                .Single(control => control.Name == "SelectedContentPresenter");
+
+            Assert.True(popup.IsOpen);
+            Assert.Equal(RibbonMenuDisplayMode.Compact, menu.DisplayMode);
+            Assert.Same(contentButton, popup.PlacementTarget);
+            Assert.Equal(PlacementMode.BottomEdgeAlignedLeft, popup.Placement);
+            Assert.Equal(0, popup.HorizontalOffset);
+            Assert.Equal(0, popup.VerticalOffset);
+            Assert.True(double.IsNaN(popup.Width));
+            Assert.True(double.IsNaN(popup.Height));
+            Assert.True(double.IsNaN(menuRoot.Width));
+            Assert.True(double.IsNaN(menuRoot.Height));
+            Assert.False(backButton.IsVisible);
+            Assert.False(largeImagePresenter.IsVisible);
+            Assert.False(selectedContentPresenter.IsVisible);
+            Assert.True(menuRoot.Bounds.Width >= 200);
+            Assert.True(menuRoot.Bounds.Width < hiddenContentWidth);
+            Assert.True(menuRoot.Bounds.Height < window.ClientSize.Height);
+            Assert.Contains(openItem, menuRoot.GetVisualDescendants().OfType<RibbonMenuItem>());
+            Assert.Contains(exitItem, menuRoot.GetVisualDescendants().OfType<RibbonMenuItem>());
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Theory]
+    [InlineData(RibbonMenuDisplayMode.FullClient)]
+    [InlineData(RibbonMenuDisplayMode.Compact)]
+    public void RibbonMenu_EscapeClosesFromButtonAndPopupContent(RibbonMenuDisplayMode displayMode)
+    {
+        EnsureStyles();
+        var menu = new RibbonMenu
+        {
+            DisplayMode = displayMode,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top
+        };
+        menu.Items.Add(new RibbonMenuItem { Header = "Open" });
+        var window = new Window
+        {
+            Width = 700,
+            Height = 320,
+            Content = menu
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            var popup = menu.GetVisualDescendants().OfType<Popup>().Single();
+            var contentButton = menu.GetVisualDescendants()
+                .OfType<ToggleButton>()
+                .Single(control => control.Name == "ContentButton");
+
+            menu.IsMenuOpen = true;
+            Dispatcher.UIThread.RunJobs();
+            contentButton.Focus();
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.True(contentButton.IsFocused);
+            Assert.True(popup.IsOpen);
+            window.KeyPress(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
+            window.KeyRelease(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.False(menu.IsMenuOpen);
+            Assert.False(popup.IsOpen);
+            Assert.False(contentButton.IsChecked);
+
+            menu.IsMenuOpen = true;
+            Dispatcher.UIThread.RunJobs();
+            var menuItemButton = Assert.IsType<Border>(popup.Child)
+                .GetVisualDescendants()
+                .OfType<Button>()
+                .Single(control => control.Name == "PART_ContentButton");
+            menuItemButton.Focus();
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.True(menuItemButton.IsFocused);
+            Assert.True(popup.IsOpen);
+            window.KeyPress(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
+            window.KeyRelease(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.False(menu.IsMenuOpen);
+            Assert.False(popup.IsOpen);
+            Assert.False(contentButton.IsChecked);
         }
         finally
         {

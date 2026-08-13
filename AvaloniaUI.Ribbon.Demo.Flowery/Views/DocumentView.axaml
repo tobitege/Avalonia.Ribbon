@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -73,6 +73,13 @@
                         Width="140"
                         ItemsSource="{Binding ClusterBanksPerRowOptions}"
                         SelectedItem="{Binding ClusterBanksPerRow}" />
+                </StackPanel>
+                <StackPanel Margin="0,0,20,8" Orientation="Vertical">
+                    <Label FontWeight="Bold">File Menu Mode</Label>
+                    <ComboBox
+                        Width="120"
+                        ItemsSource="{Binding RibbonMenuDisplayModeOptions}"
+                        SelectedItem="{Binding RibbonMenuDisplayMode}" />
                 </StackPanel>
             </WrapPanel>
             <TextBlock
@@ -151,4 +158,3 @@
         </StackPanel>
     </DockPanel>
 </UserControl>
-

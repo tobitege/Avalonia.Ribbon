@@ -547,6 +547,7 @@ Key properties:
 | `AccentBrush` | `IBrush` | theme accent brush |
 | `ShowDropDownArrow` | `bool` | `true` |
 | `DropDownArrowMargin` | `Thickness` | `0,0,4,0` |
+| `DisplayMode` | `RibbonMenuDisplayMode` | `FullClient` |
 | `ShowMenu` | `bool` | `true` |
 | `SelectedItemContent` | `object` | `null` |
 | `SelectedSubItems` | `object` | `null` |
@@ -560,6 +561,18 @@ Behavior notes:
 - Regroups items by `RibbonMenuItem.Group`.
 - Updates `IsLastItem` flags per group.
 - Recent-doc entries execute per-item command and raise `RecentDocumentInvoked`.
+- `FullClient` fills the client area below the File button.
+- `Compact` sizes the popup to its visible menu items.
+- `Compact` hides the back button, large image, and selected-content pane.
+
+Use a compact File menu:
+
+```xml
+<RibbonMenu DisplayMode="Compact">
+    <RibbonMenuItem Header="Open" />
+    <RibbonMenuItem Header="Exit" IsBottomDocked="True" />
+</RibbonMenu>
+```
 
 Customization:
 

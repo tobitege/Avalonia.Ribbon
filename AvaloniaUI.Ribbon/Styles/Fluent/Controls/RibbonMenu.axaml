@@ -105,6 +105,7 @@
                                             </Panel>
                                         </ToggleButton>
                                         <ContentPresenter
+                                            x:Name="LargeImagePresenter"
                                             HorizontalAlignment="Center"
                                             Content="{TemplateBinding LargeImage}"
                                             DockPanel.Dock="Top" />
@@ -200,7 +201,9 @@
                                         </Grid>
                                     </DockPanel>
                                 </Border>
-                                <ContentPresenter Content="{TemplateBinding SelectedItemContent}" />
+                                <ContentPresenter
+                                    x:Name="SelectedContentPresenter"
+                                    Content="{TemplateBinding SelectedItemContent}" />
                             </DockPanel>
                         </Border>
                     </Popup>
@@ -233,6 +236,15 @@
         Selector="local|RibbonMenu /template/ ToggleButton#BackButton:not(:pointerover):not(:pressed):not(:checked)">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style Selector="local|RibbonMenu[DisplayMode=Compact] /template/ ToggleButton#BackButton">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="local|RibbonMenu[DisplayMode=Compact] /template/ ContentPresenter#LargeImagePresenter">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="local|RibbonMenu[DisplayMode=Compact] /template/ ContentPresenter#SelectedContentPresenter">
+        <Setter Property="IsVisible" Value="False" />
     </Style>
     <!--Style Selector="local|RibbonMenu /template/ Popup#MenuPopup > PopupRoot">
     <Setter Property="TransparencyLevelHint" Value="Transparent" />

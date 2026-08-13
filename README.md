@@ -373,6 +373,15 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-08-13)
+
+- Bump package and application versions to `2026.8.13`.
+- Add `RibbonMenu.DisplayMode` with `FullClient` and `Compact` options.
+- `FullClient` keeps the File menu across the application client area.
+- `Compact` shows the File menu as a content-sized popup over the application.
+- The Escape key closes the File menu in both display modes.
+- Add a File Menu Mode selector to the Flowery desktop demo.
+
 ### Update (2026-08-10)
 
 - Bump package and application versions to `2026.8.10`.

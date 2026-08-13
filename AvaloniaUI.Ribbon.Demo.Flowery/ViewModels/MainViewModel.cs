@@ -43,6 +43,9 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private RibbonGroupOverflowBehavior _ribbonGroupOverflowBehavior =
         RibbonGroupOverflowBehavior.WrapThenShrink;
 
+    [ObservableProperty] private RibbonMenuDisplayMode _ribbonMenuDisplayMode =
+        RibbonMenuDisplayMode.FullClient;
+
     [ObservableProperty] private int _ribbonMaxGroupRows = 2;
 
     [ObservableProperty]
@@ -56,6 +59,9 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     public string Greeting => "Welcome to Avalonia!";
 
     public IReadOnlyList<int> RibbonMaxGroupRowOptions { get; } = Enumerable.Range(MinRibbonGroupRows, MaxRibbonGroupRows).ToArray();
+
+    public IReadOnlyList<RibbonMenuDisplayMode> RibbonMenuDisplayModeOptions { get; } =
+        Enum.GetValues<RibbonMenuDisplayMode>();
 
     public IReadOnlyList<int> ClusterBanksPerRowOptions { get; } = Enumerable.Range(MinClusterBanksPerRow, MaxClusterBanksPerRow).ToArray();
 
