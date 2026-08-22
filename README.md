@@ -373,6 +373,12 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-08-22)
+
+- Bump package and application versions to `2026.8.22`.
+- Fix the Ribbon group area when an application starts in full-screen mode.
+- The group area now uses the current width and stays aligned with the window edges.
+
 ### Update (2026-08-13)
 
 - Bump package and application versions to `2026.8.13`.

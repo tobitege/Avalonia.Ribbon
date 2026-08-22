@@ -152,7 +152,6 @@
                                         Name="PART_SelectedGroupsHost"
                                         MinHeight="96"
                                         MinWidth="100"
-                                        Width="{Binding $parent[local:Ribbon].Bounds.Width}"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                         ItemsSource="{TemplateBinding SelectedGroups}"
@@ -175,7 +174,6 @@
                                             <ItemsPanelTemplate>
                                                 <RibbonGroupsStackPanel
                                                     x:Name="PART_ItemsPanel"
-                                                    Width="{Binding $parent[ItemsControl].Bounds.Width}"
                                                     Margin="0"
                                                     HorizontalAlignment="Stretch"
                                                     Background="Transparent"

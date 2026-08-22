@@ -168,6 +168,56 @@ public class RibbonIntegrationRegressionTests
         }
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Ribbon_InitialFullScreenLayoutFillsClientWidth(bool useDesktopRibbon)
+    {
+        EnsureStyles();
+        Ribbon ribbon = useDesktopRibbon
+            ? CreateRibbon(new DesktopRibbon())
+            : CreateRibbon(new Ribbon());
+        Window window = useDesktopRibbon
+            ? new RibbonWindow
+            {
+                Width = 640,
+                Height = 480,
+                WindowState = WindowState.FullScreen,
+                Ribbon = (DesktopRibbon)ribbon
+            }
+            : new Window
+            {
+                Width = 640,
+                Height = 480,
+                WindowState = WindowState.FullScreen,
+                Content = ribbon
+            };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+
+            var groupsHost = ribbon.GetVisualDescendants()
+                .OfType<ItemsControl>()
+                .Single(control => control.Name == "PART_SelectedGroupsHost");
+            var groupsPanel = groupsHost.GetVisualDescendants()
+                .OfType<RibbonGroupsStackPanel>()
+                .Single();
+
+            Assert.Equal(WindowState.FullScreen, window.WindowState);
+            Assert.True(double.IsNaN(groupsHost.Width));
+            Assert.True(double.IsNaN(groupsPanel.Width));
+            Assert.Equal(window.ClientSize.Width, ribbon.Bounds.Width);
+            Assert.Equal(ribbon.Bounds.Width, groupsHost.Bounds.Width);
+            Assert.Equal(groupsHost.Bounds.Width, groupsPanel.Bounds.Width);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
     [Fact]
     public void RibbonMenu_ReopensAgainstCurrentWindowAfterWindowMoves()
     {
