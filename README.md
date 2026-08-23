@@ -373,6 +373,12 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-08-23)
+
+- Bump package and application versions to `2026.8.23`.
+- Restore the 1px accent frame around `RibbonWindow` when `WindowDecorations` is `None`.
+- The frame uses the window `BorderBrush`, dims for inactive windows, and disappears when the window is maximized.
+
 ### Update (2026-08-22)
 
 - Bump package and application versions to `2026.8.22`.

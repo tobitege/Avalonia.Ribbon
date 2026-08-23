@@ -23,6 +23,7 @@
         <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
         <Setter Property="Template">
             <ControlTemplate>
+                <Border Classes="OuterBorder" CornerRadius="0">
                 <Panel>
                     <Border Name="PART_TransparencyFallback" IsHitTestVisible="False" />
                     <Border Background="{TemplateBinding Background}" IsHitTestVisible="False" />
@@ -170,6 +171,7 @@
                             Grid.Column="2" />
                     </Grid>
                 </Panel>
+                </Border>
             </ControlTemplate>
         </Setter>
     </Style>
@@ -318,12 +320,6 @@
     <Style Selector="windows|RibbonWindow[WindowDecorations=None] /template/ Border.OuterBorder">
         <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
-    </Style>
-    <Style Selector="windows|RibbonWindow[WindowDecorations=None][WindowState=Normal] /template/ Border.OuterBorder">
-        <Setter Property="CornerRadius" Value="4" />
-    </Style>
-    <Style Selector="windows|RibbonWindow[WindowDecorations=None] /template/ Border#TitlebarFill">
-        <Setter Property="CornerRadius" Value="3,3,0,0" />
     </Style>
     <Style Selector="windows|RibbonWindow[WindowState=Maximized] /template/ Border.OuterBorder">
         <Setter Property="BorderThickness" Value="0" />

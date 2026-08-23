@@ -761,6 +761,41 @@ public class RibbonIntegrationRegressionTests
     }
 
     [Fact]
+    public void RibbonWindow_OuterBorderShowsAccentFrameOnlyWhileBorderless()
+    {
+        EnsureStyles();
+        var window = new RibbonWindow
+        {
+            Width = 700,
+            Height = 320,
+            WindowDecorations = WindowDecorations.None
+        };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+
+            var outerBorder = window.GetVisualDescendants()
+                .OfType<Border>()
+                .Single(border => border.Classes.Contains("OuterBorder"));
+
+            Assert.Equal(new Thickness(1), outerBorder.BorderThickness);
+            Assert.Equal(new CornerRadius(0), outerBorder.CornerRadius);
+            Assert.NotNull(outerBorder.BorderBrush);
+
+            window.WindowState = WindowState.Maximized;
+            Dispatcher.UIThread.RunJobs();
+
+            Assert.Equal(new Thickness(0), outerBorder.BorderThickness);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
     public void RibbonGroupBox_OrientationStylesSwitchSeparatorsWithoutBehaviors()
     {
         EnsureStyles();
