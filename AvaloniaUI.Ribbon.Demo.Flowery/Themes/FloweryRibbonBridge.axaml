@@ -7,9 +7,11 @@
     <sys:Double x:Key="FontSizeNormal">12</sys:Double>
     <sys:Double x:Key="ThemeDisabledOpacity">0.45</sys:Double>
     <Thickness x:Key="ThemeBorderThickness">1</Thickness>
+    <Thickness x:Key="RibbonGroupBoxSeparatorThickness">1</Thickness>
 
     <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="{DynamicResource DaisyBase100Color}" />
     <SolidColorBrush x:Key="ThemeForegroundBrush" Color="{DynamicResource DaisyBaseContentColor}" />
+    <SolidColorBrush x:Key="RibbonGroupBoxSeparatorBrush" Color="{DynamicResource DaisyBaseContentColor}" />
     <SolidColorBrush x:Key="ThemeControlMidBrush" Color="{DynamicResource DaisyBase200Color}" />
     <SolidColorBrush x:Key="ThemeControlMidHighBrush" Color="{DynamicResource DaisyBase200Color}" />
     <SolidColorBrush x:Key="ThemeControlHighBrush" Color="{DynamicResource DaisyBase300Color}" />

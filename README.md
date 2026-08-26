@@ -373,6 +373,13 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-08-26)
+
+- Bump package and application versions to `2026.8.26`.
+- Fix invisible `RibbonGroupBox` separators at 100% display scaling by changing the default thickness from 0.5px to 1px.
+- Expose `RibbonGroupBoxSeparatorThickness` and `RibbonGroupBoxSeparatorBrush` as theme resources; the default separator color matches the group font color.
+- Add live separator thickness and color controls to the Flowery demo.
+
 ### Update (2026-08-23)
 
 - Bump package and application versions to `2026.8.23`.

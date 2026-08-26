@@ -59,6 +59,8 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceInclude Source="avares://AvaloniaUI.Ribbon/SizeResources.axaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<Thickness x:Key="RibbonGroupBoxSeparatorThickness">1</Thickness>
+			<SolidColorBrush x:Key="RibbonGroupBoxSeparatorBrush" Color="{DynamicResource SystemAltMediumColor}" />
 		</ResourceDictionary>
 	</Styles.Resources>
 	<Style Selector="local|RibbonGroupBox">
@@ -77,16 +79,16 @@
                         IsVisible="True"
                         Height="{StaticResource LargeControlHeight}"
                         Margin="4,0"
-                        BorderBrush="{DynamicResource SystemControlHighlightAltBaseLowBrush}"
-                        BorderThickness="0.5"
+                        BorderBrush="{DynamicResource RibbonGroupBoxSeparatorBrush}"
+                        BorderThickness="{DynamicResource RibbonGroupBoxSeparatorThickness}"
                         DockPanel.Dock="Right" />
 					<Border
                         x:Name="HorizontalSeparator"
                         IsVisible="False"
                         Margin="10,4"
                         HorizontalAlignment="Stretch"
-                        BorderBrush="{DynamicResource SystemControlHighlightAltBaseLowBrush}"
-                        BorderThickness="0.5"
+                        BorderBrush="{DynamicResource RibbonGroupBoxSeparatorBrush}"
+                        BorderThickness="{DynamicResource RibbonGroupBoxSeparatorThickness}"
                         DockPanel.Dock="Bottom" />
 					<DockPanel>
 						<DockPanel Margin="6,0,6,1" DockPanel.Dock="Bottom">

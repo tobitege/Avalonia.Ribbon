@@ -1,4 +1,6 @@
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Threading;
 using AvaloniaUI.Ribbon.Desktop;
 
@@ -9,6 +11,30 @@ public partial class DocumentView : UserControl
     public DocumentView()
     {
         InitializeComponent();
+        LoadSeparatorResources();
+    }
+
+    private void LoadSeparatorResources()
+    {
+        if (Application.Current?.Resources.TryGetResource("RibbonGroupBoxSeparatorThickness", null, out var thicknessResource) == true &&
+            thicknessResource is Thickness thickness)
+            SeparatorThicknessNumericUpDown.Value = (decimal)thickness.Left;
+
+        if (Application.Current?.Resources.TryGetResource("RibbonGroupBoxSeparatorBrush", null, out var brushResource) == true &&
+            brushResource is ISolidColorBrush brush)
+            SeparatorColorPicker.Color = brush.Color;
+    }
+
+    private void OnSeparatorThicknessChanged(object sender, NumericUpDownValueChangedEventArgs e)
+    {
+        if (e.NewValue.HasValue && Application.Current != null)
+            Application.Current.Resources["RibbonGroupBoxSeparatorThickness"] = new Thickness((double)e.NewValue.Value);
+    }
+
+    private void OnSeparatorColorChanged(object sender, ColorChangedEventArgs e)
+    {
+        if (Application.Current != null)
+            Application.Current.Resources["RibbonGroupBoxSeparatorBrush"] = new SolidColorBrush(e.NewColor);
     }
 
     private void OnDecorationModeSelectionChanged(object sender, SelectionChangedEventArgs e)

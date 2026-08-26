@@ -81,6 +81,24 @@
                         ItemsSource="{Binding RibbonMenuDisplayModeOptions}"
                         SelectedItem="{Binding RibbonMenuDisplayMode}" />
                 </StackPanel>
+                <StackPanel Margin="0,0,20,8" Orientation="Vertical">
+                    <Label FontWeight="Bold">Group Separator Thickness</Label>
+                    <NumericUpDown
+                        x:Name="SeparatorThicknessNumericUpDown"
+                        Width="120"
+                        Increment="0.5"
+                        Maximum="5"
+                        Minimum="0"
+                        ValueChanged="OnSeparatorThicknessChanged" />
+                </StackPanel>
+                <StackPanel Margin="0,0,20,8" Orientation="Vertical">
+                    <Label FontWeight="Bold">Group Separator Color</Label>
+                    <ColorPicker
+                        x:Name="SeparatorColorPicker"
+                        Width="120"
+                        ColorChanged="OnSeparatorColorChanged"
+                        IsAlphaEnabled="True" />
+                </StackPanel>
             </WrapPanel>
             <TextBlock
                 MaxWidth="640"
