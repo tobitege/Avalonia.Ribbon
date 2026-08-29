@@ -135,8 +135,8 @@
                     </Panel>
                     <Grid
                         x:Name="ResizeGrid"
-                        RowDefinitions="6,*,12"
-                        ColumnDefinitions="6,*,12">
+                        RowDefinitions="6,*,6"
+                        ColumnDefinitions="6,*,6">
                         <Border
                             x:Name="TopLeft"
                             Grid.Row="0"

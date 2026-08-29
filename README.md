@@ -373,6 +373,13 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-08-29)
+
+- Bump package and application versions to `2026.8.29`.
+- Shrink the invisible `RibbonWindow` resize borders on the right and bottom edges from 12px to 6px,
+  matching the window's actual resize hit logic. The wider strips showed a resize cursor over client
+  content where dragging had no effect.
+
 ### Update (2026-08-26)
 
 - Bump package and application versions to `2026.8.26`.
