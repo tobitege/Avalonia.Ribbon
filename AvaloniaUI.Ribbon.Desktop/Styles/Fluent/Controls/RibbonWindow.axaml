@@ -29,6 +29,7 @@
                     <Border Background="{TemplateBinding Background}" IsHitTestVisible="False" />
                     <Panel Margin="{TemplateBinding WindowDecorationMargin}" Background="Transparent" />
                     <Panel>
+                        <VisualLayerManager>
                         <DockPanel>
                             <Grid
                                 Margin="{TemplateBinding WindowDecorationMargin}"
@@ -132,6 +133,7 @@
                                     ContentTemplate="{TemplateBinding ContentTemplate}" />
                             </DockPanel>
                         </DockPanel>
+                        </VisualLayerManager>
                     </Panel>
                     <Grid
                         x:Name="ResizeGrid"

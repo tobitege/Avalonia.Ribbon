@@ -1,4 +1,4 @@
-# AvaloniaRibbon
+﻿# AvaloniaRibbon
 
 This is a Ribbon Control Component library that replicates Microsoft's Ribbon UI, as seen in Windows 8+'s File Explorer,
 Microsoft Office 2007+, and in various other places, for Avalonia. In its present state, it is reasonably usable, but
@@ -372,6 +372,13 @@ Composing banks in rows:
 Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many banks appear per row via its line-count properties.
 
 ## Change Log
+
+### Update (2026-09-10)
+
+- Bump package and application versions to `2026.9.10`.
+- Update Avalonia packages to `12.1.2`.
+- Wrap the `RibbonWindow` content (title bar, Ribbon and client area) in a `VisualLayerManager`.
+  Avalonia 12 resolves the `LightDismissOverlayLayer` from this layer; without it, popups did not close on a click outside.
 
 ### Update (2026-08-29)
 
