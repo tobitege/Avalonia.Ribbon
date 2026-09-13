@@ -98,12 +98,7 @@
                                                     Margin="0,2,2,0"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Bottom" />
-                                                <Rectangle
-                                                    Width="8"
-                                                    Height="8"
-                                                    Margin="2,0,0,2"
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Top" />
+                                                <Path Data="M 2.5,2 L 2.5,0.5 L 9.5,0.5 L 9.5,7.5 L 8,7.5" />
                                             </Grid>
                                         </Grid>
                                     </Button>
@@ -287,10 +282,16 @@
                 Value="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" />
         <Setter Property="StrokeThickness" Value="1" />
     </Style>
+    <!--
+        Restore glyph like the Windows caption button: the front square is an outline, the back square shows
+        only its top and right edge (path), both drawn with the button foreground.
+    -->
     <Style
-        Selector="windows|RibbonWindow /template/ Grid#CaptionButtons Button#PART_MaximizeButton > Grid > Grid Border">
-        <Setter Property="BorderBrush"
+        Selector="windows|RibbonWindow /template/ Grid#CaptionButtons Button#PART_MaximizeButton > Grid > Grid > Path">
+        <Setter Property="Stroke"
                 Value="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeLineCap" Value="Square" />
     </Style>
     <Style
         Selector="windows|RibbonWindow[WindowState=Maximized] /template/ Grid#CaptionButtons Button#PART_MaximizeButton > Grid > Rectangle">
@@ -303,13 +304,6 @@
     <Style
         Selector="windows|RibbonWindow[WindowState=Minimized] /template/ Grid#CaptionButtons Button#PART_MaximizeButton > Grid > Grid">
         <Setter Property="IsVisible" Value="False" />
-    </Style>
-    <Style
-        Selector="windows|RibbonWindow /template/ Grid#CaptionButtons Button#PART_MaximizeButton > Grid > Grid > Rectangle">
-        <Setter Property="Stroke" Value="Transparent" />
-        <Setter Property="StrokeThickness" Value="0" />
-        <Setter Property="Fill"
-                Value="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" />
     </Style>
     <Style
         Selector="windows|RibbonWindow[IsActive=false] /template/ Grid#CaptionButtons Button:not(:pointerover):not(:pressed)">

@@ -373,6 +373,13 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-09-13)
+
+- Bump package and application versions to `2026.9.13`.
+- `RibbonWindow`: the restore glyph of the maximize caption button is drawn like the Windows caption button
+  (front square as outline, back square as top and right edge). It used to be two filled squares, which
+  rendered as a solid block on dark title bars.
+
 ### Update (2026-09-10)
 
 - Bump package and application versions to `2026.9.10`.
