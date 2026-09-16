@@ -178,9 +178,9 @@
                                                     HorizontalAlignment="Stretch"
                                                     Background="Transparent"
                                                     VerticalAlignment="Stretch"
-                                                    GroupOverflowBehavior="{Binding $parent[local:Ribbon].GroupOverflowBehavior}"
-                                                    MaxGroupRows="{Binding $parent[local:Ribbon].MaxGroupRows}"
-                                                    OverflowOwner="{Binding $parent[local:Ribbon]}"
+                                                    GroupOverflowBehavior="{CompiledBinding $parent[local:Ribbon].GroupOverflowBehavior}"
+                                                    MaxGroupRows="{CompiledBinding $parent[local:Ribbon].MaxGroupRows}"
+                                                    OverflowOwner="{CompiledBinding $parent[local:Ribbon]}"
                                                     Orientation="Horizontal" />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
@@ -195,8 +195,8 @@
                                     BorderBrush="{DynamicResource ThemeBorderMidBrush}"
                                     BorderThickness="{DynamicResource ThemeBorderThickness}"
                                     CornerRadius="{DynamicResource ControlCornerRadius}"
-                                    IsHitTestVisible="{Binding $parent[local:Ribbon].HasGroupOverflow}"
-                                    Opacity="{Binding $parent[local:Ribbon].HasGroupOverflow}">
+                                    IsHitTestVisible="{CompiledBinding $parent[local:Ribbon].HasGroupOverflow}"
+                                    Opacity="{CompiledBinding $parent[local:Ribbon].HasGroupOverflow}">
                                     <Grid>
                                         <ToggleButton
                                             x:Name="PART_GroupOverflowButton"
@@ -206,7 +206,7 @@
                                             Background="Transparent"
                                             BorderBrush="Transparent"
                                             Classes="RibbonGroupOverflowButton"
-                                            IsEnabled="{Binding $parent[local:Ribbon].HasGroupOverflow}"
+                                            IsEnabled="{CompiledBinding $parent[local:Ribbon].HasGroupOverflow}"
                                             IsChecked="{Binding IsGroupOverflowOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
                                             ToolTip.Tip="More groups">
                                             <Path
@@ -400,7 +400,7 @@
                                             <ItemsPanelTemplate>
                                                 <RibbonGroupsStackPanel
                                                     x:Name="PART_ItemsPanel"
-                                                    Height="{Binding $parent[ItemsControl].Bounds.Height}"
+                                                    Height="{CompiledBinding $parent[ItemsControl].Bounds.Height}"
                                                     Margin="0"
                                                     HorizontalAlignment="Stretch"
                                                     Background="Transparent"

@@ -27,6 +27,158 @@ public class RibbonIntegrationRegressionTests
 {
     private static Application? _styledApplication;
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void KeyTip_UsesExplicitThemeAndTracksRibbonForeground(bool dark)
+    {
+        EnsureStyles();
+        var ribbon = CreateRibbon(new Ribbon { Foreground = Brushes.Red });
+        var tab = (RibbonTab)ribbon.Tabs[0];
+        KeyTip.SetKeyTipKeys(tab, "H");
+        var window = new Window
+        {
+            Width = 600,
+            Height = 240,
+            RequestedThemeVariant = dark ? Avalonia.Styling.ThemeVariant.Dark : Avalonia.Styling.ThemeVariant.Light,
+            Content = ribbon
+        };
+        Popup? popup = null;
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            popup = KeyTip.GetKeyTip(tab);
+            popup.IsOpen = true;
+            Dispatcher.UIThread.RunJobs();
+
+            var content = Assert.IsType<ContentControl>(popup.Child);
+            Assert.NotNull(content.Theme);
+            Assert.NotNull(content.Template);
+            Assert.Equal("H", content.Content);
+            Assert.Equal(20d, content.Height);
+            Assert.Equal(Brushes.Red, content.Foreground);
+            Assert.Contains(content.GetVisualDescendants().OfType<ContentPresenter>(),
+                presenter => presenter.CornerRadius == new CornerRadius(3));
+
+            ribbon.Foreground = Brushes.Blue;
+            Dispatcher.UIThread.RunJobs();
+            Assert.Equal(Brushes.Blue, content.Foreground);
+            Assert.Same(popup, KeyTip.GetKeyTip(tab));
+        }
+        finally
+        {
+            if (popup is not null)
+                popup.IsOpen = false;
+            window.Close();
+        }
+    }
+
+    [Theory]
+    [InlineData("W", false)]
+    [InlineData("M", false)]
+    [InlineData("WM", false)]
+    [InlineData("W", true)]
+    [InlineData("M", true)]
+    [InlineData("WM", true)]
+    public void KeyTip_PopupFitsWideTextAndContentChanges(string keys, bool firstOpen)
+    {
+        EnsureStyles();
+        var ribbon = CreateRibbon(new Ribbon());
+        var tab = (RibbonTab)ribbon.Tabs[0];
+        KeyTip.SetKeyTipKeys(tab, firstOpen ? keys : "I");
+        var window = new Window { Width = 600, Height = 240, Content = ribbon };
+        Popup? popup = null;
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            popup = KeyTip.GetKeyTip(tab);
+            var content = Assert.IsType<ContentControl>(popup.Child);
+            content.FontSize = 18;
+            popup.IsOpen = true;
+            Dispatcher.UIThread.RunJobs();
+
+            KeyTip.SetKeyTipKeys(tab, keys);
+            Dispatcher.UIThread.RunJobs();
+
+            var text = Assert.Single(content.GetVisualDescendants().OfType<TextBlock>());
+            var requiredWidth = text.TextLayout.WidthIncludingTrailingWhitespace
+                + content.Padding.Left + content.Padding.Right
+                + content.BorderThickness.Left + content.BorderThickness.Right;
+            Assert.True(content.Bounds.Width >= requiredWidth,
+                $"KeyTip '{keys}' needs {requiredWidth}px but has {content.Bounds.Width}px.");
+        }
+        finally
+        {
+            if (popup is not null)
+                popup.IsOpen = false;
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonStyles_DoNotApplyKeyTipOrQuickAccessStylesOutsideTheirOwners()
+    {
+        EnsureStyles();
+        var content = new ContentControl { Content = "Host content", Classes = { "KeyTipContent" } };
+        var button = new Button { Content = "Host button", Classes = { "quickAccessButton" } };
+        var toggle = new ToggleButton { Content = "Host toggle", Classes = { "quickAccessButton" } };
+        var window = new Window
+        {
+            Width = 600,
+            Height = 240,
+            Content = new StackPanel { Children = { content, button, toggle } }
+        };
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+            Assert.True(double.IsNaN(content.Height));
+            Assert.True(button.Focusable);
+            Assert.True(toggle.Focusable);
+            Assert.NotEqual(Brushes.Transparent, toggle.Background);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
+    [Fact]
+    public void RibbonStyles_ContentControlBatchRemainsUnstyled()
+    {
+        EnsureStyles();
+        var panel = new StackPanel();
+        var window = new Window { Width = 600, Height = 400, Content = panel };
+        using var events = new System.Diagnostics.Tracing.EventSource("RibbonStyles-Regression");
+        try
+        {
+            window.Show();
+            panel.Children.Add(new ContentControl { Content = "Warmup" });
+            panel.Children.Add(new DataValidationErrors());
+            Dispatcher.UIThread.RunJobs();
+            panel.Children.Clear();
+
+            // Trace markers isolate control creation from application and theme startup.
+            events.Write("ContentControlsStart", new { Count = 2048 });
+            for (var index = 0; index < 1024; index++)
+            {
+                panel.Children.Add(new ContentControl { Content = index.ToString() });
+                panel.Children.Add(new DataValidationErrors());
+            }
+            Dispatcher.UIThread.RunJobs();
+            events.Write("ContentControlsStop", new { Count = panel.Children.Count });
+
+            Assert.Equal(2048, panel.Children.Count);
+            Assert.All(panel.Children, control => Assert.True(double.IsNaN(control.Height)));
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
     [Fact]
     public void DesktopStyleCollection_RendersBaseAndDesktopRibbon()
     {

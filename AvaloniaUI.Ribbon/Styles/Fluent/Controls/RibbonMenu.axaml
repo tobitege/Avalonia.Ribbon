@@ -48,7 +48,7 @@
                                 Margin="{TemplateBinding DropDownArrowMargin}"
                                 VerticalAlignment="Center"
                                 Data="M 0 0 L 7 0 L 3.5 4 Z"
-                                Fill="{Binding $parent[ToggleButton].Foreground}"
+                                Fill="{CompiledBinding $parent[ToggleButton].Foreground}"
                                 IsVisible="{TemplateBinding ShowDropDownArrow}"
                                 Stretch="Uniform" />
                         </StackPanel>
@@ -167,9 +167,9 @@
                                                             HorizontalContentAlignment="Stretch"
                                                             Background="Transparent"
                                                             BorderBrush="Transparent"
-                                                            Command="{Binding $parent[local:RibbonMenu].RecentDocumentClickCommand}"
+                                                            Command="{CompiledBinding $parent[local:RibbonMenu].RecentDocumentClickCommand}"
                                                             CommandParameter="{Binding}"
-                                                            FontSize="{Binding $parent[ItemsControl].FontSize}">
+                                                            FontSize="{CompiledBinding $parent[ItemsControl].FontSize}">
                                                             <DockPanel>
                                                                 <ContentPresenter
                                                                     Margin="0,0,6,0"

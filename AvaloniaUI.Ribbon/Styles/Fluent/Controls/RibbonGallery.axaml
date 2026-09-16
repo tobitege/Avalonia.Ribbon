@@ -1,4 +1,4 @@
-<ResourceDictionary
+﻿<ResourceDictionary
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
@@ -178,7 +178,7 @@
                                         HorizontalAlignment="Center"
                                         ClipToBounds="True"
                                         Data="M 0 3 L 3 0 L 6 3"
-                                        Stroke="{Binding $parent[RepeatButton].Foreground}"
+                                        Stroke="{CompiledBinding $parent[RepeatButton].Foreground}"
                                         StrokeThickness="1" />
                                 </RepeatButton>
                                 <RepeatButton
@@ -195,7 +195,7 @@
                                         HorizontalAlignment="Center"
                                         ClipToBounds="True"
                                         Data="M 0 0 L 3 3 L 6 0"
-                                        Stroke="{Binding $parent[RepeatButton].Foreground}"
+                                        Stroke="{CompiledBinding $parent[RepeatButton].Foreground}"
                                         StrokeThickness="1" />
                                 </RepeatButton>
                                 <ToggleButton
@@ -211,14 +211,14 @@
                                         <Rectangle
                                             Height="1"
                                             HorizontalAlignment="Stretch"
-                                            Fill="{Binding $parent[ToggleButton].Foreground}" />
+                                            Fill="{CompiledBinding $parent[ToggleButton].Foreground}" />
                                         <Path
                                             Width="6"
                                             Height="3"
                                             HorizontalAlignment="Center"
                                             ClipToBounds="True"
                                             Data="M 0 0 L 3 3 L 6 0"
-                                            Stroke="{Binding $parent[ToggleButton].Foreground}"
+                                            Stroke="{CompiledBinding $parent[ToggleButton].Foreground}"
                                             StrokeThickness="1" />
                                     </StackPanel>
                                 </ToggleButton>

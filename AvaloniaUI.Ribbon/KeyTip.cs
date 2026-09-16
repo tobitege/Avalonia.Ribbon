@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.Styling;
 
 namespace AvaloniaUI.Ribbon;
 
@@ -42,7 +43,7 @@ public class KeyTip
             return val;
         var tipContent = new ContentControl
         {
-            //Background = new SolidColorBrush(Colors.White),
+            Theme = element.FindResource("RibbonKeyTipContentTheme") as ControlTheme,
             [!ContentControl.ContentProperty] = element[!KeyTipKeysProperty]
         };
         tipContent.Classes.Add("KeyTipContent");
@@ -53,10 +54,6 @@ public class KeyTip
         {
             PlacementTarget = element,
             Placement = PlacementMode.Right,
-            [!Popup.WidthProperty] = tipContent.GetObservable(Control.BoundsProperty).Select(x => x.Width).ToBinding(),
-            [!Popup.HeightProperty] =
-                tipContent.GetObservable(Control.BoundsProperty).Select(x => x.Height)
-                    .ToBinding(), //tipContent[!Control.HeightProperty],
             VerticalAlignment = VerticalAlignment.Bottom,
             Child = tipContent
         };

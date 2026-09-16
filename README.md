@@ -373,6 +373,13 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-09-16)
+
+- Move KeyTip styling into a theme assigned directly to each KeyTip. Host application content controls no longer instantiate its bindings.
+- Compile ancestor bindings in both Ribbon libraries and limit quick access button styles to their toolbar or template.
+- Let KeyTip popups size to their content so wide letters and changing key sequences are not clipped.
+- Bump both packages to `2026.9.16`.
+
 ### Update (2026-09-13)
 
 - Bump package and application versions to `2026.9.13`.

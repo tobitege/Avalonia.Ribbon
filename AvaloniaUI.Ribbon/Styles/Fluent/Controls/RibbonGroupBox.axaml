@@ -196,7 +196,7 @@
 		<Setter Property="VerticalAlignment" Value="Top" />
 	</Style>
 	<Style Selector="local|Ribbon[Orientation=Horizontal][GroupOverflowBehavior=WrapThenShrink] local|RibbonGroupBox /template/ local|RibbonGroupWrapPanel#PART_ItemsPanel">
-		<Setter Property="SmallLineCount" Value="{Binding $parent[local:Ribbon].MaxGroupRows}" />
+		<Setter Property="SmallLineCount" Value="{CompiledBinding $parent[local:Ribbon].MaxGroupRows}" />
 	</Style>
 	<Style Selector="local|Ribbon[Orientation=Vertical] local|RibbonGroupBox /template/ local|RibbonGroupWrapPanel#PART_ItemsPanel">
 		<Setter Property="Orientation" Value="Horizontal" />

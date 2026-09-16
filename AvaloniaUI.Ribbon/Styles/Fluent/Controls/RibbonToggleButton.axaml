@@ -53,14 +53,16 @@
                 <ToggleButton Classes="quickAccessButton" Command="{Binding Command}" IsChecked="{Binding IsChecked}"
                               CommandParameter="{Binding CommandParameter}" ToolTip.Tip="{Binding ToolTip.Tip}"
                               KeyTip.KeyTipKeys="{Binding KeyTip.Tip}">
+                    <ToggleButton.Styles>
+                        <Style Selector="ToggleButton:not(:pointerover):not(:pressed):not(:checked)">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                        </Style>
+                    </ToggleButton.Styles>
                     <ContentPresenter Content="{Binding QuickAccessIcon}" Width="16" Height="16" />
                 </ToggleButton>
             </ControlTemplate>
         </Setter>
-    </Style>
-    <Style Selector="ToggleButton.quickAccessButton:not(:pointerover):not(:pressed):not(:checked)">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
     <Style Selector="local|RibbonToggleButton[Size=Large]">
         <Setter Property="Padding" Value="9,4" />

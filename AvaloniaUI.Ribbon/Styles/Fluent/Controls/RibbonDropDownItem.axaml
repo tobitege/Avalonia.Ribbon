@@ -1,5 +1,6 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon"
                     xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls">
     <converters:PlatformKeyGestureConverter x:Key="KeyGestureConverter" />
     <x:Double x:Key="MenuFlyoutSubItemPopupHorizontalOffset">-4</x:Double>
@@ -8,7 +9,7 @@
     <StreamGeometry x:Key="MenuItemChevronPathData">M 1,0 10,10 l -9,10 -1,-1 L 8,10 -0,1 Z</StreamGeometry>
 
     <ControlTheme x:Key="{x:Type RibbonDropDownItem}" TargetType="RibbonDropDownItem">
-        <Setter Property="Foreground" Value="{Binding $parent[Ribbon].Foreground}" />
+        <Setter Property="Foreground" Value="{CompiledBinding $parent[local:Ribbon].Foreground}" />
         <!--  Narrow padding should be used for mouse input, when non-narrow one should be used for touch input in future.  -->
         <Setter Property="Padding" Value="{DynamicResource MenuFlyoutItemThemePaddingNarrow}" />
         <Setter Property="Template">
@@ -168,7 +169,7 @@
             <Setter Property="IsVisible" Value="True" />
             <Setter Property="Content">
                 <Template>
-                    <Path Fill="{Binding $parent[MenuItem].Foreground}"
+                    <Path Fill="{CompiledBinding $parent[MenuItem].Foreground}"
                           Width="16"
                           Data="{StaticResource CheckMarkPathData}" />
                 </Template>
@@ -178,7 +179,7 @@
             <Setter Property="IsVisible" Value="True" />
             <Setter Property="Content">
                 <Template>
-                    <Ellipse Fill="{Binding $parent[MenuItem].Foreground}"
+                    <Ellipse Fill="{CompiledBinding $parent[MenuItem].Foreground}"
                              Margin="4" Width="8" Height="8" />
                 </Template>
             </Setter>

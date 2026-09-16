@@ -1,11 +1,11 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AvaloniaUI.Ribbon;assembly=AvaloniaUI.Ribbon">
     <!-- Add Resources Here -->
     <ControlTheme x:Key="LargeGalleryItem" TargetType="local:GalleryItem">
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="2,1" />
-        <Setter Property="Height" Value="{Binding $parent[local:Gallery].ItemHeight}" />
+        <Setter Property="Height" Value="{CompiledBinding $parent[local:Gallery].ItemHeight}" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Border x:Name="BackgroundBorder"
@@ -78,7 +78,7 @@
     <ControlTheme x:Key="MediumGalleryItem" TargetType="local:GalleryItem">
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="2,1" />
-        <Setter Property="Height" Value="{Binding $parent[local:Gallery].ItemHeight}" />
+        <Setter Property="Height" Value="{CompiledBinding $parent[local:Gallery].ItemHeight}" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Border x:Name="BackgroundBorder"
