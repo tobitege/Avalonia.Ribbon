@@ -375,6 +375,7 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ### Update (2026-09-17)
 
+- Reuse group widths during horizontal layout to reduce repeated measurement calls while groups shrink or move into popup overflow.
 - Defer group updates caused by tab selection changes until `EndUpdate()` completes the batch.
 - When `ItemsSource` already contains the same tabs in the same order, preserve the tab list and selection.
 - Bump both packages to `2026.9.17`.
