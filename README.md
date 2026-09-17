@@ -373,6 +373,12 @@ Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many bank
 
 ## Change Log
 
+### Update (2026-09-17)
+
+- Defer group updates caused by tab selection changes until `EndUpdate()` completes the batch.
+- When `ItemsSource` already contains the same tabs in the same order, preserve the tab list and selection.
+- Bump both packages to `2026.9.17`.
+
 ### Update (2026-09-16)
 
 - Move KeyTip styling into a theme assigned directly to each KeyTip. Host application content controls no longer instantiate its bindings.
