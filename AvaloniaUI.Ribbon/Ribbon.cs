@@ -43,7 +43,7 @@ public class Ribbon : TabControl, IRibbon
 
         OrientationProperty.OverrideDefaultValue<Ribbon>(Orientation.Horizontal);
 
-        SelectedIndexProperty.Changed.AddClassHandler<Ribbon>((x, e) => x.RefreshSelectedGroups());
+        SelectedIndexProperty.Changed.AddClassHandler<Ribbon>((x, e) => x.OnSelectedIndexChanged());
 
         IsCollapsedProperty.Changed.AddClassHandler<Ribbon, bool>((sender, args) =>
         {
@@ -384,6 +384,20 @@ public class Ribbon : TabControl, IRibbon
             RefreshTabs();
             RefreshSelectedGroups();
         }
+    }
+
+    // Selection changes inside a BeginUpdate/EndUpdate batch are folded into the single refresh at
+    // EndUpdate: a host that replaces Tabs and restores the selected tab afterwards otherwise pays
+    // RefreshSelectedGroups once per index change (the Tabs assignment forces index 1 first).
+    private void OnSelectedIndexChanged()
+    {
+        if (_updateDepth > 0)
+        {
+            _refreshPending = true;
+            return;
+        }
+
+        RefreshSelectedGroups();
     }
 
     public Control? GetItemByName(string name)
@@ -892,6 +906,11 @@ public class Ribbon : TabControl, IRibbon
         {
             if (ItemsSource is IList list)
             {
+                // Already in sync (the host assigned the flattened tabs itself): clearing and refilling
+                // would reset the tab selection and rebuild the tab strip for nothing.
+                if (ItemsSourceMatchesTabs(list))
+                    return;
+
                 list.Clear();
                 foreach (var ctrl in Tabs)
                     if (ctrl is RibbonContextualTabGroup ctx)
@@ -913,6 +932,29 @@ public class Ribbon : TabControl, IRibbon
                 ItemsSource = newTabsList;
             }
         }
+    }
+
+    private bool ItemsSourceMatchesTabs(IList list)
+    {
+        var index = 0;
+        foreach (var ctrl in Tabs)
+        {
+            if (ctrl is RibbonContextualTabGroup ctx)
+            {
+                foreach (var tb in ctx.Items.OfType<RibbonTab>())
+                {
+                    if (index >= list.Count || !ReferenceEquals(list[index++], tb))
+                        return false;
+                }
+            }
+            else if (ctrl is RibbonTab tab)
+            {
+                if (index >= list.Count || !ReferenceEquals(list[index++], tab))
+                    return false;
+            }
+        }
+
+        return index == list.Count;
     }
 
     private void SetChildKeyTipsVisibility(bool open)

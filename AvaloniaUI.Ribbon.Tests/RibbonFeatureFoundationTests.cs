@@ -36,6 +36,29 @@ public class RibbonFeatureFoundationTests
     }
 
     [Fact]
+    public void BeginUpdate_DefersSelectionRefresh_UntilEndUpdate()
+    {
+        var ribbon = new Ribbon();
+        var first = new RibbonTab { Header = "First" };
+        var second = new RibbonTab { Header = "Second" };
+        first.Groups.Add(new RibbonGroupBox { Header = "A" });
+        second.Groups.Add(new RibbonGroupBox { Header = "B" });
+
+        ribbon.BeginUpdate();
+        ribbon.Tabs = new System.Collections.ObjectModel.ObservableCollection<Control> { first, second };
+        ribbon.ItemsSource = new System.Collections.ObjectModel.ObservableCollection<Control> { first, second };
+        ribbon.SelectedIndex = 1;
+        ribbon.SelectedIndex = 0;
+        Assert.Empty(ribbon.SelectedGroups);
+        ribbon.EndUpdate();
+
+        Assert.Equal(0, ribbon.SelectedIndex);
+        Assert.Equal(new Control[] { first, second }, ribbon.Items.Cast<Control>());
+        Assert.Single(ribbon.SelectedGroups);
+        Assert.Same(first.Groups[0], ribbon.SelectedGroups[0]);
+    }
+
+    [Fact]
     public void Lookup_FindsTreeItems_ChangesOnlyRequestedState_AndMovesWithinOwner()
     {
         var ribbon = new Ribbon();
