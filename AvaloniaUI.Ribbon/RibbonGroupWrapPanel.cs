@@ -216,6 +216,7 @@ public class RibbonGroupWrapPanel : WrapPanel
         var lines = new List<LineInfo>();
         var currentLine = new LineInfo();
         lines.Add(currentLine);
+        var lineClosed = false;
 
         for (var i = 0; i < visibleChildren.Count; i++)
         {
@@ -225,12 +226,15 @@ public class RibbonGroupWrapPanel : WrapPanel
             var childPrimary = GetPrimary(child.DesiredSize);
             var childCross = GetCross(child.DesiredSize);
 
+            // In the stacked modes a group container already spans the full column height with its own
+            // rows, so it never shares a column with single controls.
+            var ownsColumn = Orientation == Orientation.Vertical && child is IRibbonGroupContainer;
             var wrapByCount = currentLine.Children.Count >= maxItemsPerLine;
             var wrapBySize = canWrapBySize &&
                 currentLine.Children.Count > 0 &&
                 currentLine.PrimarySize + childPrimary > availablePrimary + Epsilon;
 
-            if (currentLine.Children.Count > 0 && (wrapByCount || wrapBySize))
+            if (currentLine.Children.Count > 0 && (wrapByCount || wrapBySize || lineClosed || ownsColumn))
             {
                 currentLine = new LineInfo();
                 lines.Add(currentLine);
@@ -239,6 +243,7 @@ public class RibbonGroupWrapPanel : WrapPanel
             currentLine.Children.Add(child);
             currentLine.PrimarySize += childPrimary;
             currentLine.CrossSize = Math.Max(currentLine.CrossSize, childCross);
+            lineClosed = ownsColumn;
         }
 
         return lines;
