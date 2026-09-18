@@ -286,6 +286,11 @@ For narrow layouts, you can opt in to wrapping groups across rows before shrinki
 - `MaxGroupRows`: minimum value is `1`.
 - `MaxGroupRows` has no built-in upper limit in the control; demos can clamp the value for UX (for example `1..10`).
 - In horizontal `WrapThenShrink`, default `RibbonGroupWrapPanel` internals cap small-item lines with `MaxGroupRows`.
+- `ShrinkToSmallBeforePopupOverflow="True"`: with popup overflow (`AllowCollapsedPopup` groups), groups shrink
+  `Large` -> `Medium` -> `Small` (icon-only controls, bounded by each control's `MinSize`) before the last
+  group moves into the shared overflow popup. Default `False` stops at `Medium`.
+- `GroupShrinkOrder="RightToLeft"`: the last group steps down first (to its smallest mode), then the group
+  before it. Default `WidestFirst` steps down whichever group is currently the widest.
 
 ### Group Containers (Triple / Lines / Cluster)
 
@@ -372,6 +377,16 @@ Composing banks in rows:
 Each `RibbonGroupCluster` is one bank; `RibbonGroupLines` controls how many banks appear per row via its line-count properties.
 
 ## Change Log
+
+### Update (2026-09-18)
+
+- Add `Ribbon.ShrinkToSmallBeforePopupOverflow`: with popup overflow, groups may shrink to `Small` before the last group moves into the shared overflow popup (default `False` keeps the `Medium` stop).
+- Controls inside the shared overflow popup use `Medium` (icon and label on one row, bounded by `MinSize`/`MaxSize`) instead of `MinSize`, so icon-only controls stay readable in the vertical list.
+- Keep the shared overflow popup open while the pointer is pressed inside a flyout opened from an overflow group (drop-down buttons, split buttons). The containment check now crosses popup roots.
+- `RibbonGroupWrapPanel` stacks `Medium` controls in columns of `SmallLineCount` rows (icon with label), like `Small`. A horizontal row of `Medium` controls was wider than the `Large` row it replaced, so the `Medium` step never gained width.
+- Add `Ribbon.GroupShrinkOrder`: `WidestFirst` (default, the widest group steps down first) or `RightToLeft` (the last group steps down to its smallest mode first, then the one before it; groups on the left keep their layout as long as possible).
+- Fix group sizing after a display mode change: a `RibbonGroupBox` now invalidates its whole template subtree when `DisplayMode` changes, and controls invalidate their measure when their `Size` changes. The synchronous sizing loop used to read the width of the previous mode (Avalonia does not mark ancestors invalid), so groups that would have fit in `Medium`/`Small` were moved into the overflow popup.
+- Bump all projects to `2026.9.18`.
 
 ### Update (2026-09-17)
 

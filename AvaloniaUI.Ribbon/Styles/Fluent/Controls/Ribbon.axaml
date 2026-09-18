@@ -181,6 +181,8 @@
                                                     GroupOverflowBehavior="{CompiledBinding $parent[local:Ribbon].GroupOverflowBehavior}"
                                                     MaxGroupRows="{CompiledBinding $parent[local:Ribbon].MaxGroupRows}"
                                                     OverflowOwner="{CompiledBinding $parent[local:Ribbon]}"
+                                                    ShrinkToSmallBeforePopupOverflow="{CompiledBinding $parent[local:Ribbon].ShrinkToSmallBeforePopupOverflow}"
+                                                    GroupShrinkOrder="{CompiledBinding $parent[local:Ribbon].GroupShrinkOrder}"
                                                     Orientation="Horizontal" />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>

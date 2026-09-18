@@ -34,10 +34,18 @@ public class RibbonGroupsStackPanel : Panel
     public static readonly StyledProperty<Ribbon?> OverflowOwnerProperty =
         AvaloniaProperty.Register<RibbonGroupsStackPanel, Ribbon?>(nameof(OverflowOwner));
 
+    public static readonly StyledProperty<bool> ShrinkToSmallBeforePopupOverflowProperty =
+        Ribbon.ShrinkToSmallBeforePopupOverflowProperty.AddOwner<RibbonGroupsStackPanel>();
+
+    public static readonly StyledProperty<RibbonGroupShrinkOrder> GroupShrinkOrderProperty =
+        Ribbon.GroupShrinkOrderProperty.AddOwner<RibbonGroupsStackPanel>();
+
     static RibbonGroupsStackPanel()
     {
-        AffectsMeasure<RibbonGroupsStackPanel>(OrientationProperty, GroupOverflowBehaviorProperty, MaxGroupRowsProperty);
-        AffectsArrange<RibbonGroupsStackPanel>(OrientationProperty, GroupOverflowBehaviorProperty, MaxGroupRowsProperty);
+        AffectsMeasure<RibbonGroupsStackPanel>(OrientationProperty, GroupOverflowBehaviorProperty, MaxGroupRowsProperty,
+            ShrinkToSmallBeforePopupOverflowProperty, GroupShrinkOrderProperty);
+        AffectsArrange<RibbonGroupsStackPanel>(OrientationProperty, GroupOverflowBehaviorProperty, MaxGroupRowsProperty,
+            ShrinkToSmallBeforePopupOverflowProperty, GroupShrinkOrderProperty);
 
         ParentProperty.Changed.AddClassHandler<RibbonGroupsStackPanel>((sender, _) =>
         {
@@ -77,6 +85,18 @@ public class RibbonGroupsStackPanel : Panel
     {
         get => GetValue(OverflowOwnerProperty);
         set => SetValue(OverflowOwnerProperty, value);
+    }
+
+    public bool ShrinkToSmallBeforePopupOverflow
+    {
+        get => GetValue(ShrinkToSmallBeforePopupOverflowProperty);
+        set => SetValue(ShrinkToSmallBeforePopupOverflowProperty, value);
+    }
+
+    public RibbonGroupShrinkOrder GroupShrinkOrder
+    {
+        get => GetValue(GroupShrinkOrderProperty);
+        set => SetValue(GroupShrinkOrderProperty, value);
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -125,7 +145,9 @@ public class RibbonGroupsStackPanel : Panel
 
         if (change.Property == OrientationProperty ||
             change.Property == GroupOverflowBehaviorProperty ||
-            change.Property == MaxGroupRowsProperty)
+            change.Property == MaxGroupRowsProperty ||
+            change.Property == ShrinkToSmallBeforePopupOverflowProperty ||
+            change.Property == GroupShrinkOrderProperty)
         {
             MarkSizingDirty();
         }
@@ -410,6 +432,8 @@ public class RibbonGroupsStackPanel : Panel
                     sizingExtent,
                     GetHorizontalRowLimit(),
                     GroupOverflowBehavior == RibbonGroupOverflowBehavior.WrapThenShrink,
+                    ShrinkToSmallBeforePopupOverflow,
+                    GroupShrinkOrder,
                     new Size(
                         double.PositiveInfinity,
                         GetFiniteExtent(availableSize.Height, Bounds.Height)));
@@ -441,6 +465,8 @@ public class RibbonGroupsStackPanel : Panel
         double availableWidth,
         int maxRows,
         bool allowCollapsedPopupOverflow,
+        bool shrinkToSmallBeforePopupOverflow,
+        RibbonGroupShrinkOrder shrinkOrder,
         Size groupConstraint)
     {
         if (double.IsInfinity(availableWidth))
@@ -456,7 +482,7 @@ public class RibbonGroupsStackPanel : Panel
 
         var usePopupOverflow = allowCollapsedPopupOverflow &&
                                groups.Any(group => group.AllowCollapsedPopup);
-        var allowSmallMode = !usePopupOverflow;
+        var allowSmallMode = !usePopupOverflow || shrinkToSmallBeforePopupOverflow;
         var sizingWidth = usePopupOverflow
             ? GetWidthBeforeOverflowSlot(availableWidth)
             : availableWidth;
@@ -468,11 +494,13 @@ public class RibbonGroupsStackPanel : Panel
 
         while (!CanFitHorizontal(groups, widths, sizingWidth, maxRows, groupConstraint))
         {
-            var candidate = FindWidestGroupThatCanDecrease(
-                groups,
-                widths,
-                groupConstraint,
-                allowSmallMode);
+            var candidate = shrinkOrder == RibbonGroupShrinkOrder.RightToLeft
+                ? FindLastGroupThatCanDecrease(groups, allowSmallMode)
+                : FindWidestGroupThatCanDecrease(
+                    groups,
+                    widths,
+                    groupConstraint,
+                    allowSmallMode);
             if (candidate is null)
                 break;
 
@@ -518,6 +546,19 @@ public class RibbonGroupsStackPanel : Panel
         GroupDisplayMode.Popup => null,
         _ => null
     };
+
+    private static RibbonGroupBox? FindLastGroupThatCanDecrease(
+        IReadOnlyList<RibbonGroupBox> groups,
+        bool allowSmallMode)
+    {
+        for (var i = groups.Count - 1; i >= 0; i--)
+        {
+            if (CanDecreaseDisplayMode(groups[i].DisplayMode, allowSmallMode).HasValue)
+                return groups[i];
+        }
+
+        return null;
+    }
 
     private static RibbonGroupBox? FindWidestGroupThatCanDecrease(
         IReadOnlyList<RibbonGroupBox> groups,

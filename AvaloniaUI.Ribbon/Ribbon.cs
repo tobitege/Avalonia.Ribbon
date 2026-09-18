@@ -141,6 +141,13 @@ public class Ribbon : TabControl, IRibbon
     public static readonly StyledProperty<bool> IsGroupOverflowOpenProperty =
         AvaloniaProperty.Register<Ribbon, bool>(nameof(IsGroupOverflowOpen));
 
+    public static readonly StyledProperty<bool> ShrinkToSmallBeforePopupOverflowProperty =
+        AvaloniaProperty.Register<Ribbon, bool>(nameof(ShrinkToSmallBeforePopupOverflow));
+
+    public static readonly StyledProperty<RibbonGroupShrinkOrder> GroupShrinkOrderProperty =
+        AvaloniaProperty.Register<Ribbon, RibbonGroupShrinkOrder>(nameof(GroupShrinkOrder),
+            RibbonGroupShrinkOrder.WidestFirst);
+
     public static readonly RoutedEvent<RoutedEventArgs> RibbonKeyTipsOpenedEvent =
         RoutedEvent.Register<MenuBase, RoutedEventArgs>("RibbonKeyTipsOpened", RoutingStrategies.Bubble);
 
@@ -329,6 +336,27 @@ public class Ribbon : TabControl, IRibbon
     {
         get => GetValue(IsGroupOverflowOpenProperty);
         set => SetValue(IsGroupOverflowOpenProperty, value);
+    }
+
+    /// <summary>
+    /// In <see cref="RibbonGroupOverflowBehavior.WrapThenShrink"/> with popup overflow, groups shrink to
+    /// <see cref="GroupDisplayMode.Small"/> (icon-only controls) before the last group moves into the
+    /// shared overflow popup. Default: groups stop at <see cref="GroupDisplayMode.Medium"/>.
+    /// </summary>
+    public bool ShrinkToSmallBeforePopupOverflow
+    {
+        get => GetValue(ShrinkToSmallBeforePopupOverflowProperty);
+        set => SetValue(ShrinkToSmallBeforePopupOverflowProperty, value);
+    }
+
+    /// <summary>
+    /// Which group steps down first when the row does not fit: the widest one (default) or the last one,
+    /// right to left, until it reaches its smallest mode.
+    /// </summary>
+    public RibbonGroupShrinkOrder GroupShrinkOrder
+    {
+        get => GetValue(GroupShrinkOrderProperty);
+        set => SetValue(GroupShrinkOrderProperty, value);
     }
 
     public ObservableCollection<RibbonGroupOverflowItem> OverflowGroups => _overflowGroups;
@@ -808,18 +836,50 @@ public class Ribbon : TabControl, IRibbon
         if (!IsGroupOverflowOpen)
             return;
 
+        // The popup itself is the container, not its child: a press inside the popup root that lands on the
+        // light-dismiss overlay of a nested popup (a combo box drop-down opened from an overflow group)
+        // walks PopupRoot > Popup without passing the child border.
         if (e.Source is Visual source &&
-            (IsVisualWithin(source, _groupOverflowButton) || IsVisualWithin(source, _groupOverflowPopup?.Child)))
+            (IsVisualWithin(source, _groupOverflowButton) || IsVisualWithin(source, _groupOverflowPopup)))
             return;
 
         IsGroupOverflowOpen = false;
     }
 
+    // Walks visual parents and, at a popup host root, continues with the logical parent (the popup and
+    // its placement target). A pointer press inside a flyout opened from an overflow group therefore counts
+    // as inside the overflow popup; the shared popup used to close before the flyout entry could fire.
     private static bool IsVisualWithin(Visual source, Visual? container)
     {
-        return container is not null &&
-               (ReferenceEquals(source, container) ||
-                source.GetVisualAncestors().Any(ancestor => ReferenceEquals(ancestor, container)));
+        if (container is null)
+            return false;
+
+        for (StyledElement? current = source; current is not null; current = GetVisualOrLogicalParent(current))
+        {
+            if (ReferenceEquals(current, container))
+                return true;
+        }
+
+        return false;
+    }
+
+    // Popup hosts (PopupRoot, OverlayPopupHost) continue at their Popup; a Popup continues at its visual
+    // parent (template), its logical parent (flyouts) or its placement target (popups created in code,
+    // e.g. combo box drop-downs). A Window ends the walk: in Avalonia 12 its visual parent is a
+    // TopLevelHost whose logical parent is the Window again.
+    private static StyledElement? GetVisualOrLogicalParent(StyledElement element)
+    {
+        if (element is PopupRoot or OverlayPopupHost)
+            return element.Parent;
+
+        if (element is TopLevel)
+            return null;
+
+        var parent = (element as Visual)?.GetVisualParent() as StyledElement ?? element.Parent;
+        if (parent is null && element is Popup popup)
+            return popup.PlacementTarget;
+
+        return parent;
     }
 
     internal void SetGroupOverflow(

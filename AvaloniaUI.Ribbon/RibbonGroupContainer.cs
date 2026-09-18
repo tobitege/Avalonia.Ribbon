@@ -118,7 +118,7 @@ public abstract class RibbonGroupContainer : Panel, IRibbonGroupContainer
                 groupContainer.ApplyDisplayMode(DisplayMode);
 
             if (Children[i] is IRibbonControl ribbonControl)
-                ribbonControl.Size = ClampControlSize(targetSize, ribbonControl.MinSize, ribbonControl.MaxSize);
+                RibbonGroupWrapPanel.ApplyControlSize(ribbonControl, ClampControlSize(targetSize, ribbonControl.MinSize, ribbonControl.MaxSize));
         }
     }
 

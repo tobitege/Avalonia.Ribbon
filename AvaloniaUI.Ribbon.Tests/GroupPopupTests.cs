@@ -214,6 +214,111 @@ public class GroupPopupTests
         }
     }
 
+    [Fact]
+    public void Overflow_ShrinksGroupsToSmallBeforePopupWhenEnabled()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1,
+            ShrinkToSmallBeforePopupOverflow = true
+        };
+
+        // Three small groups (95 each) fit into 330 minus the overflow slot; three medium groups (130) do not.
+        var groups = CreateGroups(panel, 3, allowCollapsedPopup: true);
+
+        RunLayout(panel, 330);
+
+        Assert.All(groups, group => Assert.Equal(GroupDisplayMode.Small, group.DisplayMode));
+    }
+
+    [Fact]
+    public void ShrinkOrder_RightToLeft_StepsDownTheLastGroupFirst()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1,
+            ShrinkToSmallBeforePopupOverflow = true,
+            GroupShrinkOrder = RibbonGroupShrinkOrder.RightToLeft
+        };
+
+        // 180 + 180 + 95 = 455 fits into 500 minus the overflow slot; only the last group has to give way.
+        var groups = CreateGroups(panel, 3, allowCollapsedPopup: true);
+
+        RunLayout(panel, 500);
+
+        Assert.Equal(GroupDisplayMode.Large, groups[0].DisplayMode);
+        Assert.Equal(GroupDisplayMode.Large, groups[1].DisplayMode);
+        Assert.Equal(GroupDisplayMode.Small, groups[2].DisplayMode);
+    }
+
+    [Fact]
+    public void Overflow_StopsAtMediumBeforePopupByDefault()
+    {
+        var panel = new RibbonGroupsStackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1
+        };
+
+        var groups = CreateGroups(panel, 3, allowCollapsedPopup: true);
+
+        RunLayout(panel, 330);
+
+        Assert.DoesNotContain(groups, group => group.DisplayMode == GroupDisplayMode.Small);
+        Assert.Contains(groups, group => group.DisplayMode == GroupDisplayMode.Popup);
+    }
+
+    [Fact]
+    public void GroupMeasure_FollowsDisplayModeChange()
+    {
+        EnsureStyles();
+        var group = new RibbonGroupBox { Header = "Group", AllowCollapsedPopup = true };
+        for (var action = 1; action <= 3; action++)
+            group.Items.Add(new RibbonButton { Content = $"Action {action}", MinSize = RibbonControlSize.Small, MaxSize = RibbonControlSize.Large });
+        var tab = new RibbonTab { Header = "Home" };
+        tab.Groups.Add(group);
+        var ribbon = new OverflowTestRibbon
+        {
+            GroupOverflowBehavior = RibbonGroupOverflowBehavior.WrapThenShrink,
+            MaxGroupRows = 1,
+            SelectedIndex = 0,
+            Tabs = new ObservableCollection<Control> { tab }
+        };
+        var window = new Window { Width = 1300, Height = 400, Content = ribbon };
+
+        try
+        {
+            window.Show();
+            Dispatcher.UIThread.RunJobs();
+
+            // The sizing loop measures the group synchronously right after each mode change; the
+            // measured width must follow the mode (a stale Large width made the overflow collapse
+            // groups that would have fit).
+            var constraint = new Size(double.PositiveInfinity, 100);
+            var widths = new[] { GroupDisplayMode.Large, GroupDisplayMode.Small, GroupDisplayMode.Large }
+                .Select(mode =>
+                {
+                    group.DisplayMode = mode;
+                    group.Measure(constraint);
+                    return group.DesiredSize.Width;
+                })
+                .ToArray();
+
+            Assert.True(widths[1] < widths[0], $"small {widths[1]} should be narrower than large {widths[0]}");
+            Assert.Equal(widths[0], widths[2]);
+            Assert.All(group.Items.OfType<RibbonButton>(), button => Assert.Equal(RibbonControlSize.Large, button.Size));
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
     private sealed class OverflowTestRibbon : Ribbon
     {
         public ToggleButton? GroupOverflowButton { get; private set; }

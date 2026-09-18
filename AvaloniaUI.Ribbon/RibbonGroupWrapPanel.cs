@@ -123,7 +123,9 @@ public class RibbonGroupWrapPanel : WrapPanel
 
     private void ApplyDisplayMode(GroupDisplayMode displayMode)
     {
-        Orientation = displayMode is GroupDisplayMode.Small or GroupDisplayMode.Popup
+        // Medium and Small stack their controls in columns of SmallLineCount rows (icon with label, then
+        // icon only); a horizontal row of Medium controls would be wider than the Large row it replaces.
+        Orientation = IsStackedMode(displayMode)
             ? Orientation.Vertical
             : Orientation.Horizontal;
 
@@ -133,14 +135,32 @@ public class RibbonGroupWrapPanel : WrapPanel
                 groupContainer.ApplyDisplayMode(displayMode);
 
             if (Children[i] is IRibbonControl control)
-                control.Size = displayMode switch
+            {
+                var size = displayMode switch
                 {
                     GroupDisplayMode.Small => control.MinSize,
-                    GroupDisplayMode.Popup => control.MinSize,
+                    // The shared overflow popup lists controls vertically; Medium keeps icon and label
+                    // on one row, so entries stay readable even when MinSize allows icon-only controls.
+                    GroupDisplayMode.Popup => ClampControlSize(RibbonControlSize.Medium, control.MinSize, control.MaxSize),
                     GroupDisplayMode.Medium => ClampControlSize(RibbonControlSize.Medium, control.MinSize, control.MaxSize),
                     _ => control.MaxSize
                 };
+                ApplyControlSize(control, size);
+            }
         }
+    }
+
+    // A size change swaps the control template through the [Size=...] styles, but the control keeps its
+    // measured DesiredSize until something invalidates it. The group sizing loop measures the group right
+    // after the mode change, so without this the group reports the width of the previous mode and the
+    // overflow logic collapses groups that would fit.
+    internal static void ApplyControlSize(IRibbonControl control, RibbonControlSize size)
+    {
+        if (control.Size == size)
+            return;
+
+        control.Size = size;
+        (control as Layoutable)?.InvalidateMeasure();
     }
 
     private static RibbonControlSize ClampControlSize(RibbonControlSize value, RibbonControlSize min, RibbonControlSize max)
@@ -159,10 +179,13 @@ public class RibbonGroupWrapPanel : WrapPanel
 
     private int ResolveLineCount()
     {
-        return DisplayMode is GroupDisplayMode.Small or GroupDisplayMode.Popup
+        return IsStackedMode(DisplayMode)
             ? Math.Max(1, SmallLineCount)
             : Math.Max(1, LargeLineCount);
     }
+
+    private static bool IsStackedMode(GroupDisplayMode displayMode)
+        => displayMode is GroupDisplayMode.Medium or GroupDisplayMode.Small or GroupDisplayMode.Popup;
 
     private double GetPrimary(Size size)
     {

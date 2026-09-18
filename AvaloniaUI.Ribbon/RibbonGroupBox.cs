@@ -3,6 +3,8 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
+using Avalonia.VisualTree;
 using AvaloniaUI.Ribbon.Models;
 
 namespace AvaloniaUI.Ribbon;
@@ -19,7 +21,23 @@ public class RibbonGroupBox : HeaderedItemsControl
         {
             if (args.NewValue is GroupDisplayMode displayMode)
                 sender.SetPopupState(displayMode == GroupDisplayMode.Popup);
+
+            sender.InvalidateDescendantMeasures();
         });
+    }
+
+    // The group sizing loop (RibbonGroupsStackPanel) measures the group synchronously right after a
+    // mode change. Avalonia does not mark ancestors invalid when a descendant (a control whose template
+    // changed with its Size) invalidates itself, so the template chain between group and controls
+    // (DockPanel, ItemsPresenter, items panel) would keep its previous DesiredSize and the group would
+    // report the width of the previous mode.
+    private void InvalidateDescendantMeasures()
+    {
+        foreach (var descendant in this.GetVisualDescendants())
+        {
+            if (descendant is Layoutable layoutable)
+                layoutable.InvalidateMeasure();
+        }
     }
 
     #region Static Properties

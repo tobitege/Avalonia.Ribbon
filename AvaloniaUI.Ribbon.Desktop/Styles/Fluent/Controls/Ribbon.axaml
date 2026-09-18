@@ -190,7 +190,9 @@
                                                     GroupOverflowBehavior="{CompiledBinding $parent[windows:DesktopRibbon].GroupOverflowBehavior}"
                                                     MaxGroupRows="{CompiledBinding $parent[windows:DesktopRibbon].MaxGroupRows}"
                                                     Orientation="Horizontal"
-                                                    OverflowOwner="{CompiledBinding $parent[windows:DesktopRibbon]}" />
+                                                    OverflowOwner="{CompiledBinding $parent[windows:DesktopRibbon]}"
+                                                    ShrinkToSmallBeforePopupOverflow="{CompiledBinding $parent[windows:DesktopRibbon].ShrinkToSmallBeforePopupOverflow}"
+                                                    GroupShrinkOrder="{CompiledBinding $parent[windows:DesktopRibbon].GroupShrinkOrder}" />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
